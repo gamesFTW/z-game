@@ -1,9 +1,13 @@
 function Game() {
+    this.tileSize = 20;
 };
 
 Game.prototype.constructor = Game;
 
 Game.prototype.init = function(renderer) {
+    this.withInTile = Game.WIDTH / Game.TILE_SIZE;
+    this.heightInTile = Game.HEIGHT / Game.TILE_SIZE;
+
     this.renderer = renderer;
 
     this.stage = new PIXI.Stage(0xEEFFFF, true);
@@ -86,5 +90,6 @@ Game.prototype.mainLoop = function() {
 };
 
 // Static
+Game.TILE_SIZE = 40;
 Game.WIDTH = 1024;
 Game.HEIGHT = 768;

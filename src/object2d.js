@@ -31,11 +31,15 @@ Object2D.prototype.defineProperties = function(){
 
 
 Object2D.prototype.createFixture = function(){
+    this.body.CreateFixture(Object2D.POLY_FIXTURE);
 };
 
 
 Object2D.prototype.setPosition = function(x, y){
     this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / 100, y / 100));
+    var position = this.body.GetPosition();
+    this.view.position.x = position.x * 100;
+    this.view.position.y = position.y * 100;
 };
 
 
@@ -64,4 +68,3 @@ Object2D.DYNAMIC_BODY_DEF.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
 Object2D.POLY_FIXTURE = new Box2D.Dynamics.b2FixtureDef();
 Object2D.POLY_FIXTURE.shape = new Box2D.Collision.Shapes.b2PolygonShape();
 Object2D.POLY_FIXTURE.density = 1;
-Object2D.POLY_FIXTURE.filter.groupIndex = -1;

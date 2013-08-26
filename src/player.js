@@ -12,7 +12,7 @@ Player.prototype.defineMouseEvents = function(stage){
 //
 //    var globalX = displayObject.worldTransform[2];
 //    var globalY = displayObject.worldTransform[5];
-    console.log(stage);
+//    console.log(stage);
     stage.click = function(event){
         console.log("mousedown");
         console.log(event);
@@ -26,7 +26,7 @@ Player.prototype.createFixture = function(){
     var self = this;
     this.body.CreateFixture(Player.POLY_FIXTURE);
 
-    var speed = 0.01;
+    var speed = 1;
 
     KeyboardJS.on('a', function() {
         self.body.ApplyImpulse(
@@ -62,7 +62,7 @@ Player.prototype.createFixture = function(){
 
 Player.POLY_FIXTURE = new Box2D.Dynamics.b2FixtureDef();
 Player.POLY_FIXTURE.shape = new Box2D.Collision.Shapes.b2PolygonShape();
-Player.POLY_FIXTURE.density = 50;
+Player.POLY_FIXTURE.density = 1000;
 //Player.POLY_FIXTURE.restitution = 0.1;
 Player.POLY_FIXTURE.friction = 0.1;
 Player.POLY_FIXTURE.shape.SetAsBox(5 / 100, 5 / 100);
