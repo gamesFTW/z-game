@@ -26,11 +26,25 @@ Game.prototype.init = function(renderer) {
     this.stats = new Stats();
     container.appendChild(this.stats.domElement);
     this.stats.domElement.style.position = "absolute";
+
+
+
+
+
+
+    var b2Listener = Box2D.Dynamics.b2ContactListener;
+    var listener = new b2Listener;
+    listener.PostSolve = function(contact, impulse) {
+        console.log("PostSolve");
+    }
+    this.world.SetContactListener(listener);
 };
 
 
 Game.prototype.registerObject2D = function(obj) {
-    this.objects2D.push(obj);
+    this.objects2D.push(obj)
+    obj.game = this;
+    // TODO: не скармливать внутрь
     this.stage.addChild(obj.view);
 };
 

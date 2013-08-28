@@ -10,14 +10,79 @@ Zombie.prototype.createFixture = function(){
     this.body.CreateFixture(Zombie.POLY_FIXTURE);
 };
 
+Zombie.prototype._changeDirectionCounter = 200;
+Zombie.prototype._changeDirection = 200;
+Zombie.prototype._radianInfelicity = 0;
+Zombie.prototype._radianWithInfelicity = 0;
 
 Zombie.prototype.tick = function() {
-//    if(!_.random(0, 100)){
-//        this.body.ApplyImpulse(
-//            new Box2D.Common.Math.b2Vec2(Math.random(), Math.random()),
-//            this.body.GetWorldCenter()
-//        );
-//    }
+    var zombiePosition = this.body.GetPosition();
+
+    function randomateInfelicity(){
+        // Рандомим погрешность, что бы зомби не шли по прямой на плеера.
+        var infelicity = _.random(0, 4);
+        self._radianInfelicity = _.random(- infelicity, infelicity);
+    }
+
+    if (this._changeDirectionCounter >= this._changeDirection){
+//        console.log("Всем смотреть!");
+        var playerPosition = this.game.player.body.GetPosition();
+        var playerX = playerPosition.x,
+            playerY = playerPosition.y;
+//        console.log(playerX, playerY);
+        randomateInfelicity();
+
+        var radian = Math.atan2(playerY - zombiePosition.y, playerX - zombiePosition.x);
+        this._radianWithInfelicity = radian + this._radianInfelicity;
+
+        var newRotation = this._radianWithInfelicity - (90 * (Math.PI / 180));
+
+        this.body.SetAngle(newRotation);
+
+//        self.rotation = self.rotation % 360;
+//        var rotation = this.body.GetAngle() % 360;
+//        newRotation = newRotation % 360;
+
+//        if (self.rotation < newRotation){
+//            var difference = Math.abs(newRotation - self.rotation);
+//            if (difference > 180){
+//                newRotation = self.rotation - (360 - difference);
+//            }
+//        }
+//        else{
+//            difference = Math.abs(self.rotation - newRotation);
+//            if (difference > 180){
+//                newRotation = self.rotation + (360 - difference);
+//            }
+//        }
+
+//        var speedOfTurn = Math.round(difference / 4);
+//        if (speedOfTurn == 0)
+//            speedOfTurn = 1;
+
+//        this.tween({rotation: newRotation}, speedOfTurn);
+
+        this._changeDirectionCounter = 0;
+    }
+    else
+        this._changeDirectionCounter ++;
+
+    var speed = 0.005;
+//    this.x += Math.cos(self._radianWithInfelicity) * speed;
+//    this.y += Math.sin(self._radianWithInfelicity) * speed;
+
+    this.body.SetPosition(new Box2D.Common.Math.b2Vec2(
+        zombiePosition.x + (Math.cos(this._radianWithInfelicity) * speed),
+        zombiePosition.y + (Math.sin(this._radianWithInfelicity) * speed)
+    ));
+
+//    console.log(zombiePosition);
+//    console.log(zombiePosition.x);
+//    console.log(zombiePosition.y);
+//    this.body.SetPosition(
+//        zombiePosition.x,
+//        zombiePosition.y
+//    );
 };
 
 

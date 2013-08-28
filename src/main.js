@@ -28,7 +28,7 @@ function onAssetsLoaded()
 
     // create a texture from an image path
     // add a bunch of aliens
-    for (var i = 0; i < 500; i++) {
+    for (var i = 0; i < 100; i++) {
         // create an explosion MovieClip
         var zombie = new Zombie();
         zombie.init(zombieTextures, game.world, false, true);
@@ -49,7 +49,7 @@ function onAssetsLoaded()
     console.log(manTexture);
     player.init(manTexture, game.world, false, false);
     player.setPosition(Game.WIDTH / 2, Game.HEIGHT / 2);
-    player.body.SetAngle(Math.random() * Math.PI);
+//    player.body.SetAngle(Math.random() * Math.PI);
     game.registerObject2D(player);
     game.registerPlayer(player);
 
@@ -69,12 +69,12 @@ function createWalls(){
         game.registerObject2D(brick);
     }
 
-    for (var i = 0; i < 50; i++) {
-        createWall(
-            _.random(0, game.withInTile) * Game.TILE_SIZE,
-            _.random(0, game.heightInTile) * Game.TILE_SIZE
-        );
-    }
+//    for (var i = 0; i < 50; i++) {
+//        createWall(
+//            _.random(0, game.withInTile) * Game.TILE_SIZE,
+//            _.random(0, game.heightInTile) * Game.TILE_SIZE
+//        );
+//    }
 
     for (i = 0; i < game.withInTile + 1; i++) {
         createWall(
