@@ -26,9 +26,10 @@ function onAssetsLoaded()
         zombieTextures.push(texture);
     }
 
+    var zombies = 100;
     // create a texture from an image path
     // add a bunch of aliens
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < zombies; i++) {
         // create an explosion MovieClip
         var zombie = new Zombie();
         zombie.init(zombieTextures, game.world, false, true);

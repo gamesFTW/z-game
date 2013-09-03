@@ -32,12 +32,12 @@ Game.prototype.init = function(renderer) {
 
 
 
-    var b2Listener = Box2D.Dynamics.b2ContactListener;
-    var listener = new b2Listener;
-    listener.PostSolve = function(contact, impulse) {
-        console.log("PostSolve");
-    }
-    this.world.SetContactListener(listener);
+//    var b2Listener = Box2D.Dynamics.b2ContactListener;
+//    var listener = new b2Listener;
+//    listener.PostSolve = function(contact, impulse) {
+////        console.log("PostSolve");
+//    }
+//    this.world.SetContactListener(listener);
 };
 
 

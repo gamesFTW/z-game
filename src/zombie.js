@@ -10,8 +10,8 @@ Zombie.prototype.createFixture = function(){
     this.body.CreateFixture(Zombie.POLY_FIXTURE);
 };
 
-Zombie.prototype._changeDirectionCounter = 200;
-Zombie.prototype._changeDirection = 200;
+Zombie.prototype._changeDirectionCounter = 10000;
+Zombie.prototype._changeDirection = 10000;
 Zombie.prototype._radianInfelicity = 0;
 Zombie.prototype._radianWithInfelicity = 0;
 
@@ -21,67 +21,64 @@ Zombie.prototype.tick = function() {
     function randomateInfelicity(){
         // Рандомим погрешность, что бы зомби не шли по прямой на плеера.
         var infelicity = _.random(0, 4);
-        self._radianInfelicity = _.random(- infelicity, infelicity);
+        this._radianInfelicity = _.random(- infelicity, infelicity);
+//        this._radianInfelicity = 0;
     }
 
     if (this._changeDirectionCounter >= this._changeDirection){
-//        console.log("Всем смотреть!");
-        var playerPosition = this.game.player.body.GetPosition();
-        var playerX = playerPosition.x,
-            playerY = playerPosition.y;
-//        console.log(playerX, playerY);
         randomateInfelicity();
-
-        var radian = Math.atan2(playerY - zombiePosition.y, playerX - zombiePosition.x);
-        this._radianWithInfelicity = radian + this._radianInfelicity;
-
-        var newRotation = this._radianWithInfelicity - (90 * (Math.PI / 180));
-
-        this.body.SetAngle(newRotation);
-
-//        self.rotation = self.rotation % 360;
-//        var rotation = this.body.GetAngle() % 360;
-//        newRotation = newRotation % 360;
-
-//        if (self.rotation < newRotation){
-//            var difference = Math.abs(newRotation - self.rotation);
-//            if (difference > 180){
-//                newRotation = self.rotation - (360 - difference);
-//            }
-//        }
-//        else{
-//            difference = Math.abs(self.rotation - newRotation);
-//            if (difference > 180){
-//                newRotation = self.rotation + (360 - difference);
-//            }
-//        }
-
-//        var speedOfTurn = Math.round(difference / 4);
-//        if (speedOfTurn == 0)
-//            speedOfTurn = 1;
-
-//        this.tween({rotation: newRotation}, speedOfTurn);
 
         this._changeDirectionCounter = 0;
     }
     else
         this._changeDirectionCounter ++;
 
-    var speed = 0.005;
-//    this.x += Math.cos(self._radianWithInfelicity) * speed;
-//    this.y += Math.sin(self._radianWithInfelicity) * speed;
+    var playerPosition = this.game.player.body.GetPosition();
+    var playerX = playerPosition.x,
+        playerY = playerPosition.y;
 
-    this.body.SetPosition(new Box2D.Common.Math.b2Vec2(
-        zombiePosition.x + (Math.cos(this._radianWithInfelicity) * speed),
-        zombiePosition.y + (Math.sin(this._radianWithInfelicity) * speed)
-    ));
+    var radian = Math.atan2(playerY - zombiePosition.y, playerX - zombiePosition.x);
+    this._radianWithInfelicity = radian + this._radianInfelicity;
 
-//    console.log(zombiePosition);
-//    console.log(zombiePosition.x);
-//    console.log(zombiePosition.y);
+    var speed = 0.01;
+
+
+    var MAX_VELOCITY = 0.3;
+
+    var velocity = this.body.GetLinearVelocity();
+
+    var newVelocity = new Box2D.Common.Math.b2Vec2(
+        Math.cos(this._radianWithInfelicity) * speed,
+        Math.sin(this._radianWithInfelicity) * speed
+    );
+
+    function sign(num){
+        return num?num<0?-1:1:0;
+
+    }
+    if ((Math.abs(newVelocity.x + velocity.x) > MAX_VELOCITY) && sign(newVelocity.x) == sign(velocity.x))
+        newVelocity.x = 0;
+
+    if ((Math.abs(newVelocity.y + velocity.y) > MAX_VELOCITY) && sign(newVelocity.y) == sign(velocity.y))
+        newVelocity.y = 0;
+
+    this.body.ApplyImpulse(
+        newVelocity,
+        this.body.GetWorldCenter()
+    );
+
+    // Rotate in right angle
+    var radian = Math.atan2(velocity.y, velocity.x);
+    var newRotation = radian - (90 * (Math.PI / 180));
+    this.body.SetAngle(newRotation);
+
+
+
 //    this.body.SetPosition(
-//        zombiePosition.x,
-//        zombiePosition.y
+//        new Box2D.Common.Math.b2Vec2(
+//            zombiePosition.x + Math.cos(this._radianWithInfelicity) * speed,
+//            zombiePosition.y + Math.sin(this._radianWithInfelicity) * speed
+//        )
 //    );
 };
 

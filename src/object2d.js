@@ -64,6 +64,7 @@ Object2D.STATIC_BODY_DEF.type = Box2D.Dynamics.b2Body.b2_staticBody;
 
 Object2D.DYNAMIC_BODY_DEF = new Box2D.Dynamics.b2BodyDef();
 Object2D.DYNAMIC_BODY_DEF.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+Object2D.DYNAMIC_BODY_DEF.fixedRotation = true;
 //kinematic
 
 Object2D.POLY_FIXTURE = new Box2D.Dynamics.b2FixtureDef();
