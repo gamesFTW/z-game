@@ -47,7 +47,6 @@ function onAssetsLoaded()
 
     var player = new Player();
     var manTexture = PIXI.Texture.fromFrame("img/blue-man.png");
-    console.log(manTexture);
     player.init(manTexture, game.world, false, false);
     player.setPosition(Game.WIDTH / 2, Game.HEIGHT / 2);
 //    player.body.SetAngle(Math.random() * Math.PI);
@@ -70,12 +69,12 @@ function createWalls(){
         game.registerObject2D(brick);
     }
 
-//    for (var i = 0; i < 50; i++) {
-//        createWall(
-//            _.random(0, game.withInTile) * Game.TILE_SIZE,
-//            _.random(0, game.heightInTile) * Game.TILE_SIZE
-//        );
-//    }
+    for (var i = 0; i < 50; i++) {
+        createWall(
+            _.random(0, game.withInTile) * Game.TILE_SIZE,
+            _.random(0, game.heightInTile) * Game.TILE_SIZE
+        );
+    }
 
     for (i = 0; i < game.withInTile + 1; i++) {
         createWall(

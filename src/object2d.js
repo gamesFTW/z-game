@@ -9,6 +9,10 @@ Object2D.prototype.constructor = Object2D;
 
 // Initial methods
 Object2D.prototype.init = function(texture, world, isStatic, isAnimated) {
+    this.initFunctions = [this.defineProperties, this.createFixture];
+
+    this.addFunctionToInitFunction();
+
     this.isStatic = isStatic;
     if (isAnimated)
         this.view = new PIXI.MovieClip(texture);
@@ -20,8 +24,14 @@ Object2D.prototype.init = function(texture, world, isStatic, isAnimated) {
     else
         this.body = world.CreateBody(Object2D.DYNAMIC_BODY_DEF);
 
-    this.defineProperties();
-    this.createFixture();
+    for (var i = 0; i < this.initFunctions.length; i++){
+        this.initFunctions[i].apply(this);
+    }
+};
+
+
+Object2D.prototype.addFunctionToInitFunction = function(){
+
 };
 
 
@@ -32,6 +42,7 @@ Object2D.prototype.defineProperties = function(){
 
 
 Object2D.prototype.createFixture = function(){
+    console.log("create");
     this.body.CreateFixture(Object2D.POLY_FIXTURE);
 };
 

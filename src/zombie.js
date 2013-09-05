@@ -10,18 +10,25 @@ Zombie.prototype.createFixture = function(){
     this.body.CreateFixture(Zombie.POLY_FIXTURE);
 };
 
-Zombie.prototype._changeDirectionCounter = 10000;
-Zombie.prototype._changeDirection = 10000;
+Zombie.prototype._changeDirectionCounter = 100;
+Zombie.prototype._changeDirection = 100;
 Zombie.prototype._radianInfelicity = 0;
 Zombie.prototype._radianWithInfelicity = 0;
+Zombie.prototype._infelicityX = 0;
+Zombie.prototype._infelicityY = 0;
 
 Zombie.prototype.tick = function() {
     var zombiePosition = this.body.GetPosition();
+//    console.log(this._infelicityX);
 
+    var self = this;
     function randomateInfelicity(){
         // Рандомим погрешность, что бы зомби не шли по прямой на плеера.
-        var infelicity = _.random(0, 4);
-        this._radianInfelicity = _.random(- infelicity, infelicity);
+//        var rnd = 3;
+//        self._infelicityX = _.random(-rnd, rnd);
+//        self._infelicityY = _.random(-rnd, rnd);
+        var infelicity = Math.random() * (1 - 0) + 1;
+        self._radianInfelicity = _.random(- infelicity, infelicity);
 //        this._radianInfelicity = 0;
     }
 
@@ -34,8 +41,8 @@ Zombie.prototype.tick = function() {
         this._changeDirectionCounter ++;
 
     var playerPosition = this.game.player.body.GetPosition();
-    var playerX = playerPosition.x,
-        playerY = playerPosition.y;
+    var playerX = playerPosition.x + this._infelicityX,
+        playerY = playerPosition.y + this._infelicityY;
 
     var radian = Math.atan2(playerY - zombiePosition.y, playerX - zombiePosition.x);
     this._radianWithInfelicity = radian + this._radianInfelicity;
@@ -43,7 +50,7 @@ Zombie.prototype.tick = function() {
     var speed = 0.01;
 
 
-    var MAX_VELOCITY = 0.3;
+    var MAX_VELOCITY = 0.4;
 
     var velocity = this.body.GetLinearVelocity();
 
@@ -52,14 +59,11 @@ Zombie.prototype.tick = function() {
         Math.sin(this._radianWithInfelicity) * speed
     );
 
-    function sign(num){
-        return num?num<0?-1:1:0;
 
-    }
-    if ((Math.abs(newVelocity.x + velocity.x) > MAX_VELOCITY) && sign(newVelocity.x) == sign(velocity.x))
+    if ((Math.abs(newVelocity.x + velocity.x) > MAX_VELOCITY) && signum(newVelocity.x) == signum(velocity.x))
         newVelocity.x = 0;
 
-    if ((Math.abs(newVelocity.y + velocity.y) > MAX_VELOCITY) && sign(newVelocity.y) == sign(velocity.y))
+    if ((Math.abs(newVelocity.y + velocity.y) > MAX_VELOCITY) && signum(newVelocity.y) == signum(velocity.y))
         newVelocity.y = 0;
 
     this.body.ApplyImpulse(
@@ -71,15 +75,6 @@ Zombie.prototype.tick = function() {
     var radian = Math.atan2(velocity.y, velocity.x);
     var newRotation = radian - (90 * (Math.PI / 180));
     this.body.SetAngle(newRotation);
-
-
-
-//    this.body.SetPosition(
-//        new Box2D.Common.Math.b2Vec2(
-//            zombiePosition.x + Math.cos(this._radianWithInfelicity) * speed,
-//            zombiePosition.y + Math.sin(this._radianWithInfelicity) * speed
-//        )
-//    );
 };
 
 
@@ -87,8 +82,8 @@ Zombie.POLY_FIXTURE = new Box2D.Dynamics.b2FixtureDef();
 Zombie.POLY_FIXTURE.shape = new Box2D.Collision.Shapes.b2PolygonShape();
 Zombie.POLY_FIXTURE.density = 80;
 Zombie.POLY_FIXTURE.shape.SetAsBox(5 / 100, 5 / 100);
-Zombie.POLY_FIXTURE.filter.categoryBits = 2;
-Zombie.POLY_FIXTURE.filter.maskBits = 1;
+//Zombie.POLY_FIXTURE.filter.categoryBits = 2;
+//Zombie.POLY_FIXTURE.filter.maskBits = 1;
 
 
 
