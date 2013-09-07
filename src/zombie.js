@@ -6,9 +6,21 @@ Zombie.prototype = Object.create( Object2D.prototype );
 Zombie.prototype.constructor = Zombie;
 
 
+Zombie.prototype.isStatic = false;
+
+
 Zombie.prototype.createFixture = function(){
     this.body.CreateFixture(Zombie.POLY_FIXTURE);
+
+    // TODO: перенести из фикстурки
+    this.view.gotoAndPlay(Math.random() * 24);
+    this.view.animationSpeed  = 0.3;
 };
+
+Zombie.prototype.createTexture = function(){
+    this.view = new PIXI.MovieClip(Zombie.TEXTURE);
+};
+
 
 Zombie.prototype._changeDirectionCounter = 100;
 Zombie.prototype._changeDirection = 100;

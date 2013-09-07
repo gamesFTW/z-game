@@ -8,30 +8,23 @@ function Object2D() {
 Object2D.prototype.constructor = Object2D;
 
 // Initial methods
-Object2D.prototype.init = function(texture, world, isStatic, isAnimated) {
+Object2D.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    if (this.isStatic == undefined)
+        this.isStatic = isStatic;
+
+    if (this.isAnimated == undefined)
+        this.isAnimated = isAnimated;
+
     this.initFunctions = [this.defineProperties, this.createFixture];
 
-    this.addFunctionToInitFunction();
-
-    this.isStatic = isStatic;
-    if (isAnimated)
-        this.view = new PIXI.MovieClip(texture);
-    else
-        this.view = new PIXI.Sprite(texture);
-
-    if (isStatic)
-        this.body = world.CreateBody(Object2D.STATIC_BODY_DEF);
-    else
-        this.body = world.CreateBody(Object2D.DYNAMIC_BODY_DEF);
+    this.createTexture(isAnimated, texture);
+    this.createBody(isStatic, world);
 
     for (var i = 0; i < this.initFunctions.length; i++){
         this.initFunctions[i].apply(this);
     }
-};
 
-
-Object2D.prototype.addFunctionToInitFunction = function(){
-
+    this.setPosition(x, y);
 };
 
 
@@ -42,8 +35,23 @@ Object2D.prototype.defineProperties = function(){
 
 
 Object2D.prototype.createFixture = function(){
-    console.log("create");
     this.body.CreateFixture(Object2D.POLY_FIXTURE);
+};
+
+
+Object2D.prototype.createTexture = function(isAnimated, texture){
+    if (isAnimated)
+        this.view = new PIXI.MovieClip(texture);
+    else
+        this.view = new PIXI.Sprite(texture);
+};
+
+
+Object2D.prototype.createBody = function(isStatic, world){
+    if (isStatic)
+        this.body = world.CreateBody(Object2D.STATIC_BODY_DEF);
+    else
+        this.body = world.CreateBody(Object2D.DYNAMIC_BODY_DEF);
 };
 
 
@@ -52,6 +60,27 @@ Object2D.prototype.setPosition = function(x, y){
     var position = this.body.GetPosition();
     this.view.position.x = position.x * 100;
     this.view.position.y = position.y * 100;
+};
+
+
+Object2D.prototype.getX = function(){
+    var position = this.body.GetPosition();
+    return position.x * 100;
+};
+
+
+Object2D.prototype.getY = function(){
+    var position = this.body.GetPosition();
+    return position.y * 100;
+};
+
+
+Object2D.prototype.getPosition = function(){
+    var position = this.body.GetPosition();
+    return {
+        x:position.x * 100,
+        y:position.y * 100
+    }
 };
 
 

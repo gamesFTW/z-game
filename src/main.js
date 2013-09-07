@@ -1,4 +1,9 @@
-var assetsToLoader = ["img/zombieSprite.json", "img/blue-man.png", "img/brick.png"];
+var assetsToLoader = [
+    "img/zombieSprite.json",
+    "img/blue-man.png",
+    "img/brick.png",
+    "img/bullet.png"
+];
 
 // create a new loader
 var loader = new PIXI.AssetLoader(assetsToLoader);
@@ -16,8 +21,7 @@ document.body.appendChild(renderer.view);
 var game = new Game();
 game.init(renderer);
 
-function onAssetsLoaded()
-{
+function createAnimation(){
     // create an array to store the textures
     var zombieTextures = [];
     for (var i=0; i < 25; i++)
@@ -26,35 +30,21 @@ function onAssetsLoaded()
         zombieTextures.push(texture);
     }
 
-    var zombies = 100;
-    // create a texture from an image path
-    // add a bunch of aliens
+    Zombie.TEXTURE = zombieTextures;
+}
+
+function onAssetsLoaded()
+{
+    createAnimation();
+
+    var zombies = 500;
     for (var i = 0; i < zombies; i++) {
-        // create an explosion MovieClip
-        var zombie = new Zombie();
-        zombie.init(zombieTextures, game.world, false, true);
-
-        zombie.setPosition(Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
-        zombie.body.SetAngle(Math.random() * Math.PI);
-
-        zombie.view.gotoAndPlay(Math.random() * 24);
-        zombie.view.animationSpeed  = 0.3;
-
-        game.registerObject2D(zombie);
+        game.createObject2DAt(Zombie, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
     }
 
     createWalls();
 
-    var player = new Player();
-    var manTexture = PIXI.Texture.fromFrame("img/blue-man.png");
-    player.init(manTexture, game.world, false, false);
-    player.setPosition(Game.WIDTH / 2, Game.HEIGHT / 2);
-//    player.body.SetAngle(Math.random() * Math.PI);
-    game.registerObject2D(player);
-    game.registerPlayer(player);
-
-
-
+    game.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.world);
     game.mainLoop();
 }
 
@@ -63,10 +53,7 @@ function createWalls(){
     var brickTexture = PIXI.Texture.fromFrame("img/brick.png");
 
     function createWall(x, y){
-        var brick = new Wall();
-        brick.init(brickTexture, game.world, true, false);
-        brick.setPosition(x, y);
-        game.registerObject2D(brick);
+        game.createObject2DAt(Wall, x, y, brickTexture, true, false);
     }
 
     for (var i = 0; i < 50; i++) {

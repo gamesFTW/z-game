@@ -41,6 +41,21 @@ Game.prototype.init = function(renderer) {
 };
 
 
+Game.prototype.createObject2DAt = function(objectClass, x, y, texture, isStatic, isAnimated) {
+    var object2D = new objectClass();
+    object2D.init(this.world, x, y, texture, isStatic, isAnimated);
+    this.registerObject2D(object2D);
+    return object2D;
+};
+
+
+Game.prototype.createPlayerAt = function(x, y) {
+    var player = this.createObject2DAt(Player, x, y);
+    this.registerPlayer(player);
+    return player;
+};
+
+
 Game.prototype.registerObject2D = function(obj) {
     this.objects2D.push(obj)
     obj.game = this;
@@ -53,6 +68,11 @@ Game.prototype.registerPlayer = function(player) {
     this.player = player;
     // TODO говно же background
     this.player.defineMouseEvents(this.background);
+
+    var self = this;
+    this.player.onShoot = function(x, y){
+        self.playerShootHandler(x, y);
+    };
 };
 
 
@@ -103,7 +123,18 @@ Game.prototype.mainLoop = function() {
     loop();
 };
 
-// Static
+
+// Handlers
+Game.prototype.playerShootHandler = function(x, y){
+    var bullet = this.createObject2DAt(Bullet, this.player.getX(), this.player.getY());
+    bullet.body.ApplyImpulse(
+        new Box2D.Common.Math.b2Vec2(0.5, 0.5),
+        bullet.body.GetWorldCenter()
+    );
+
+};
+
+// Static property
 Game.TILE_SIZE = 40;
 Game.WIDTH = 1024;
 Game.HEIGHT = 768;

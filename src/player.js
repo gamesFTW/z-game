@@ -6,9 +6,7 @@ Player.prototype = Object.create( Object2D.prototype );
 Player.prototype.constructor = Player;
 
 
-Player.prototype.addFunctionToInitFunction = function(){
-
-};
+Player.prototype.isStatic = false;
 
 
 Player.prototype.defineMouseEvents = function(stage){
@@ -18,12 +16,17 @@ Player.prototype.defineMouseEvents = function(stage){
 //    var globalX = displayObject.worldTransform[2];
 //    var globalY = displayObject.worldTransform[5];
 //    console.log(stage);
+    var self = this;
     stage.click = function(event){
-        console.log("mousedown");
-        console.log(event);
         var x = event.global.x,
             y = event.global.y;
-        console.log(x+" " + y);
+
+//        self.body.SetPosition(new Box2D.Common.Math.b2Vec2(
+//
+//        ));
+
+//        self.setPosition(x, y);
+        self.onShoot(x, y);
     };
 };
 
@@ -31,29 +34,29 @@ Player.prototype.defineMouseEvents = function(stage){
 Player.prototype.createFixture = function(){
     var self = this;
     this.body.CreateFixture(Player.POLY_FIXTURE);
-    
-    
-    var bigBody = game.world.CreateBody(Object2D.STATIC_BODY_DEF);
-    
-    var jointDef = new Box2D.Dynamics.Joints.b2FrictionJointDef();
-    jointDef.Initialize(
-        this.body,
-	bigBody,
-	new Box2D.Common.Math.b2Vec2(0, 0)
-    );
-    //console.log(jointDef);
+    this.body.SetLinearDamping(6);
 
-    var joint = game.world.CreateJoint(jointDef);
-    joint.SetMaxForce(1.5);
-    //joint.SetMaxTorque(30);
-    
-     
-    
+//    var bigBody = game.world.CreateBody(Object2D.STATIC_BODY_DEF);
+//
+//    var jointDef = new Box2D.Dynamics.Joints.b2FrictionJointDef();
+//    jointDef.Initialize(
+//        this.body,
+//	bigBody,
+//	new Box2D.Common.Math.b2Vec2(0, 0)
+//    );
+//
+//    var joint = game.world.CreateJoint(jointDef);
+//    joint.SetMaxForce(1.5);
+};
+
+
+Player.prototype.createTexture = function(){
+    var manTexture = PIXI.Texture.fromFrame("img/blue-man.png");
+    this.view = new PIXI.Sprite(manTexture);
 };
 
 
 Player.prototype.tick = function() {
-
     var vertical = 0;
     var horizontal = 0;
     var activeKeys = KeyboardJS.activeKeys();
@@ -97,7 +100,6 @@ Player.prototype.tick = function() {
         var newRotation = radian - (90 * (Math.PI / 180));
         this.body.SetAngle(newRotation);
     }
-
 };
 
 
