@@ -4,7 +4,11 @@ function Game() {
 
 Game.prototype.constructor = Game;
 
+
 Game.prototype.init = function(renderer) {
+    this.destroyList = [];
+    this.objects2D = [];
+
     this.withInTile = Game.WIDTH / Game.TILE_SIZE;
     this.heightInTile = Game.HEIGHT / Game.TILE_SIZE;
 
@@ -18,7 +22,6 @@ Game.prototype.init = function(renderer) {
     this.background.setInteractive(true);
 
     this.world = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, 0),  true);
-    this.objects2D = [];
 
     //TODO: убрать в другое место
     const container = document.createElement("div");
@@ -32,12 +35,29 @@ Game.prototype.init = function(renderer) {
 
 
 
-//    var b2Listener = Box2D.Dynamics.b2ContactListener;
-//    var listener = new b2Listener;
-//    listener.PostSolve = function(contact, impulse) {
-////        console.log("PostSolve");
-//    }
-//    this.world.SetContactListener(listener);
+    var b2Listener = Box2D.Dynamics.b2ContactListener;
+    var listener = new b2Listener;
+
+    var self = this;
+    listener.PostSolve = function(contact, impulse) {
+        var objectA = contact.GetFixtureA().GetBody().GetUserData();
+        var objectB = contact.GetFixtureB().GetBody().GetUserData();
+
+        if (objectA.__proto__.constructor == Bullet){
+            var velocity = objectA.body.GetLinearVelocity();
+            var speed = Number(Math.abs(velocity.x).toFixed(4)) + Number(Math.abs(velocity.y).toFixed(4));
+
+            if (speed < 2){
+                self.destroyList.push(objectA);
+            }
+        }
+
+        if (objectA.__proto__.constructor == Bullet && objectB.__proto__.constructor == Zombie){
+            self.destroyList.push(objectA);
+            objectB.takeDamage(20);
+        }
+    };
+    this.world.SetContactListener(listener);
 };
 
 
@@ -45,6 +65,14 @@ Game.prototype.createObject2DAt = function(objectClass, x, y, texture, isStatic,
     var object2D = new objectClass();
     object2D.init(this.world, x, y, texture, isStatic, isAnimated);
     this.registerObject2D(object2D);
+
+    if (object2D.isLive){
+        var self = this;
+        object2D.onDie = function(object){
+            self.onLiveObjectDie(object);
+        };
+    }
+
     return object2D;
 };
 
@@ -57,9 +85,9 @@ Game.prototype.createPlayerAt = function(x, y) {
 
 
 Game.prototype.registerObject2D = function(obj) {
-    this.objects2D.push(obj)
-    obj.game = this;
+    this.objects2D.push(obj);
     // TODO: не скармливать внутрь
+    obj.game = this;
     this.stage.addChild(obj.view);
 };
 
@@ -102,6 +130,7 @@ Game.prototype.mainLoop = function() {
     var self = this;
 
     function loop(){
+        self.mainLoopDestroyObjectsStep();
         // Cчитываем кнопки пользователя
 
         // Считаем таймер для делеев и симуляци
@@ -124,14 +153,58 @@ Game.prototype.mainLoop = function() {
 };
 
 
-// Handlers
+Game.prototype.mainLoopDestroyObjectsStep = function() {
+    if (this.destroyList.length > 0){
+        // Удаляем объекты
+        for (var i in this.destroyList) {
+            var object = this.destroyList[i];
+            this.world.DestroyBody(object.body);
+
+            // TODO: Без этого условия часто вылетает, и ругается, что нету парента, похоже в destroyList
+            // часто успевает попасть 2 раза один и тот же объект
+            if (object.view.parent)
+                this.stage.removeChild(object.view);
+
+            var index = this.objects2D.indexOf(object);
+            if (index != -1){
+                this.objects2D.splice(index, 1);
+            }
+
+            delete this.destroyList[i];
+        }
+        this.destroyList = [];
+    }
+};
+
+
+//--------------------------------------------------------------------------------------------------------------
+//
+//  Handlers
+//
+//--------------------------------------------------------------------------------------------------------------
 Game.prototype.playerShootHandler = function(x, y){
-    var bullet = this.createObject2DAt(Bullet, this.player.getX(), this.player.getY());
+    var playerX = this.player.getX();
+    var playerY = this.player.getY();
+
+    var radian = Math.atan2(y - playerY, x - playerX);
+
+    var speed = 1;
+    var vel = {
+        x: Math.cos(radian) * speed,
+        y: Math.sin(radian) * speed
+    };
+
+    var bullet = this.createObject2DAt(Bullet, playerX + (vel.x * 10), playerY + (vel.y * 10));
+
     bullet.body.ApplyImpulse(
-        new Box2D.Common.Math.b2Vec2(0.5, 0.5),
+        new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
         bullet.body.GetWorldCenter()
     );
+};
 
+
+Game.prototype.onLiveObjectDie = function(object){
+    this.destroyList.push(object);
 };
 
 // Static property

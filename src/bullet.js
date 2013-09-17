@@ -14,7 +14,6 @@ Bullet.prototype.createFixture = function(){
 
 
 Bullet.prototype.createTexture = function(){
-    console.log("createTexture");
     var manTexture = PIXI.Texture.fromFrame("img/bullet.png");
     this.view = new PIXI.Sprite(manTexture);
 };

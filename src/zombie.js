@@ -1,10 +1,7 @@
 function Zombie() {
 }
-
-
-Zombie.prototype = Object.create( Object2D.prototype );
+Zombie.prototype = Object.create( LiveObject.prototype );
 Zombie.prototype.constructor = Zombie;
-
 
 Zombie.prototype.isStatic = false;
 
@@ -16,6 +13,7 @@ Zombie.prototype.createFixture = function(){
     this.view.gotoAndPlay(Math.random() * 24);
     this.view.animationSpeed  = 0.3;
 };
+
 
 Zombie.prototype.createTexture = function(){
     this.view = new PIXI.MovieClip(Zombie.TEXTURE);

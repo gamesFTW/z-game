@@ -1,8 +1,6 @@
 function Player() {
 }
-
-
-Player.prototype = Object.create( Object2D.prototype );
+Player.prototype = Object.create( LiveObject.prototype );
 Player.prototype.constructor = Player;
 
 
