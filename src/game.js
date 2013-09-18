@@ -52,7 +52,7 @@ Game.prototype.init = function(renderer) {
             }
         }
 
-        if (objectA.__proto__.constructor == Bullet && objectB.__proto__.constructor == Zombie){
+        if (objectA.__proto__.constructor == Bullet && objectB.isLive){
             self.destroyList.push(objectA);
             objectB.takeDamage(20);
         }
@@ -177,16 +177,21 @@ Game.prototype.mainLoopDestroyObjectsStep = function() {
 };
 
 
+
 //--------------------------------------------------------------------------------------------------------------
 //
 //  Handlers
 //
 //--------------------------------------------------------------------------------------------------------------
 Game.prototype.playerShootHandler = function(x, y){
+    // TODO: сделать универсальную функцию shootAt, которой можно скармить как Object2d, так и координаты
+
     var playerX = this.player.getX();
     var playerY = this.player.getY();
 
-    var radian = Math.atan2(y - playerY, x - playerX);
+    // Погрешность выстрела
+    var infelicity = Math.random() * (0.1 * 2) - 0.1;
+    var radian = Math.atan2(y - playerY, x - playerX) + infelicity;
 
     var speed = 1;
     var vel = {

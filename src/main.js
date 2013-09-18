@@ -37,7 +37,7 @@ function onAssetsLoaded()
 {
     createAnimation();
 
-    var zombies = 100;
+    var zombies = 200;
     for (var i = 0; i < zombies; i++) {
         game.createObject2DAt(Zombie, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
     }

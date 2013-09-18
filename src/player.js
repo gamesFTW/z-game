@@ -7,24 +7,37 @@ Player.prototype.constructor = Player;
 Player.prototype.isStatic = false;
 
 
+Player.prototype.onShoot = function(){};
+
+
 Player.prototype.defineMouseEvents = function(stage){
-//    best way to get the global x y at the moment would be to acces the worldTransform matrix.
-//        the x global x position would be
-//
-//    var globalX = displayObject.worldTransform[2];
-//    var globalY = displayObject.worldTransform[5];
-//    console.log(stage);
     var self = this;
-    stage.click = function(event){
-        var x = event.global.x,
-            y = event.global.y;
+    var interval = null;
 
-//        self.body.SetPosition(new Box2D.Common.Math.b2Vec2(
-//
-//        ));
+    var mouseX = 0;
+    var mouseY = 0;
 
-//        self.setPosition(x, y);
-        self.onShoot(x, y);
+    function mouseMoveHandler(event){
+        mouseX = event.global.x;
+        mouseY = event.global.y;
+    }
+
+    stage.mousedown = function(event){
+        mouseX = event.global.x;
+        mouseY = event.global.y;
+
+        self.onShoot(mouseX, mouseY);
+
+        interval = setInterval(function(){
+            self.onShoot(mouseX, mouseY);
+        }, 80);
+
+        stage.mousemove = mouseMoveHandler;
+    };
+
+    stage.mouseup = function(event){
+        stage.mousemove = null;
+        clearInterval(interval);
     };
 };
 
@@ -33,18 +46,6 @@ Player.prototype.createFixture = function(){
     var self = this;
     this.body.CreateFixture(Player.POLY_FIXTURE);
     this.body.SetLinearDamping(6);
-
-//    var bigBody = game.world.CreateBody(Object2D.STATIC_BODY_DEF);
-//
-//    var jointDef = new Box2D.Dynamics.Joints.b2FrictionJointDef();
-//    jointDef.Initialize(
-//        this.body,
-//	bigBody,
-//	new Box2D.Common.Math.b2Vec2(0, 0)
-//    );
-//
-//    var joint = game.world.CreateJoint(jointDef);
-//    joint.SetMaxForce(1.5);
 };
 
 
