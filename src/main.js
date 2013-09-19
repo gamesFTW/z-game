@@ -88,4 +88,21 @@ function createWalls(){
     }
 }
 
+function loadSound() {
+    if (!createjs.Sound.initializeDefaultPlugins()) {return;}
 
+    var audioPath = "../assets/";
+    var manifest = [
+        {id:"shoot", src:audioPath+"shoot.mp3"},
+        {id:"zombie_die", src:audioPath+"zombie_die.mp3"}
+    ];
+
+    createjs.Sound.addEventListener("loadComplete", handleLoad);
+    createjs.Sound.registerManifest(manifest);
+}
+
+function handleLoad(event) {
+
+}
+
+loadSound();

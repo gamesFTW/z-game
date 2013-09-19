@@ -70,6 +70,7 @@ Game.prototype.createObject2DAt = function(objectClass, x, y, texture, isStatic,
         var self = this;
         object2D.onDie = function(object){
             self.onLiveObjectDie(object);
+            createjs.Sound.play("zombie_die", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
         };
     }
 
@@ -193,7 +194,7 @@ Game.prototype.playerShootHandler = function(x, y){
     var infelicity = Math.random() * (0.1 * 2) - 0.1;
     var radian = Math.atan2(y - playerY, x - playerX) + infelicity;
 
-    var speed = 1;
+    var speed = 1.3;
     var vel = {
         x: Math.cos(radian) * speed,
         y: Math.sin(radian) * speed
@@ -205,6 +206,8 @@ Game.prototype.playerShootHandler = function(x, y){
         new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
         bullet.body.GetWorldCenter()
     );
+
+    createjs.Sound.play("shoot", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 0.2);
 };
 
 
