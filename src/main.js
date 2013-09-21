@@ -21,6 +21,8 @@ document.body.appendChild(renderer.view);
 var game = new Game();
 game.init(renderer);
 
+var gameInterface = new GameInterface(game);
+
 function createAnimation(){
     // create an array to store the textures
     var zombieTextures = [];
@@ -37,10 +39,16 @@ function onAssetsLoaded()
 {
     createAnimation();
 
-    var zombies = 200;
-    for (var i = 0; i < zombies; i++) {
-        game.createObject2DAt(Zombie, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
-    }
+    //var zombies = 100;
+    //for (var i = 0; i < zombies; i++) {
+    //    game.createObject2DAt(Zombie, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+    //}
+    var zombieManager = new ZombieManager();
+    zombieManager.init();
+    zombieManager.setSpawnPoint(0, 0);
+    zombieManager.setSpawnPoint(Game.WIDTH, 0);
+    zombieManager.setSpawnPoint(0, Game.HEIGHT);
+    zombieManager.setSpawnPoint(Game.WIDTH, Game.HEIGHT);
 
     createWalls();
 
@@ -56,36 +64,59 @@ function createWalls(){
         game.createObject2DAt(Wall, x, y, brickTexture, true, false);
     }
 
-    for (var i = 0; i < 50; i++) {
-        createWall(
-            _.random(0, game.withInTile) * Game.TILE_SIZE,
-            _.random(0, game.heightInTile) * Game.TILE_SIZE
-        );
+    function createBorders(){
+        var bodyDef = new Box2D.Dynamics.b2BodyDef();
+        bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
+
+        function createBorder(width, height, x, y){
+            var body = game.world.CreateBody(bodyDef);
+
+            var fixture = new Box2D.Dynamics.b2FixtureDef();
+            fixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();
+            fixture.shape.SetAsBox(width, height);
+            fixture.filter.categoryBits = Collisions.CATEGORY_GAME_BORDER;
+
+            body.CreateFixture(fixture);
+            body.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
+        }
+
+        createBorder(Game.WIDTH / 100, 0.01, 0, 0);
+        createBorder(0.01, Game.HEIGHT / 100, 0, 0);
+        createBorder(Game.WIDTH / 100, 0.01, 0, Game.HEIGHT / 100);
+        createBorder(0.01, Game.HEIGHT / 100, Game.WIDTH / 100, 0);
     }
 
-    for (i = 0; i < game.withInTile + 1; i++) {
-        createWall(
-            i * Game.TILE_SIZE, 0
-        );
-    }
+    createBorders();
+//    for (var i = 0; i < 50; i++) {
+//        createWall(
+//            _.random(0, game.withInTile) * Game.TILE_SIZE,
+//            _.random(0, game.heightInTile) * Game.TILE_SIZE
+//        );
+//    }
 
-    for (var i = 0; i < game.withInTile + 1; i++) {
-        createWall(
-            i * Game.TILE_SIZE, Game.TILE_SIZE * game.heightInTile
-        );
-    }
-
-    for (i = 0; i < game.heightInTile + 1; i++) {
-        createWall(
-            0, i * Game.TILE_SIZE
-        );
-    }
-
-    for (i = 0; i < game.withInTile + 1; i++) {
-        createWall(
-            Game.WIDTH, Game.TILE_SIZE * i
-        );
-    }
+//    for (i = 0; i < game.withInTile + 1; i++) {
+//        createWall(
+//            i * Game.TILE_SIZE, 0
+//        );
+//    }
+//
+//    for (var i = 0; i < game.withInTile + 1; i++) {
+//        createWall(
+//            i * Game.TILE_SIZE, Game.TILE_SIZE * game.heightInTile
+//        );
+//    }
+//
+//    for (i = 0; i < game.heightInTile + 1; i++) {
+//        createWall(
+//            0, i * Game.TILE_SIZE
+//        );
+//    }
+//
+//    for (i = 0; i < game.withInTile + 1; i++) {
+//        createWall(
+//            Game.WIDTH, Game.TILE_SIZE * i
+//        );
+//    }
 }
 
 function loadSound() {

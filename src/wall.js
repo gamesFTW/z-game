@@ -22,3 +22,4 @@ Wall.POLY_FIXTURE.shape = new Box2D.Collision.Shapes.b2PolygonShape();
 Wall.POLY_FIXTURE.shape.SetAsBox(20 / 100, 20 / 100);
 Wall.POLY_FIXTURE.filter.categoryBits = 3;
 Wall.POLY_FIXTURE.density = 1;
+Wall.POLY_FIXTURE.friction = 0.9;

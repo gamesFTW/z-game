@@ -29,6 +29,10 @@ Object2D.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     this.setPosition(x, y);
 };
 
+Object2D.prototype.isInstanceOf = function(cls){
+    return this instanceof cls;
+};
+
 
 Object2D.prototype.defineProperties = function(){
     this.view.anchor.x = 0.5;
@@ -74,6 +78,11 @@ Object2D.prototype.getX = function(){
 Object2D.prototype.getY = function(){
     var position = this.body.GetPosition();
     return position.y * 100;
+};
+
+
+Object2D.prototype.getRadianBetweenMeAnd = function(object2d){
+   return Math.atan2(this.getY() - object2d.getY(), this.getX() - object2d.getX());
 };
 
 

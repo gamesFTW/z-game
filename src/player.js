@@ -30,7 +30,7 @@ Player.prototype.defineMouseEvents = function(stage){
 
         interval = setInterval(function(){
             self.onShoot(mouseX, mouseY);
-        }, 80);
+        }, 120);
 
         stage.mousemove = mouseMoveHandler;
     };
@@ -113,5 +113,5 @@ Player.POLY_FIXTURE.shape.SetAsBox(5 / 100, 5 / 100);
 Player.SPEED = 0.05;
 Player.MAX_VELOCITY = 1;
 //Player.POLY_FIXTURE.restitution = 0.1;
-//Player.POLY_FIXTURE.filter.categoryBits = 1;
-//Player.POLY_FIXTURE.filter.maskBits = 2;
+Player.POLY_FIXTURE.filter.categoryBits = Collisions.CATEGORY_PLAYER;
+Player.POLY_FIXTURE.filter.maskBits = Collisions.MASK_PLAYER;

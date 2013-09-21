@@ -5,6 +5,15 @@ function Game() {
 Game.prototype.constructor = Game;
 
 
+// Static property
+Game.TILE_SIZE = 40;
+Game.WIDTH = 1024;
+Game.HEIGHT = 768;
+
+
+Game.prototype.onPlayerHpChanged = function(){};
+
+
 Game.prototype.init = function(renderer) {
     this.destroyList = [];
     this.objects2D = [];
@@ -14,9 +23,12 @@ Game.prototype.init = function(renderer) {
 
     this.renderer = renderer;
 
+    this.timer = new GlobalTimer();
+    this.timer.init();
+
     this.stage = new PIXI.Stage(0xEEFFFF, true);
     this.stage.hitArea = new PIXI.Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
-    //TODO: перенести бг
+    //TODO: перенести бг, но куда?
     this.background = PIXI.Sprite.fromImage("./img/bg.jpg");
     this.stage.addChild(this.background);
     this.background.setInteractive(true);
@@ -24,38 +36,16 @@ Game.prototype.init = function(renderer) {
     this.world = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, 0),  true);
 
     //TODO: убрать в другое место
-    const container = document.createElement("div");
-    document.body.appendChild(container);
     this.stats = new Stats();
-    container.appendChild(this.stats.domElement);
+    $(".viewport").append(this.stats.domElement);
     this.stats.domElement.style.position = "absolute";
 
-
-
-
-
-
+    // Глобальные столкновения
     var b2Listener = Box2D.Dynamics.b2ContactListener;
     var listener = new b2Listener;
-
     var self = this;
     listener.PostSolve = function(contact, impulse) {
-        var objectA = contact.GetFixtureA().GetBody().GetUserData();
-        var objectB = contact.GetFixtureB().GetBody().GetUserData();
-
-        if (objectA.__proto__.constructor == Bullet){
-            var velocity = objectA.body.GetLinearVelocity();
-            var speed = Number(Math.abs(velocity.x).toFixed(4)) + Number(Math.abs(velocity.y).toFixed(4));
-
-            if (speed < 2){
-                self.destroyList.push(objectA);
-            }
-        }
-
-        if (objectA.__proto__.constructor == Bullet && objectB.isLive){
-            self.destroyList.push(objectA);
-            objectB.takeDamage(20);
-        }
+        self.globalPostSolveHandler(contact, impulse);
     };
     this.world.SetContactListener(listener);
 };
@@ -68,9 +58,8 @@ Game.prototype.createObject2DAt = function(objectClass, x, y, texture, isStatic,
 
     if (object2D.isLive){
         var self = this;
-        object2D.onDie = function(object){
+        object2D.onDie = function(object) {
             self.onLiveObjectDie(object);
-            createjs.Sound.play("zombie_die", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
         };
     }
 
@@ -102,15 +91,14 @@ Game.prototype.registerPlayer = function(player) {
     this.player.onShoot = function(x, y){
         self.playerShootHandler(x, y);
     };
+
+    this.player.onHpChanged = function(newHp){
+        self.onPlayerHpChanged(newHp);
+    };
 };
 
 
-Game.prototype.globalTimer = function() {
-    // Палит всякие обновления делев
-};
-
-
-Game.prototype.reRender = function() {
+Game.prototype.render = function() {
     // Обновляем позиции в PIXI
     for (var i = 0; i < this.objects2D.length; i++) {
         this.objects2D[i].updateView();
@@ -137,13 +125,15 @@ Game.prototype.mainLoop = function() {
         // Считаем таймер для делеев и симуляци
 
         // Тикает все тикающие объекты
+        self.timer.tick();
         self.tickObjects2D();
-        // Эмулейтим колижины TODO поставить не 1/60 а реальное время
+        // Эмулейтим колижины
+        // TODO поставить не 1/60 а реальное время
         self.world.Step(1 / 60,  3,  3);
         self.world.ClearForces();
 
         // Резолвим эвенты от колижинов и другие подсчеты
-        self.reRender();
+        self.render();
 
         //TODO посмотреть нужно ли это засовывать сюда или можно один раз вызвать
         requestAnimFrame(loop);
@@ -178,7 +168,6 @@ Game.prototype.mainLoopDestroyObjectsStep = function() {
 };
 
 
-
 //--------------------------------------------------------------------------------------------------------------
 //
 //  Handlers
@@ -194,28 +183,80 @@ Game.prototype.playerShootHandler = function(x, y){
     var infelicity = Math.random() * (0.1 * 2) - 0.1;
     var radian = Math.atan2(y - playerY, x - playerX) + infelicity;
 
-    var speed = 1.3;
+    var speed = 0.4;
     var vel = {
         x: Math.cos(radian) * speed,
         y: Math.sin(radian) * speed
     };
-
-    var bullet = this.createObject2DAt(Bullet, playerX + (vel.x * 10), playerY + (vel.y * 10));
+    var pluser = 25;
+    var bullet = this.createObject2DAt(Bullet, playerX + (vel.x * pluser), playerY + (vel.y * pluser));
 
     bullet.body.ApplyImpulse(
         new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
         bullet.body.GetWorldCenter()
     );
 
-    createjs.Sound.play("shoot", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 0.2);
+    createjs.Sound.play("shoot", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 0.4);
+
+    // self destroy in 10 secs
+    var self = this;
+    delay(function() {
+        self.destroyList.push(bullet);
+    }, 10 * 1000);
 };
 
 
-Game.prototype.onLiveObjectDie = function(object){
+Game.prototype.onLiveObjectDie = function(object) {
     this.destroyList.push(object);
 };
 
-// Static property
-Game.TILE_SIZE = 40;
-Game.WIDTH = 1024;
-Game.HEIGHT = 768;
+
+Game.prototype.globalPostSolveHandler = function(contact, impulse) {
+    var objectA = contact.GetFixtureA().GetBody().GetUserData();
+    var objectB = contact.GetFixtureB().GetBody().GetUserData();
+
+    if(objectA && objectB){
+        if (objectA.isInstanceOf(Bullet)){
+            var velocity = objectA.body.GetLinearVelocity();
+            var speed = Number(Math.abs(velocity.x).toFixed(4)) + Number(Math.abs(velocity.y).toFixed(4));
+
+            if (speed < 5){
+                this.destroyList.push(objectA);
+            }
+        }
+
+        if (objectA.isInstanceOf(Bullet) && objectB.isInstanceOf(LiveObject)){
+            this.destroyList.push(objectA);
+            objectB.takeDamage(34);
+        }
+
+        if ((objectA.isInstanceOf(Zombie) && objectB.isInstanceOf(Player)) ||
+            (objectA.isInstanceOf(Player) && objectB.isInstanceOf(Zombie))){
+            // определяем кто из них кто
+            if (objectA.isInstanceOf(Player)){
+                var player = objectA,
+                    zombie = objectB;
+            } else {
+                var player = objectB,
+                    zombie = objectA;
+            }
+
+            // найти угол между зомби и плеером
+            var radian = player.getRadianBetweenMeAnd(zombie);
+
+            var speed = 0.3;
+            var vel = {
+                x: Math.cos(radian) * speed,
+                y: Math.sin(radian) * speed
+            };
+
+            // создать на плеера импульс в эту сторону
+            player.body.ApplyImpulse(
+                new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
+                player.body.GetWorldCenter()
+            );
+
+            player.takeDamage(zombie.damage);
+        }
+    }
+};
