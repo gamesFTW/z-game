@@ -59,3 +59,7 @@ GlobalTimer.prototype.delay = function(func, delay, repeat) {
     });
     return this;
 }
+
+GlobalTimer.prototype.removeDelay = function() {
+// TODO заимплементить с ID
+}

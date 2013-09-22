@@ -16,6 +16,8 @@ Player.prototype.defineMouseEvents = function(stage){
 
     var mouseX = 0;
     var mouseY = 0;
+    var fireRate = 120;
+    var isFiring = false;
 
     function mouseMoveHandler(event){
         mouseX = event.global.x;
@@ -25,19 +27,26 @@ Player.prototype.defineMouseEvents = function(stage){
     stage.mousedown = function(event){
         mouseX = event.global.x;
         mouseY = event.global.y;
+        isFiring = true;
 
         self.onShoot(mouseX, mouseY);
 
-        interval = setInterval(function(){
-            self.onShoot(mouseX, mouseY);
-        }, 120);
+        function shootCycle() {
+            delay(function(){
+                if (!isFiring) return;
+                self.onShoot(mouseX, mouseY);
+                shootCycle();
+            }, fireRate);
+        };
+
+        shootCycle();
 
         stage.mousemove = mouseMoveHandler;
     };
 
     stage.mouseup = function(event){
         stage.mousemove = null;
-        clearInterval(interval);
+        isFiring = false;
     };
 };
 
