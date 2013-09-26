@@ -1,5 +1,7 @@
 var assetsToLoader = [
     "img/zombieSprite.json",
+    "img/zombieLightBlueSprite.json",
+    "img/zombieRedSprite.json",
     "img/blue-man.png",
     "img/brick.png",
     "img/bullet.png"
@@ -31,18 +33,35 @@ function createAnimation(){
         var texture = PIXI.Texture.fromFrame("zombie_" + (i) + ".png");
         zombieTextures.push(texture);
     }
-
     Zombie.TEXTURE = zombieTextures;
+
+
+    zombieTextures = [];
+    for (i=0; i < 25; i++)
+    {
+        texture = PIXI.Texture.fromFrame("zombieLightBlue_" + (i) + ".png");
+        zombieTextures.push(texture);
+    }
+    ZombieFast.TEXTURE = zombieTextures;
+
+
+    zombieTextures = [];
+    for (i=0; i < 25; i++)
+    {
+        texture = PIXI.Texture.fromFrame("zombieRed_" + (i) + ".png");
+        zombieTextures.push(texture);
+    }
+    ZombieDamage.TEXTURE = zombieTextures;
 }
 
 function onAssetsLoaded()
 {
     createAnimation();
 
-    //var zombies = 100;
-    //for (var i = 0; i < zombies; i++) {
-    //    game.createObject2DAt(Zombie, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
-    //}
+//    var zombies = 1;
+//    for (var i = 0; i < zombies; i++) {
+//        game.createObject2DAt(ZombieFast, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+//    }
     var zombieManager = new ZombieManager();
     zombieManager.init();
     zombieManager.setSpawnPoint(0, 0);
@@ -87,12 +106,12 @@ function createWalls(){
     }
 
     createBorders();
-//    for (var i = 0; i < 50; i++) {
-//        createWall(
-//            _.random(0, game.withInTile) * Game.TILE_SIZE,
-//            _.random(0, game.heightInTile) * Game.TILE_SIZE
-//        );
-//    }
+    for (var i = 0; i < 20; i++) {
+        createWall(
+            _.random(0, game.withInTile) * Game.TILE_SIZE,
+            _.random(0, game.heightInTile) * Game.TILE_SIZE
+        );
+    }
 
 //    for (i = 0; i < game.withInTile + 1; i++) {
 //        createWall(
@@ -125,6 +144,8 @@ function loadSound() {
     var audioPath = "../assets/";
     var manifest = [
         {id:"shoot", src:audioPath+"shoot.mp3"},
+        {id:"player_hit", src:audioPath+"player_hit.mp3"},
+        {id:"player_die", src:audioPath+"player_die.mp3"},
         {id:"zombie_die", src:audioPath+"zombie_die.mp3"}
     ];
 

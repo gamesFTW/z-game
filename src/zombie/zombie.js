@@ -9,6 +9,12 @@ Zombie.prototype.isStatic = false;
 
 
 Zombie.prototype.damage = 10;
+Zombie.prototype.acceleration  = 0.015;
+Zombie.prototype.dullness  = 1;
+Zombie.prototype.maxSpeed = 0.4;
+
+
+Zombie.prototype.soundDie = "zombie_die";
 
 
 Zombie.prototype.createFixture = function(){
@@ -38,7 +44,7 @@ Zombie.prototype.tick = function() {
     var self = this;
     function randomateInfelicity(){
         // Рандомим погрешность, что бы зомби не шли по прямой на плеера.
-        var infelicity = Math.random() * (1 - 0) + 1;
+        var infelicity = Math.random() * (self.dullness - 0) + self.dullness;
         self._radianInfelicity = _.random(- infelicity, infelicity);
     }
 
@@ -57,23 +63,18 @@ Zombie.prototype.tick = function() {
     var radian = Math.atan2(playerY - zombiePosition.y, playerX - zombiePosition.x);
     this._radianWithInfelicity = radian + this._radianInfelicity;
 
-    var speed = 0.015;
-
-
-    var MAX_VELOCITY = 0.4;
-
     var velocity = this.body.GetLinearVelocity();
 
     var newVelocity = new Box2D.Common.Math.b2Vec2(
-        Math.cos(this._radianWithInfelicity) * speed,
-        Math.sin(this._radianWithInfelicity) * speed
+        Math.cos(this._radianWithInfelicity) * this.acceleration,
+        Math.sin(this._radianWithInfelicity) * this.acceleration
     );
 
 
-    if ((Math.abs(newVelocity.x + velocity.x) > MAX_VELOCITY) && signum(newVelocity.x) == signum(velocity.x))
+    if ((Math.abs(newVelocity.x + velocity.x) > this.maxSpeed) && signum(newVelocity.x) == signum(velocity.x))
         newVelocity.x = 0;
 
-    if ((Math.abs(newVelocity.y + velocity.y) > MAX_VELOCITY) && signum(newVelocity.y) == signum(velocity.y))
+    if ((Math.abs(newVelocity.y + velocity.y) > this.maxSpeed) && signum(newVelocity.y) == signum(velocity.y))
         newVelocity.y = 0;
 
     this.body.ApplyImpulse(
@@ -96,6 +97,40 @@ Zombie.POLY_FIXTURE.filter.categoryBits = Collisions.CATEGORY_MONSTER;
 Zombie.POLY_FIXTURE.filter.maskBits = Collisions.MASK_MONSTER;
 
 
+function ZombieFast() {
+
+}
+ZombieFast.prototype = Object.create( Zombie.prototype );
+ZombieFast.prototype.constructor = ZombieFast;
+
+ZombieFast.prototype.hp = 50;
+ZombieFast.prototype.acceleration = 0.3;
+ZombieFast.prototype.maxSpeed = 0.6;
+ZombieFast.prototype.dullness = 0.2;
 
 
+ZombieFast.prototype.createTexture = function(){
+    this.view = new PIXI.MovieClip(ZombieFast.TEXTURE);
+
+    this.view.gotoAndPlay(_.random(0,24));
+    this.view.animationSpeed = 0.45;
+};
+
+
+function ZombieDamage() {
+
+}
+ZombieDamage.prototype = Object.create( Zombie.prototype );
+ZombieDamage.prototype.constructor = ZombieDamage;
+
+ZombieDamage.prototype.dullness = 0.2;
+ZombieDamage.prototype.damage = 30;
+
+
+ZombieDamage.prototype.createTexture = function(){
+    this.view = new PIXI.MovieClip(ZombieDamage.TEXTURE);
+
+    this.view.gotoAndPlay(_.random(0,24));
+    this.view.animationSpeed = 0.3;
+};
 

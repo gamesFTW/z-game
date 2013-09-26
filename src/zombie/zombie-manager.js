@@ -13,7 +13,13 @@ ZombieManager.prototype.init = function() {
 }
 
 ZombieManager.prototype.spawn = function(spawnPoint) {
-    game.createObject2DAt(Zombie, spawnPoint.x, spawnPoint.y);
+    var rnd = _.random(0, 4);
+
+    if (rnd == 0) var zombieClass = ZombieFast;
+    else if (rnd == 1) zombieClass = ZombieDamage;
+    else zombieClass = Zombie;
+
+    game.createObject2DAt(zombieClass, spawnPoint.x, spawnPoint.y);
 }
 
 ZombieManager.prototype.setSpawnPoint = function(x, y, rate) {

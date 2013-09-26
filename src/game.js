@@ -257,6 +257,7 @@ Game.prototype.globalPostSolveHandler = function(contact, impulse) {
             );
 
             player.takeDamage(zombie.damage);
+            createjs.Sound.play("player_hit", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
         }
     }
 };

@@ -10,6 +10,9 @@ Player.prototype.isStatic = false;
 Player.prototype.onShoot = function(){};
 
 
+Player.prototype.soundDie = "player_die";
+
+
 Player.prototype.defineMouseEvents = function(stage){
     var self = this;
     var interval = null;
@@ -25,28 +28,32 @@ Player.prototype.defineMouseEvents = function(stage){
     }
 
     stage.mousedown = function(event){
-        mouseX = event.global.x;
-        mouseY = event.global.y;
-        isFiring = true;
+        if (event.originalEvent.button == 0){
+            mouseX = event.global.x;
+            mouseY = event.global.y;
+            isFiring = true;
 
-        self.onShoot(mouseX, mouseY);
+            self.onShoot(mouseX, mouseY);
 
-        function shootCycle() {
-            delay(function(){
-                if (!isFiring) return;
-                self.onShoot(mouseX, mouseY);
-                shootCycle();
-            }, fireRate);
-        };
+            function shootCycle() {
+                delay(function(){
+                    if (!isFiring) return;
+                    self.onShoot(mouseX, mouseY);
+                    shootCycle();
+                }, fireRate);
+            }
 
-        shootCycle();
+            shootCycle();
 
-        stage.mousemove = mouseMoveHandler;
+            stage.mousemove = mouseMoveHandler;
+        }
     };
 
     stage.mouseup = function(event){
-        stage.mousemove = null;
-        isFiring = false;
+        if (event.originalEvent.button == 0){
+            stage.mousemove = null;
+            isFiring = false;
+        }
     };
 };
 

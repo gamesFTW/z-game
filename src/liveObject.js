@@ -23,6 +23,6 @@ LiveObject.prototype.takeDamage = function(damage){
 
 
 LiveObject.prototype.die = function(){
-    createjs.Sound.play("zombie_die", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+    createjs.Sound.play(this.soundDie, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
     this.onDie(this);
 };
