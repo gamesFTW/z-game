@@ -5,7 +5,7 @@ Player.prototype.constructor = Player;
 
 
 Player.prototype.isStatic = false;
-
+Player.prototype.isLeftMouseDown = false;
 
 Player.prototype.onShoot = function(){};
 
@@ -29,7 +29,8 @@ Player.prototype.defineMouseEvents = function(stage){
     }
 
     stage.mousedown = function(event){
-        if (event.originalEvent.button == 0){
+        if (event.originalEvent.button == 0 && !self.isLeftMouseDown){
+            self.isLeftMouseDown = true;
             mouseX = event.global.x;
             mouseY = event.global.y;
             isFiring = true;
@@ -52,6 +53,7 @@ Player.prototype.defineMouseEvents = function(stage){
 
     stage.mouseup = function(event){
         if (event.originalEvent.button == 0){
+            self.isLeftMouseDown = false;
             stage.mousemove = null;
             isFiring = false;
         }
