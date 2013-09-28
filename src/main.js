@@ -141,7 +141,7 @@ function createWalls(){
 function loadSound() {
     if (!createjs.Sound.initializeDefaultPlugins()) {return;}
 
-    var audioPath = "../assets/";
+    var audioPath = "assets/";
     var manifest = [
         {id:"shoot", src:audioPath+"shoot.mp3"},
         {id:"player_hit", src:audioPath+"player_hit.mp3"},

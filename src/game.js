@@ -237,27 +237,11 @@ Game.prototype.globalPostSolveHandler = function(contact, impulse) {
                 var player = objectA,
                     zombie = objectB;
             } else {
-                var player = objectB,
-                    zombie = objectA;
+                player = objectB;
+                zombie = objectA;
             }
 
-            // найти угол между зомби и плеером
-            var radian = player.getRadianBetweenMeAnd(zombie);
-
-            var speed = 0.3;
-            var vel = {
-                x: Math.cos(radian) * speed,
-                y: Math.sin(radian) * speed
-            };
-
-            // создать на плеера импульс в эту сторону
-            player.body.ApplyImpulse(
-                new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
-                player.body.GetWorldCenter()
-            );
-
-            player.takeDamage(zombie.damage);
-            createjs.Sound.play("player_hit", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+            zombie.attackLiveObjectWithMeleeWeapon(player);
         }
     }
 };

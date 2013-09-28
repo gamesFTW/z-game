@@ -11,6 +11,7 @@ Player.prototype.onShoot = function(){};
 
 
 Player.prototype.soundDie = "player_die";
+Player.prototype.soundTakeDamage = "player_hit";
 
 
 Player.prototype.defineMouseEvents = function(stage){

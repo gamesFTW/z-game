@@ -2,7 +2,7 @@ function Zombie() {
 
 }
 
-Zombie.prototype = Object.create( LiveObject.prototype );
+Zombie.prototype = Object.create( Enemy.prototype );
 
 Zombie.prototype.constructor = Zombie;
 Zombie.prototype.isStatic = false;

@@ -19,6 +19,9 @@ LiveObject.prototype.takeDamage = function(damage){
 
     if (this.hp <= 0)
         this.die();
+
+    if (this.soundTakeDamage)
+        createjs.Sound.play(this.soundTakeDamage, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
 };
 
 
