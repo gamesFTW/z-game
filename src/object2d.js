@@ -15,7 +15,7 @@ Object2D.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     if (this.isAnimated == undefined)
         this.isAnimated = isAnimated;
 
-    this.initFunctions = [this.defineProperties, this.createFixture];
+    this.setInitFunctions();
 
     this.createTexture(isAnimated, texture);
     this.createBody(isStatic, world);
@@ -28,6 +28,12 @@ Object2D.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
 
     this.setPosition(x, y);
 };
+
+
+Object2D.prototype.setInitFunctions  = function(){
+    this.initFunctions = [this.defineProperties, this.createFixture];
+};
+
 
 Object2D.prototype.isInstanceOf = function(cls){
     return this instanceof cls;

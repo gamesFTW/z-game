@@ -14,6 +14,17 @@ Player.prototype.soundDie = "player_die";
 Player.prototype.soundTakeDamage = "player_hit";
 
 
+Player.prototype.setInitFunctions  = function(){
+    this.initFunctions = [this.defineProperties, this.createFixture, this.createIntentory];
+};
+
+
+Player.prototype.createIntentory = function(){
+    this.inventory = new Inventory();
+    this.inventory.init();
+};
+
+
 Player.prototype.defineMouseEvents = function(stage){
     var self = this;
     var interval = null;
@@ -29,6 +40,7 @@ Player.prototype.defineMouseEvents = function(stage){
     }
 
     stage.mousedown = function(event){
+        console.log(self.inventory.currentmainWeaponsSlot);
         if (event.originalEvent.button == 0 && !self.isLeftMouseDown){
             self.isLeftMouseDown = true;
             mouseX = event.global.x;

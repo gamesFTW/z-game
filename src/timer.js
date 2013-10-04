@@ -10,7 +10,7 @@ GlobalTimer.prototype.constructor = GlobalTimer;
 GlobalTimer.prototype.init = function() {
     this._delays = [];
     window.delay = _.bind(this.delay, this);
-}
+};
 
 GlobalTimer.prototype.tick = function() {
     var now = new Date().getTime();
@@ -31,14 +31,14 @@ GlobalTimer.prototype.tick = function() {
             }
         }
     }
-}
+};
 
 GlobalTimer.prototype.pause = function() {
     var now = new Date().getTime();
     for(var index in this._delays) {
         this._delays[index].pauseBuffer = now;
     }
-}
+};
 
 GlobalTimer.prototype.unPause = function() {
     var now = new Date().getTime();
@@ -46,7 +46,7 @@ GlobalTimer.prototype.unPause = function() {
         var item = this._delays[index];
         item.pause += now-item.pauseBuffer;
     }
-}
+};
 
 GlobalTimer.prototype.delay = function(func, delay, repeat) {
     this._delays.push({
@@ -58,8 +58,15 @@ GlobalTimer.prototype.delay = function(func, delay, repeat) {
         pause: 0
     });
     return this;
-}
+};
+
+GlobalTimer.prototype.removeAllDelaysWithFunction = function(func) {
+    for (var i = this._delays.length - 1; i >= 0; i--) {
+        if (this._delays[i].func == func)
+            this._delays.splice(i, 1);
+    }
+};
 
 GlobalTimer.prototype.removeDelay = function() {
 // TODO заимплементить с ID
-}
+};
