@@ -18,14 +18,18 @@ GlobalTimer.prototype.tick = function() {
     while (--index >= 0) {
         var item = this._delays[index];
         if(item.start + item.delay + item.pause < now) {
-            item.func.call(this);
-            if (item.repeat > 0 ) {
-                // reschedule item
-                item.start = now;
-                item.pause = 0;
-                item.pauseBuffer = 0;
-                item.repeat--;
-            } else if (item.repeat <= 0) {
+            if (item.enabled === true) {
+                item.func.call(this);
+                if (item.repeat > 0 ) {
+                    // reschedule item
+                    item.start = now;
+                    item.pause = 0;
+                    item.pauseBuffer = 0;
+                    item.repeat--;
+                }
+            }
+
+            if (item.repeat <= 0) {
                 // remove item from array
                 this._delays.splice(index,1);
             }
@@ -55,9 +59,24 @@ GlobalTimer.prototype.delay = function(func, delay, repeat) {
         delay : delay,
         repeat: ( repeat < 0 ? Infinity : repeat) || 0,
         pauseBuffer: 0,
-        pause: 0
+        pause: 0,
+        enabled: true
     });
-    return this;
+
+    var delayObject = this._delays[this._delays.length - 1];
+    var delayController = {
+        remove: function() {
+            delayObject.repeat = 0;
+            delayObject.enabled = false;
+        },
+        enable: function() {
+            delayObject.enabled = true;
+        },
+        disable: function() {
+            delayObject.enabled = false;
+        }
+    };
+    return delayController;
 };
 
 GlobalTimer.prototype.removeAllDelaysWithFunction = function(func) {
@@ -67,6 +86,3 @@ GlobalTimer.prototype.removeAllDelaysWithFunction = function(func) {
     }
 };
 
-GlobalTimer.prototype.removeDelay = function() {
-// TODO заимплементить с ID
-};
