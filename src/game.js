@@ -88,8 +88,8 @@ Game.prototype.registerPlayer = function(player) {
     this.player.defineMouseEvents(this.background);
 
     var self = this;
-    this.player.onShoot = function(x, y){
-        self.playerShootHandler(x, y);
+    this.player.onShoot = function(vectorFrom, vectorTo, weaponStats){
+        self.simpleShoot(vectorFrom, vectorTo, weaponStats);
     };
 
     this.player.onHpChanged = function(newHp){
@@ -173,30 +173,65 @@ Game.prototype.mainLoopDestroyObjectsStep = function() {
 //  Handlers
 //
 //--------------------------------------------------------------------------------------------------------------
-Game.prototype.playerShootHandler = function(x, y){
-    // TODO: сделать универсальную функцию shootAt, которой можно скармить как Object2d, так и координаты
+//Game.prototype.playerShootHandler = function(x, y){
+//    // TODO: сделать универсальную функцию shootAt, которой можно скармить как Object2d, так и координаты
+//
+//    var playerX = this.player.getX();
+//    var playerY = this.player.getY();
+//
+//    // Погрешность выстрела
+//    var infelicity = Math.random() * (0.1 * 2) - 0.1;
+//    var radian = Math.atan2(y - playerY, x - playerX) + infelicity;
+//
+//    var speed = 0.4;
+//    var vel = {
+//        x: Math.cos(radian) * speed,
+//        y: Math.sin(radian) * speed
+//    };
+//    var pluser = 25;
+//    var bullet = this.createObject2DAt(Bullet, playerX + (vel.x * pluser), playerY + (vel.y * pluser));
+//
+//    bullet.body.ApplyImpulse(
+//        new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
+//        bullet.body.GetWorldCenter()
+//    );
+//
+//    createjs.Sound.play("shoot", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 0.4);
+//
+//    // self destroy in 10 secs
+//    var self = this;
+//    delay(function() {
+//        self.destroyList.push(bullet);
+//    }, 10 * 1000);
+//};
 
-    var playerX = this.player.getX();
-    var playerY = this.player.getY();
 
+Game.prototype.simpleShoot = function(vectorFrom, vectorTo, weaponStats){
+    for (var i = 0; i < weaponStats.bulletsPerShot; i++){
+        createjs.Sound.play(weaponStats.shotSound, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 0.4);
+
+        this.createSimpleButtel(vectorFrom, vectorTo, weaponStats);
+    }
+};
+
+
+Game.prototype.createSimpleButtel = function(vectorFrom, vectorTo, weaponStats) {
     // Погрешность выстрела
-    var infelicity = Math.random() * (0.1 * 2) - 0.1;
-    var radian = Math.atan2(y - playerY, x - playerX) + infelicity;
+    var infelicity = Math.random() * (weaponStats.scatter * 2) - weaponStats.scatter;
+    var radian = Math.atan2(vectorTo.y - vectorFrom.y, vectorTo.x - vectorFrom.x) + infelicity;
 
-    var speed = 0.4;
     var vel = {
-        x: Math.cos(radian) * speed,
-        y: Math.sin(radian) * speed
+        x: Math.cos(radian) * weaponStats.bulletSpeed,
+        y: Math.sin(radian) * weaponStats.bulletSpeed
     };
     var pluser = 25;
-    var bullet = this.createObject2DAt(Bullet, playerX + (vel.x * pluser), playerY + (vel.y * pluser));
+    var bullet = this.createObject2DAt(Bullet, vectorFrom.x + (vel.x * pluser), vectorFrom.y + (vel.y * pluser));
+    bullet.damage = weaponStats.damage;
 
     bullet.body.ApplyImpulse(
         new Box2D.Common.Math.b2Vec2(vel.x, vel.y),
         bullet.body.GetWorldCenter()
     );
-
-    createjs.Sound.play("shoot", createjs.Sound.INTERRUPT_NONE, 0, 0, false, 0.4);
 
     // self destroy in 10 secs
     var self = this;
@@ -227,7 +262,7 @@ Game.prototype.globalPostSolveHandler = function(contact, impulse) {
 
         if (objectA.isInstanceOf(Bullet) && objectB.isInstanceOf(LiveObject)){
             this.destroyList.push(objectA);
-            objectB.takeDamage(34);
+            objectB.takeDamage(objectA.damage);
         }
 
         if ((objectA.isInstanceOf(Zombie) && objectB.isInstanceOf(Player)) ||

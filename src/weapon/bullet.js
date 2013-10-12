@@ -6,6 +6,7 @@ Bullet.prototype.constructor = Bullet;
 
 
 Bullet.prototype.isStatic = false;
+Bullet.prototype.damage = 100;
 
 
 Bullet.prototype.createFixture = function(){

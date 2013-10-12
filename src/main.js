@@ -112,30 +112,6 @@ function createWalls(){
             _.random(0, game.heightInTile) * Game.TILE_SIZE
         );
     }
-
-//    for (i = 0; i < game.withInTile + 1; i++) {
-//        createWall(
-//            i * Game.TILE_SIZE, 0
-//        );
-//    }
-//
-//    for (var i = 0; i < game.withInTile + 1; i++) {
-//        createWall(
-//            i * Game.TILE_SIZE, Game.TILE_SIZE * game.heightInTile
-//        );
-//    }
-//
-//    for (i = 0; i < game.heightInTile + 1; i++) {
-//        createWall(
-//            0, i * Game.TILE_SIZE
-//        );
-//    }
-//
-//    for (i = 0; i < game.withInTile + 1; i++) {
-//        createWall(
-//            Game.WIDTH, Game.TILE_SIZE * i
-//        );
-//    }
 }
 
 function loadSound() {

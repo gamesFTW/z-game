@@ -4,9 +4,28 @@ function Inventory() {
 
 Inventory.prototype.init = function(){
     this.currentmainWeaponsSlot = 0;
-    this.mainWeaponsSlots = [null, null, null];
+
+    var assaultRifle = new WeaponController();
+    assaultRifle.init(WeaponsStats.assaultRifle);
+
+    var shotgun = new WeaponController();
+    shotgun.init(WeaponsStats.shotgun);
+
+    var sniperRifle = new WeaponController();
+    sniperRifle.init(WeaponsStats.sniperRifle);
+
+    this.mainWeaponsSlots = [
+        assaultRifle,
+        shotgun,
+        sniperRifle
+    ];
 
     this.setKeyboardEvents();
+};
+
+
+Inventory.prototype.getCurrentMainWeapon = function(){
+    return this.mainWeaponsSlots[this.currentmainWeaponsSlot];
 };
 
 

@@ -40,26 +40,42 @@ Player.prototype.defineMouseEvents = function(stage){
     }
 
     stage.mousedown = function(event){
-        console.log(self.inventory.currentmainWeaponsSlot);
         if (event.originalEvent.button == 0 && !self.isLeftMouseDown){
+            var weapon = self.inventory.getCurrentMainWeapon();
             self.isLeftMouseDown = true;
-            mouseX = event.global.x;
-            mouseY = event.global.y;
-            isFiring = true;
 
-            self.onShoot(mouseX, mouseY);
+            if (!weapon.isBetweenShot){
+                function shoot(){
+                    var weapon = self.inventory.getCurrentMainWeapon();
+                    weapon.isBetweenShot = true;
 
-            function shootCycle() {
-                delay(function(){
-                    if (!isFiring) return;
-                    self.onShoot(mouseX, mouseY);
-                    shootCycle();
-                }, fireRate);
+                    self.onShoot({x:self.getX(), y:self.getY()}, {x:mouseX, y: mouseY},
+                        weapon.weaponStats
+                    );
+                }
+
+                function shootCycle(){
+                    var weapon = self.inventory.getCurrentMainWeapon();
+
+                    delay(function(){
+                        var weapon = self.inventory.getCurrentMainWeapon();
+                        weapon.isBetweenShot = false;
+
+                        if (self.isLeftMouseDown){
+                            shoot();
+                            shootCycle();
+                        }
+                    }, weapon.weaponStats.timeBetweenShots);
+                }
+
+                mouseX = event.global.x;
+                mouseY = event.global.y;
+
+                shoot();
+                shootCycle();
+
+                stage.mousemove = mouseMoveHandler;
             }
-
-            shootCycle();
-
-            stage.mousemove = mouseMoveHandler;
         }
     };
 
@@ -67,7 +83,6 @@ Player.prototype.defineMouseEvents = function(stage){
         if (event.originalEvent.button == 0){
             self.isLeftMouseDown = false;
             stage.mousemove = null;
-            isFiring = false;
         }
     };
 };
