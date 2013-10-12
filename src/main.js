@@ -62,12 +62,12 @@ function onAssetsLoaded()
 //    for (var i = 0; i < zombies; i++) {
 //        game.createObject2DAt(ZombieFast, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
 //    }
-    var zombieManager = new ZombieManager();
-    zombieManager.init();
-    zombieManager.setSpawnPoint(0, 0);
-    zombieManager.setSpawnPoint(Game.WIDTH, 0);
-    zombieManager.setSpawnPoint(0, Game.HEIGHT);
-    zombieManager.setSpawnPoint(Game.WIDTH, Game.HEIGHT);
+    var enemyManager= new EnemyManager();
+    enemyManager.init();
+    enemyManager.setSpawnPoint(0, 0);
+    enemyManager.setSpawnPoint(Game.WIDTH, 0);
+    enemyManager.setSpawnPoint(0, Game.HEIGHT);
+    enemyManager.setSpawnPoint(Game.WIDTH, Game.HEIGHT);
 
     createWalls();
 
