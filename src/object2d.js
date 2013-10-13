@@ -1,7 +1,6 @@
 function Object2D() {
     this.view = null;
     this.body = null;
-    this.game = null;
 }
 
 
