@@ -38,8 +38,10 @@ Player.prototype.defineMouseEvents = function(stage){
         mouseX = event.global.x;
         mouseY = event.global.y;
     }
+    stage.mousemove = mouseMoveHandler;
 
     stage.mousedown = function(event){
+        //TODO: переписать все это нафиг!
         if (event.originalEvent.button == 0 && !self.isLeftMouseDown){
             var weapon = self.inventory.getCurrentMainWeapon();
             self.isLeftMouseDown = true;
@@ -57,9 +59,11 @@ Player.prototype.defineMouseEvents = function(stage){
                 function shootCycle(){
                     var weapon = self.inventory.getCurrentMainWeapon();
 
-                    delay(function(){
+                    weapon.betweenShotDelay = delay(function(){
                         var weapon = self.inventory.getCurrentMainWeapon();
                         weapon.isBetweenShot = false;
+
+                        weapon.betweenShotDelay = null;
 
                         if (self.isLeftMouseDown){
                             shoot();
@@ -73,8 +77,11 @@ Player.prototype.defineMouseEvents = function(stage){
 
                 shoot();
                 shootCycle();
-
-                stage.mousemove = mouseMoveHandler;
+            }
+            else{
+                if(!weapon.betweenShotDelay){
+                    shootCycle();
+                }
             }
         }
     };
@@ -82,7 +89,6 @@ Player.prototype.defineMouseEvents = function(stage){
     stage.mouseup = function(event){
         if (event.originalEvent.button == 0){
             self.isLeftMouseDown = false;
-            stage.mousemove = null;
         }
     };
 };

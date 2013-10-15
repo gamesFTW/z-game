@@ -88,7 +88,7 @@ function createWalls(){
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
 
         function createBorder(width, height, x, y){
-            var body = game.world.CreateBody(bodyDef);
+            var body = game.box2DWorld.CreateBody(bodyDef);
 
             var fixture = new Box2D.Dynamics.b2FixtureDef();
             fixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();

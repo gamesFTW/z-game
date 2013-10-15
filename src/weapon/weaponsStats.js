@@ -17,7 +17,7 @@ WeaponsStats = {
     },
     sniperRifle:{
         damage:             100,
-        timeBetweenShots:   600,
+        timeBetweenShots:   400,
         scatter:            0.05,
         bulletSpeed:        0.8,
         bulletsPerShot:     1,

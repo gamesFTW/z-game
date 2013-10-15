@@ -24,6 +24,17 @@ Inventory.prototype.init = function(){
 };
 
 
+Inventory.prototype.changeMainWeapon = function(weaponID){
+    var weapon = this.getCurrentMainWeapon();
+    if (weapon.betweenShotDelay){
+        weapon.betweenShotDelay.remove();
+        weapon.betweenShotDelay = null;
+    }
+
+    this.currentmainWeaponsSlot = weaponID;
+};
+
+
 Inventory.prototype.getCurrentMainWeapon = function(){
     return this.mainWeaponsSlots[this.currentmainWeaponsSlot];
 };
@@ -32,14 +43,14 @@ Inventory.prototype.getCurrentMainWeapon = function(){
 Inventory.prototype.setKeyboardEvents = function(){
     var self = this;
     KeyboardJS.on("1", function(){
-        self.currentmainWeaponsSlot = 0;
+        self.changeMainWeapon(0);
     });
 
     KeyboardJS.on("2", function(){
-        self.currentmainWeaponsSlot = 1;
+        self.changeMainWeapon(1);
     });
 
     KeyboardJS.on("3", function(){
-        self.currentmainWeaponsSlot = 2;
+        self.changeMainWeapon(2);
     });
 };
