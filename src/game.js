@@ -28,6 +28,7 @@ Game.prototype.init = function(renderer) {
 
     this.stage = new PIXI.Stage(0xEEFFFF, true);
     this.stage.hitArea = new PIXI.Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
+
     //TODO: перенести бг, но куда?
     this.background = PIXI.Sprite.fromImage("./img/bg.jpg");
     this.stage.addChild(this.background);
@@ -76,8 +77,6 @@ Game.prototype.createPlayerAt = function(x, y) {
 
 Game.prototype.registerObject2D = function(obj) {
     this.objects2D.push(obj);
-    // TODO: не скармливать внутрь
-    obj.game = this;
     this.stage.addChild(obj.view);
 };
 
@@ -135,7 +134,6 @@ Game.prototype.mainLoop = function() {
         // Резолвим эвенты от колижинов и другие подсчеты
         self.render();
 
-        //TODO посмотреть нужно ли это засовывать сюда или можно один раз вызвать
         requestAnimFrame(loop);
         self.stats.update();
     }

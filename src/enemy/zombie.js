@@ -56,7 +56,7 @@ Zombie.prototype.tick = function() {
     else
         this._changeDirectionCounter ++;
 
-    var playerPosition = this.game.player.body.GetPosition();
+    var playerPosition = game.player.body.GetPosition();
     var playerX = playerPosition.x + this._infelicityX,
         playerY = playerPosition.y + this._infelicityY;
 
