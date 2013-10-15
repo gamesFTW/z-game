@@ -1,5 +1,5 @@
 $(function() {
-    $("#volumeController").change(function(event) j{
+    $("#volumeController").change(function(event) {
         var volume = Number($("#volumeController option:selected").attr("value")) / 10;
         createjs.Sound.setVolume(volume);
 
