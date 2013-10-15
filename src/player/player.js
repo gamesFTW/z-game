@@ -35,8 +35,9 @@ Player.prototype.defineMouseEvents = function(stage){
     var isFiring = false;
 
     function mouseMoveHandler(event){
-        mouseX = event.global.x;
-        mouseY = event.global.y;
+        var position = event.getLocalPosition(game.stage);
+        mouseX = position.x;
+        mouseY = position.y;
     }
     stage.mousemove = mouseMoveHandler;
 
@@ -72,8 +73,9 @@ Player.prototype.defineMouseEvents = function(stage){
                     }, weapon.weaponStats.timeBetweenShots);
                 }
 
-                mouseX = event.global.x;
-                mouseY = event.global.y;
+                var position = event.getLocalPosition(game.stage);
+                mouseX = position.x;
+                mouseY = position.y;
 
                 shoot();
                 shootCycle();

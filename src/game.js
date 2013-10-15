@@ -1,5 +1,5 @@
 function Game() {
-    this.tileSize = 20;
+
 };
 
 Game.prototype.constructor = Game;
@@ -26,13 +26,15 @@ Game.prototype.init = function(renderer) {
     this.timer = new GlobalTimer();
     this.timer.init();
 
-    this.stage = new PIXI.Stage(0xEEFFFF, true);
-    this.stage.hitArea = new PIXI.Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
+    this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
+    //TODO убрать this
+    this.camera = new Camera();
+    this.camera.init(this.pixiStage);
+    this.stage = this.camera.displayContainer;
 
     //TODO: перенести бг, но куда?
     this.background = PIXI.Sprite.fromImage("./img/bg.jpg");
     this.stage.addChild(this.background);
-    this.background.setInteractive(true);
 
     this.box2DWorld = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, 0),  true);
 
@@ -84,7 +86,7 @@ Game.prototype.registerObject2D = function(obj) {
 Game.prototype.registerPlayer = function(player) {
     this.player = player;
     // TODO говно же background
-    this.player.defineMouseEvents(this.background);
+    this.player.defineMouseEvents(this.stage);
 
     var self = this;
     this.player.onShoot = function(vectorFrom, vectorTo, weaponStats){
@@ -94,6 +96,8 @@ Game.prototype.registerPlayer = function(player) {
     this.player.onHpChanged = function(newHp){
         self.onPlayerHpChanged(newHp);
     };
+
+    this.camera.setFolow(this.player.view);
 };
 
 
@@ -102,8 +106,9 @@ Game.prototype.render = function() {
     for (var i = 0; i < this.objects2D.length; i++) {
         this.objects2D[i].updateView();
     }
+    this.camera.refresh();
     // Рендерим
-    this.renderer.render(this.stage);
+    this.renderer.render(this.pixiStage);
 };
 
 

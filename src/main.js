@@ -25,7 +25,7 @@ game.init(renderer);
 
 var gameInterface = new GameInterface(game);
 
-function createAnimation(){
+function createAnimation() {
     // create an array to store the textures
     var zombieTextures = [];
     for (var i=0; i < 25; i++)
@@ -54,16 +54,12 @@ function createAnimation(){
     ZombieDamage.TEXTURE = zombieTextures;
 }
 
-function onAssetsLoaded()
-{
+function onAssetsLoaded() {
     createAnimation();
 
-//    var zombies = 1;
-//    for (var i = 0; i < zombies; i++) {
-//        game.createObject2DAt(ZombieFast, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
-//    }
     var enemyManager= new EnemyManager();
     enemyManager.init();
+    // TODO добавить няшный чайнинг
     enemyManager.setSpawnPoint(0, 0);
     enemyManager.setSpawnPoint(Game.WIDTH, 0);
     enemyManager.setSpawnPoint(0, Game.HEIGHT);
@@ -79,11 +75,11 @@ function onAssetsLoaded()
 function createWalls(){
     var brickTexture = PIXI.Texture.fromFrame("img/brick.png");
 
-    function createWall(x, y){
+    function createWall(x, y) {
         game.createObject2DAt(Wall, x, y, brickTexture, true, false);
     }
 
-    function createBorders(){
+    function createBorders() {
         var bodyDef = new Box2D.Dynamics.b2BodyDef();
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
 
