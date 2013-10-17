@@ -24,9 +24,10 @@ EnemyManager.prototype.spawn = function(spawnPoint) {
     game.createObject2DAt(enemyClass, spawnPoint.x, spawnPoint.y);
 
     spawnPoint.spawned++;
-    if (spawnPoint.spawned > this.maxSpawnsPerPoint) {
-        spawnPoint.spawnDelayController.remove();
-    }
+    //if (spawnPoint.spawned > this.maxSpawnsPerPoint) {
+    //    spawnPoint.spawnDelayController.remove();
+    //}
+    return this;
 }
 
 EnemyManager.prototype.setSpawnPoint = function(x, y, rate) {
@@ -51,6 +52,7 @@ EnemyManager.prototype.setSpawnPoint = function(x, y, rate) {
     );
 
     spawnPoint.spawnDelayController = delayController;
+    return this;
 }
 
 EnemyManager.SPAWN_RATE = 1; //in seconds

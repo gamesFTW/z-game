@@ -27,31 +27,31 @@ var gameInterface = new GameInterface(game);
 
 function createAnimation() {
     // create an array to store the textures
-    var zombieTextures = [];
-    for (var i=0; i < 25; i++)
-    {
-        var texture = PIXI.Texture.fromFrame("zombie_" + (i) + ".png");
-        zombieTextures.push(texture);
-    }
-    Zombie.TEXTURE = zombieTextures;
+    var zombiesTexturesData = [
+        {
+            prefix: "zombie",
+            obj: Zombie
+        },
+        {
+            prefix: "zombieLightBlue",
+            obj: ZombieFast
+        },
+        {
+            prefix: "zombieRed",
+            obj: ZombieDamage
+        },
+    ];
 
+    zombiesTexturesData.forEach(function(ztd) {
+        var zombieTextures = [];
+        for (var i=0; i < 25; i++)
+        {
+            var texture = PIXI.Texture.fromFrame(ztd.prefix + "_" + (i) + ".png");
+            zombieTextures.push(texture);
+        }
+        ztd.obj.TEXTURE = zombieTextures;
+    });
 
-    zombieTextures = [];
-    for (i=0; i < 25; i++)
-    {
-        texture = PIXI.Texture.fromFrame("zombieLightBlue_" + (i) + ".png");
-        zombieTextures.push(texture);
-    }
-    ZombieFast.TEXTURE = zombieTextures;
-
-
-    zombieTextures = [];
-    for (i=0; i < 25; i++)
-    {
-        texture = PIXI.Texture.fromFrame("zombieRed_" + (i) + ".png");
-        zombieTextures.push(texture);
-    }
-    ZombieDamage.TEXTURE = zombieTextures;
 }
 
 function onAssetsLoaded() {
@@ -59,11 +59,10 @@ function onAssetsLoaded() {
 
     var enemyManager= new EnemyManager();
     enemyManager.init();
-    // TODO добавить няшный чайнинг
-    enemyManager.setSpawnPoint(0, 0);
-    enemyManager.setSpawnPoint(Game.WIDTH, 0);
-    enemyManager.setSpawnPoint(0, Game.HEIGHT);
-    enemyManager.setSpawnPoint(Game.WIDTH, Game.HEIGHT);
+    enemyManager.setSpawnPoint(0, 0)
+        .setSpawnPoint(Game.WIDTH, 0)
+        .setSpawnPoint(0, Game.HEIGHT)
+        .setSpawnPoint(Game.WIDTH, Game.HEIGHT);
 
     createWalls();
 
