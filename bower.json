@@ -1,0 +1,12 @@
+{
+  "name": "z-game",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "http://code.jquery.com/jquery-1.10.2.min.js",
+    "pixi": "https://raw.github.com/GoodBoyDigital/pixi.js/075e2fc2e7897fe45cf17cc020b75d0f9edda1c5/bin/pixi.dev.js",
+    "box2dweb": "https://box2dweb.googlecode.com/svn/trunk/Box2D.js",
+    "underscore": "http://underscorejs.org/underscore-min.js",
+    "keyboard": "https://github.com/RobertWHurst/KeyboardJS.git",
+    "soundjs": "http://code.createjs.com/soundjs-0.5.0.min.js"
+  }
+}
