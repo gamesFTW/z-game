@@ -11,7 +11,7 @@ EnemyManager.prototype.constructor = EnemyManager;
 EnemyManager.prototype.init = function() {
     this.spawnPoints = [];
     this.maxSpawnsPerPoint = 50;
-}
+};
 
 EnemyManager.prototype.spawn = function(spawnPoint) {
     var rnd = _.random(0, 4);
@@ -28,7 +28,7 @@ EnemyManager.prototype.spawn = function(spawnPoint) {
     //    spawnPoint.spawnDelayController.remove();
     //}
     return this;
-}
+};
 
 EnemyManager.prototype.setSpawnPoint = function(x, y, rate) {
     var self = this;
@@ -53,7 +53,7 @@ EnemyManager.prototype.setSpawnPoint = function(x, y, rate) {
 
     spawnPoint.spawnDelayController = delayController;
     return this;
-}
+};
 
 EnemyManager.SPAWN_RATE = 1; //in seconds
 

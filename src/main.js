@@ -59,19 +59,21 @@ function onAssetsLoaded() {
 
     var enemyManager= new EnemyManager();
     enemyManager.init();
+//    enemyManager.spawn({x:0, y:0});
+//    enemyManager.spawn({x:0, y:0});
     enemyManager.setSpawnPoint(0, 0)
         .setSpawnPoint(Game.WIDTH, 0)
         .setSpawnPoint(0, Game.HEIGHT)
         .setSpawnPoint(Game.WIDTH, Game.HEIGHT);
 
-    createWalls();
 
     game.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.world);
+    createWalls(game.map.giveCopyOfGreed());
     game.mainLoop();
 }
 
 
-function createWalls(){
+function createWalls(grid){
     var brickTexture = PIXI.Texture.fromFrame("img/brick.png");
 
     function createWall(x, y) {
@@ -100,12 +102,19 @@ function createWalls(){
         createBorder(0.01, Game.HEIGHT / 100, Game.WIDTH / 100, 0);
     }
 
-    createBorders();
-    for (var i = 0; i < 20; i++) {
-        createWall(
-            _.random(0, game.withInTile) * Game.TILE_SIZE,
-            _.random(0, game.heightInTile) * Game.TILE_SIZE
-        );
+//    createBorders();
+//    for (var i = 0; i < 20; i++) {
+//        createWall(
+//            _.random(0, game.withInTile) * Game.TILE_SIZE,
+//            _.random(0, game.heightInTile) * Game.TILE_SIZE
+//        );
+//    }
+
+    for (var x = 0; x < grid.length; x++) {
+        for (var y = 0; y < grid.length; y++) {
+            if (grid[x][y] === 1)
+                createWall(x * Game.TILE_SIZE + 20, y * Game.TILE_SIZE + 20);
+        }
     }
 }
 

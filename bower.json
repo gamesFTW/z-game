@@ -7,6 +7,7 @@
     "box2dweb": "https://box2dweb.googlecode.com/svn/trunk/Box2D.js",
     "underscore": "http://underscorejs.org/underscore-min.js",
     "keyboard": "https://github.com/RobertWHurst/KeyboardJS.git",
-    "soundjs": "http://code.createjs.com/soundjs-0.5.0.min.js"
+    "soundjs": "http://code.createjs.com/soundjs-0.5.0.min.js",
+    "astar": "https://raw.github.com/bgrins/javascript-astar/master/astar.js"
   }
 }

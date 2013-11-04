@@ -68,9 +68,8 @@ Object2D.prototype.createBody = function(isStatic, world){
 
 Object2D.prototype.setPosition = function(x, y){
     this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / 100, y / 100));
-    var position = this.body.GetPosition();
-    this.view.position.x = position.x * 100;
-    this.view.position.y = position.y * 100;
+    this.view.position.x = x;
+    this.view.position.y = y;
 };
 
 
@@ -91,11 +90,19 @@ Object2D.prototype.getRadianBetweenMeAnd = function(object2d){
 };
 
 
-Object2D.prototype.getPosition = function(){
+Object2D.prototype.getPosition = function(body){
     var position = this.body.GetPosition();
+
+    if (body == "box2D"){
+        var multiplier = 1;
+    }
+    else if (body == undefined || body == "pixi"){
+        multiplier = 100;
+    }
+
     return {
-        x:position.x * 100,
-        y:position.y * 100
+        x:position.x * multiplier,
+        y:position.y * multiplier
     }
 };
 
