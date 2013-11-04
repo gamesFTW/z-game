@@ -7,7 +7,7 @@ Enemy.prototype.constructor = Enemy;
 Enemy.prototype.meleeCooldown = 1000;
 Enemy.prototype.canAttack = true;
 Enemy.prototype.targetPosition = {x:null, y:null};
-
+Enemy.prototype.pathToTarget = [];
 
 Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
     if (this.canAttack){
@@ -37,29 +37,30 @@ Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
     }
 };
 
+// TODO вставить куда нибудь и вызывать рекурсивно
+//delay(function() {
+//    console.log("beep");
+//    var targetPosition = game.map.getTileByCoordinates(game.player.getPosition());
+//    var enemyPosition = game.map.getTileByCoordinates(self.getPosition());
+//    self.findPath(enemyPosition, targetPosition);
+//}, 3000);
 
 Enemy.prototype.tick = function() {
-    var targetPosition = game.map.getTileByCoordinates(game.player.getPosition());
-    var enemyPosition = game.map.getTileByCoordinates(this.getPosition());
+    var targetPosition = game.player.getPosition('tile');
+    var enemyPosition = this.getPosition('tile');
     if (targetPosition.x !== this.targetPosition.x || targetPosition.y !== this.targetPosition.y) {
         if (targetPosition.x == enemyPosition.x && targetPosition.y == enemyPosition.y) {
             this.canGoToPlayer = true;
         } else {
             this.targetPosition = targetPosition;
 
-            // TODO: возможно стоит поменять Graph на не граф, говно же
-            var graph = new Graph(game.map.giveCopyOfGreed());
-            try {
-                var start = graph.nodes[enemyPosition.x][enemyPosition.y];
-                var end = graph.nodes[targetPosition.x][targetPosition.y];
-                var result = astar.search(graph.nodes, start, end, true);
-            } catch(e) {
-                var result = [];
+            if (this.pathToTarget.length > 0){
+                // Оптимизация поиска пути. Пукаем врага по следу цели.
+                this.pathToTarget.push(new GraphNode(targetPosition.x, targetPosition.y));
             }
-
-            this.pathToTarget = result.length > 0 ? result.slice(0, -1) : null;
-            this.nearTargetStep = null;
-            this.canGoToPlayer = false;
+            else{
+                this.findPath(enemyPosition, targetPosition);
+            }
         }
     }
 
@@ -78,6 +79,23 @@ Enemy.prototype.tick = function() {
 };
 
 
+Enemy.prototype.findPath = function(enemyPosition, targetPosition) {
+    // TODO: возможно стоит поменять Graph на не граф, говно же
+    var graph = new Graph(game.map.giveCopyOfGreed());
+    try {
+        var start = graph.nodes[enemyPosition.x][enemyPosition.y];
+        var end = graph.nodes[targetPosition.x][targetPosition.y];
+        var result = astar.search(graph.nodes, start, end, true);
+    } catch(e) {
+        result = [];
+    }
+
+    this.pathToTarget = result.length > 0 ? result.slice(0, -1) : null;
+    this.nearTargetStep = null;
+    this.canGoToPlayer = false;
+};
+
+
 Enemy.prototype.getNearTargetStep = function() {
     this.nearTargetStep = this.pathToTarget.shift();
     if (!this.nearTargetStep) {
@@ -90,37 +108,16 @@ Enemy.prototype.getNearTargetStep = function() {
 Enemy.prototype.goToPosition = function(position) {
     var myPosition = this.getPosition('box2D');
     position = position || game.map.getCoordinatesByTileInCenter(this.nearTargetStep);
-    position.x = position.x / 100;
-    position.y = position.y / 100;
+    position.x = position.x / Game.box2DMultiplier;
+    position.y = position.y / Game.box2DMultiplier;
 
-    var self = this;
-    //function randomateInfelicity() {
-    //    // Рандомим погрешность, что бы зомби не шли по прямой на плеера.
-    //    var infelicity = Math.random() * (self.dullness - 0) + self.dullness;
-    //    self._radianInfelicity = _.random(- infelicity, infelicity);
-    //}
-
-    //if (this._changeDirectionCounter >= this._changeDirection) {
-    //    randomateInfelicity();
-
-    //    this._changeDirectionCounter = 0;
-    //} else {
-    //    this._changeDirectionCounter ++;
-
-    //}
-
-    //var playerX = playerPosition.x + this._infelicityX,
-    //    playerY = playerPosition.y + this._infelicityY;
     var radian = Math.atan2(position.y - myPosition.y, position.x - myPosition.x);
-    //this._radianWithInfelicity = radian + this._radianInfelicity;
-
     var velocity = this.body.GetLinearVelocity();
 
     var newVelocity = new Box2D.Common.Math.b2Vec2(
         Math.cos(radian) * this.acceleration,
         Math.sin(radian) * this.acceleration
     );
-
 
     if ((Math.abs(newVelocity.x + velocity.x) > this.maxSpeed) && signum(newVelocity.x) == signum(velocity.x))
         newVelocity.x = 0;

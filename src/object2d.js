@@ -67,42 +67,44 @@ Object2D.prototype.createBody = function(isStatic, world){
 
 
 Object2D.prototype.setPosition = function(x, y){
-    this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / 100, y / 100));
+    this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / Game.box2DMultiplier, y / Game.box2DMultiplier));
     this.view.position.x = x;
     this.view.position.y = y;
 };
 
 
-Object2D.prototype.getX = function(){
+Object2D.prototype.getX = function() {
     var position = this.body.GetPosition();
-    return position.x * 100;
+    return position.x * Game.box2DMultiplier;
 };
 
 
-Object2D.prototype.getY = function(){
+Object2D.prototype.getY = function() {
     var position = this.body.GetPosition();
-    return position.y * 100;
+    return position.y * Game.box2DMultiplier;
 };
 
 
-Object2D.prototype.getRadianBetweenMeAnd = function(object2d){
+Object2D.prototype.getRadianBetweenMeAnd = function(object2d) {
    return Math.atan2(this.getY() - object2d.getY(), this.getX() - object2d.getX());
 };
 
 
-Object2D.prototype.getPosition = function(body){
+Object2D.prototype.getPosition = function(body, map) {
     var position = this.body.GetPosition();
 
-    if (body == "box2D"){
-        var multiplier = 1;
-    }
-    else if (body == undefined || body == "pixi"){
-        multiplier = 100;
-    }
-
-    return {
-        x:position.x * multiplier,
-        y:position.y * multiplier
+    if (body == "box2D" || body == "box2d"){
+        return { x: position.x, y: position.y };
+    } else if (body == undefined || body == "pixi"){
+        return {
+            x: position.x * Game.box2DMultiplier,
+            y: position.y * Game.box2DMultiplier
+        };
+    } else if (body == "map" || body == "tile") {
+        return map.getTileByCoordinates({
+            x: position.x * Game.box2DMultiplier,
+            y: position.y * Game.box2DMultiplier
+        });
     }
 };
 
@@ -115,8 +117,8 @@ Object2D.prototype.tick = function() {
 Object2D.prototype.updateView = function() {
     if (!this.isStatic) {
        var position = this.body.GetPosition();
-       this.view.position.x = position.x * 100;
-       this.view.position.y = position.y * 100;
+       this.view.position.x = position.x * Game.box2DMultiplier;
+       this.view.position.y = position.y * Game.box2DMultiplier;
        this.view.rotation = this.body.GetAngle();
     }
 };

@@ -7,7 +7,9 @@ Game.prototype.constructor = Game;
 
 // Static property
 Game.TILE_SIZE = 40;
-Game.TILE_SIZE_BOX2D = Game.TILE_SIZE / 100;
+Game.box2DMultiplier = 100;
+Game.TILE_SIZE_BOX2D = Game.TILE_SIZE / Game.box2DMultiplier;
+
 Game.WIDTH = 1024;
 Game.HEIGHT = 768;
 
