@@ -46,8 +46,8 @@ Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
 //}, 3000);
 
 Enemy.prototype.tick = function() {
-    var targetPosition = game.player.getPosition('tile');
-    var enemyPosition = this.getPosition('tile');
+    var targetPosition = game.player.getPosition('tile', game.map);
+    var enemyPosition = this.getPosition('tile', game.map);
     if (targetPosition.x !== this.targetPosition.x || targetPosition.y !== this.targetPosition.y) {
         if (targetPosition.x == enemyPosition.x && targetPosition.y == enemyPosition.y) {
             this.canGoToPlayer = true;
