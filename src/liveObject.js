@@ -2,6 +2,7 @@ function LiveObject() {
 }
 LiveObject.prototype = Object.create( Object2D.prototype );
 LiveObject.prototype.constructor = LiveObject;
+LiveObject.superclass = Object2D.prototype;
 
 
 LiveObject.prototype.onDie = function(){};
@@ -10,6 +11,11 @@ LiveObject.prototype.onHpChanged = function(){};
 
 LiveObject.prototype.isLive     = true;
 LiveObject.prototype.hp         = 100;
+
+
+LiveObject.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    LiveObject.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+};
 
 
 LiveObject.prototype.takeDamage = function(damage){

@@ -179,6 +179,15 @@ Game.prototype.registerPlayer = function(player) {
         self.onPlayerHpChanged(newHp);
     };
 
+    player.addEventListener(Player.CHANGE_TILE_POSITION, function(){
+        AStar.reset();
+        for (var i = 0; i < self.objects2D.length; i++) {
+            if (self.objects2D[i].isInstanceOf(Enemy)){
+                self.objects2D[i].targetChangeTilePosition(player.tilePosition);
+            }
+        }
+    });
+
     this.camera.setFolow(this.player.view);
 };
 

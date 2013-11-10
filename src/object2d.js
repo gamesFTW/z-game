@@ -4,6 +4,7 @@ function Object2D() {
 }
 
 
+Object2D.prototype = Object.create( EventDispatcher.prototype );
 Object2D.prototype.constructor = Object2D;
 
 // Initial methods
@@ -14,23 +15,20 @@ Object2D.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     if (this.isAnimated == undefined)
         this.isAnimated = isAnimated;
 
-    this.setInitFunctions();
-
     this.createTexture(isAnimated, texture);
     this.createBody(isStatic, world);
 
     this.body.SetUserData(this);
 
-    for (var i = 0; i < this.initFunctions.length; i++){
-        this.initFunctions[i].apply(this);
-    }
+    this.defineProperties();
+    this.createFixture();
 
     this.setPosition(x, y);
 };
 
 
 Object2D.prototype.setInitFunctions  = function(){
-    this.initFunctions = [this.defineProperties, this.createFixture];
+    this.initFunctions = [, this.createFixture];
 };
 
 

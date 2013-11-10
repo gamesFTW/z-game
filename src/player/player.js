@@ -2,10 +2,12 @@ function Player() {
 }
 Player.prototype = Object.create( LiveObject.prototype );
 Player.prototype.constructor = Player;
+Player.superclass = LiveObject.prototype;
 
 
 Player.prototype.isStatic = false;
 Player.prototype.isLeftMouseDown = false;
+Player.prototype.tilePosition = {x:null, y:null};
 
 Player.prototype.onShoot = function(){};
 
@@ -14,8 +16,11 @@ Player.prototype.soundDie = "player_die";
 Player.prototype.soundTakeDamage = "player_hit";
 
 
-Player.prototype.setInitFunctions  = function(){
-    this.initFunctions = [this.defineProperties, this.createFixture, this.createIntentory];
+Player.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    Player.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+    this.createIntentory();
+
+    this.tilePosition = this.getPosition('tile', game.map);
 };
 
 
@@ -153,9 +158,18 @@ Player.prototype.tick = function() {
         var newRotation = radian - (90 * (Math.PI / 180));
         this.body.SetAngle(newRotation);
     }
+
+    this.checkChengeTileCoord();
 };
 
 
+Player.prototype.checkChengeTileCoord = function() {
+    var position = this.getPosition('tile', game.map);
+    if (position.x !== this.tilePosition.x || position.y !== this.tilePosition.y) {
+        this.tilePosition = position;
+        this.dispatchEvent(Player.CHANGE_TILE_POSITION);
+    }
+}
 
 
 Player.POLY_FIXTURE = new Box2D.Dynamics.b2FixtureDef();
@@ -169,3 +183,5 @@ Player.MAX_VELOCITY = 1;
 //Player.POLY_FIXTURE.restitution = 0.1;
 Player.POLY_FIXTURE.filter.categoryBits = Collisions.CATEGORY_PLAYER;
 Player.POLY_FIXTURE.filter.maskBits = Collisions.MASK_PLAYER;
+
+Player.CHANGE_TILE_POSITION = "changeTilePosition";

@@ -55,6 +55,6 @@ EnemyManager.prototype.setSpawnPoint = function(x, y, rate) {
     return this;
 };
 
-EnemyManager.SPAWN_RATE = 1; //in seconds
+EnemyManager.SPAWN_RATE = 2; //in seconds
 
 

@@ -59,15 +59,19 @@ function onAssetsLoaded() {
 
     var enemyManager= new EnemyManager();
     enemyManager.init();
-//    enemyManager.spawn({x:0, y:0});
-//    enemyManager.spawn({x:0, y:0});
+
+    game.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.world);
+
+    // for (var i = 0; i < 1; i++) {
+    //     enemyManager.spawn({x:0, y:0});
+    // }
+
     enemyManager.setSpawnPoint(0, 0)
         .setSpawnPoint(Game.WIDTH, 0)
         .setSpawnPoint(0, Game.HEIGHT)
         .setSpawnPoint(Game.WIDTH, Game.HEIGHT);
 
 
-    game.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.world);
     createWalls(game.map.giveCopyOfGreed());
     game.mainLoop();
 }

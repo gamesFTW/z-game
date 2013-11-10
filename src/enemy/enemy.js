@@ -2,12 +2,21 @@ function Enemy() {
 }
 Enemy.prototype = Object.create( LiveObject.prototype );
 Enemy.prototype.constructor = Enemy;
+Enemy.superclass = LiveObject.prototype;
 
 
 Enemy.prototype.meleeCooldown = 1000;
 Enemy.prototype.canAttack = true;
 Enemy.prototype.targetPosition = {x:null, y:null};
 Enemy.prototype.pathToTarget = [];
+
+
+Enemy.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    Enemy.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+
+    this.targetChangeTilePosition(game.player.tilePosition);
+};
+
 
 Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
     if (this.canAttack){
@@ -46,26 +55,17 @@ Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
 //}, 3000);
 
 Enemy.prototype.tick = function() {
-    var targetPosition = game.player.getPosition('tile', game.map);
     var enemyPosition = this.getPosition('tile', game.map);
-    if (targetPosition.x !== this.targetPosition.x || targetPosition.y !== this.targetPosition.y) {
-        if (targetPosition.x == enemyPosition.x && targetPosition.y == enemyPosition.y) {
-            this.canGoToPlayer = true;
-        } else {
-            this.targetPosition = targetPosition;
-
-            if (this.pathToTarget.length > 0){
-                // Оптимизация поиска пути. Пукаем врага по следу цели.
-                this.pathToTarget.push(new GraphNode(targetPosition.x, targetPosition.y));
-            }
-            else{
-                this.findPath(enemyPosition, targetPosition);
-            }
-        }
-    }
 
     (this.pathToTarget && !this.nearTargetStep) && this.getNearTargetStep();
+    // хак для того что бы чувак не имеющий пути не выкидывал эксепшен
+    if (!this.pathToTarget && !this.canGoToPlayer) {
+        // console.log('warning, no path find');
+        this.canGoToPlayer = true;
+    }
+
     if (!this.canGoToPlayer) {
+        // console.log(this.nearTargetStep);
         if (enemyPosition.x == this.nearTargetStep.x && enemyPosition.y == this.nearTargetStep.y) {
             this.getNearTargetStep();
         }
@@ -79,13 +79,35 @@ Enemy.prototype.tick = function() {
 };
 
 
+Enemy.prototype.targetChangeTilePosition = function(targetPosition) {
+    var enemyPosition = this.getPosition('tile', game.map);
+    if (targetPosition.x !== this.targetPosition.x || targetPosition.y !== this.targetPosition.y) {
+        if (targetPosition.x == enemyPosition.x && targetPosition.y == enemyPosition.y) {
+            this.canGoToPlayer = true;
+        } else {
+            this.targetPosition = targetPosition;
+
+            // if (this.pathToTarget.length > 0){
+            //     // Оптимизация поиска пути. Пукаем врага по следу цели.
+            //     this.pathToTarget.push(new GraphNode(targetPosition.x, targetPosition.y));
+            // }
+            // else{
+                // console.log("findPath");
+                // console.log(enemyPosition);
+                this.findPath(enemyPosition, targetPosition);
+            // }
+        }
+    }
+};
+
+
 Enemy.prototype.findPath = function(enemyPosition, targetPosition) {
     // TODO: возможно стоит поменять Graph на не граф, говно же
     var graph = new Graph(game.map.giveCopyOfGreed());
     try {
-        var start = graph.nodes[enemyPosition.x][enemyPosition.y];
-        var end = graph.nodes[targetPosition.x][targetPosition.y];
-        var result = astar.search(graph.nodes, start, end, true);
+        var start = graph.nodes[targetPosition.x][targetPosition.y];
+        var end = graph.nodes[enemyPosition.x][enemyPosition.y];
+        var result = AStar.search(graph.nodes, start, end, true);
     } catch(e) {
         result = [];
     }

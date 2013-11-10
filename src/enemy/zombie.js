@@ -3,8 +3,10 @@ function Zombie() {
 }
 
 Zombie.prototype = Object.create( Enemy.prototype );
-
 Zombie.prototype.constructor = Zombie;
+Zombie.superclass = Enemy.prototype;
+
+
 Zombie.prototype.isStatic = false;
 
 
@@ -15,6 +17,13 @@ Zombie.prototype.maxSpeed = 0.4;
 
 
 Zombie.prototype.soundDie = "zombie_die";
+
+
+Zombie.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    Zombie.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+
+    this.maxSpeed += Math.random() / 10;
+};
 
 
 Zombie.prototype.createFixture = function(){
