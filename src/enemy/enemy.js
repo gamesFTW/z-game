@@ -10,8 +10,11 @@ Enemy.prototype.canAttack = true;
 Enemy.prototype.targetPosition = { x: null, y: null };
 Enemy.prototype.pathToTarget = [];
 
+Enemy.prototype.maxTickCounter = 10;
+
 
 Enemy.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    this.tickCounter = this.maxTickCounter;
     Enemy.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
 
     this.targetChangeTilePosition(game.player.tilePosition);
@@ -77,7 +80,9 @@ Enemy.prototype.tick = function() {
         this.goToPosition();
     }
 
-    this.calcPlayerVisibility();
+
+    this.tickCounter >= this.maxTickCounter && this.calcPlayerVisibility();
+    this.tickCounter = this.tickCounter >= this.maxTickCounter ? 0 : this.tickCounter + 1;
 
 };
 
@@ -139,8 +144,7 @@ Enemy.prototype.targetChangeTilePosition = function(targetPosition) {
 
 Enemy.prototype.findPath = function(enemyPosition, targetPosition) {
     // TODO: возможно стоит поменять Graph на не граф, говно же
-    // var graph = new Graph(game.map.giveCopyOfGreed());
-    var graph = game.map.giveGraphNodes();
+    var graph = new Graph(game.map.giveCopyOfGreed());
     try {
         var start = graph.nodes[targetPosition.x][targetPosition.y];
         var end = graph.nodes[enemyPosition.x][enemyPosition.y];
