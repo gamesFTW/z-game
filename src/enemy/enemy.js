@@ -108,7 +108,8 @@ Enemy.prototype.findPath = function(enemyPosition, targetPosition) {
     try {
         var start = graph.nodes[targetPosition.x][targetPosition.y];
         var end = graph.nodes[enemyPosition.x][enemyPosition.y];
-        var result = AStar.search(graph.nodes, start, end, true);
+        // var result = AStar.search(graph.nodes, start, end, true);
+        var result = astar.search(graph.nodes, start, end, true).reverse();
     } catch(e) {
         result = [];
     }

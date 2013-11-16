@@ -15,6 +15,9 @@ Map.prototype.constructor = Map;
 
 Map.prototype.init = function(grid) {
     this.grid = grid;
+
+    this.width = grid.length * Game.TILE_SIZE;
+    this.height = grid[0].length * Game.TILE_SIZE;
 };
 
 
