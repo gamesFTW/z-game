@@ -10,7 +10,7 @@ EnemyManager.prototype.constructor = EnemyManager;
 
 EnemyManager.prototype.init = function() {
     this.spawnPoints = [];
-    this.maxSpawnsPerPoint = 50;
+    this.maxSpawnsPerPoint = 1;
 };
 
 EnemyManager.prototype.spawn = function(spawnPoint) {
@@ -24,16 +24,15 @@ EnemyManager.prototype.spawn = function(spawnPoint) {
     game.createObject2DAt(enemyClass, spawnPoint.x, spawnPoint.y);
 
     spawnPoint.spawned++;
-    //if (spawnPoint.spawned > this.maxSpawnsPerPoint) {
-    //    spawnPoint.spawnDelayController.remove();
-    //}
+    if (spawnPoint.spawned > this.maxSpawnsPerPoint) {
+        spawnPoint.spawnDelayController.remove();
+    }
     return this;
 };
 
 EnemyManager.prototype.setSpawnPoint = function(x, y, rate) {
     var self = this;
-    if (!rate)
-        rate = EnemyManager.SPAWN_RATE;
+    rate = rate ? rate : EnemyManager.SPAWN_RATE;
 
     var spawnPoint = {
         x: x,

@@ -1,1 +1,1 @@
-python -m SimpleHTTPServer
+cd .. && python -m SimpleHTTPServer

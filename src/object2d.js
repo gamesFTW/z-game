@@ -98,6 +98,10 @@ Object2D.prototype.getPosition = function(body, map) {
             x: position.x * Game.box2DMultiplier,
             y: position.y * Game.box2DMultiplier
         };
+    } else if (body == "vector"){
+        return new Box2D.Common.Math.b2Vec2(
+            position.x, position.y
+        );
     } else if (body == "map" || body == "tile") {
         return map.getTileByCoordinates({
             x: position.x * Game.box2DMultiplier,
@@ -113,7 +117,7 @@ Object2D.prototype.tick = function() {
 
 
 Object2D.prototype.updateView = function() {
-    if (!this.isStatic) {
+    if (!this.isStatic && this.view.visible) {
        var position = this.body.GetPosition();
        this.view.position.x = position.x * Game.box2DMultiplier;
        this.view.position.y = position.y * Game.box2DMultiplier;
