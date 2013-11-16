@@ -18,6 +18,15 @@ Map.prototype.init = function(grid) {
 };
 
 
+Map.prototype.giveGraphNodes = function() {
+    if (this.graphNodes == undefined){
+        this.graphNodes = new Graph(game.map.giveCopyOfGreed());
+    }
+
+    return this.graphNodes;
+};
+
+
 Map.prototype.giveCopyOfGreed = function() {
     return this.grid.slice(0);
 };

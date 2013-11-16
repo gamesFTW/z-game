@@ -103,7 +103,8 @@ Enemy.prototype.targetChangeTilePosition = function(targetPosition) {
 
 Enemy.prototype.findPath = function(enemyPosition, targetPosition) {
     // TODO: возможно стоит поменять Graph на не граф, говно же
-    var graph = new Graph(game.map.giveCopyOfGreed());
+    // var graph = new Graph(game.map.giveCopyOfGreed());
+    var graph = game.map.giveGraphNodes();
     try {
         var start = graph.nodes[targetPosition.x][targetPosition.y];
         var end = graph.nodes[enemyPosition.x][enemyPosition.y];
