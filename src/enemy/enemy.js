@@ -49,13 +49,6 @@ Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
     }
 };
 
-// TODO вставить куда нибудь и вызывать рекурсивно
-//delay(function() {
-//    console.log("beep");
-//    var targetPosition = game.map.getTileByCoordinates(game.player.getPosition());
-//    var enemyPosition = game.map.getTileByCoordinates(self.getPosition());
-//    self.findPath(enemyPosition, targetPosition);
-//}, 3000);
 
 Enemy.prototype.tick = function() {
     var enemyPosition = this.getPosition('tile', game.map);
@@ -63,12 +56,10 @@ Enemy.prototype.tick = function() {
     (this.pathToTarget && !this.nearTargetStep) && this.getNearTargetStep();
     // хак для того что бы чувак не имеющий пути не выкидывал эксепшен
     if (!this.pathToTarget && !this.canGoToPlayer) {
-        // console.log('warning, no path find');
         this.canGoToPlayer = true;
     }
 
     if (!this.canGoToPlayer) {
-        // console.log(this.nearTargetStep);
         if (enemyPosition.x == this.nearTargetStep.x && enemyPosition.y == this.nearTargetStep.y) {
             this.getNearTargetStep();
         }
@@ -128,28 +119,17 @@ Enemy.prototype.targetChangeTilePosition = function(targetPosition) {
         } else {
             this.targetPosition = targetPosition;
 
-            // if (this.pathToTarget.length > 0){
-            //     // Оптимизация поиска пути. Пукаем врага по следу цели.
-            //     this.pathToTarget.push(new GraphNode(targetPosition.x, targetPosition.y));
-            // }
-            // else{
-                // console.log("findPath");
-                // console.log(enemyPosition);
-                this.findPath(enemyPosition, targetPosition);
-            // }
+            this.findPath(enemyPosition, targetPosition);
         }
     }
 };
 
 
 Enemy.prototype.findPath = function(enemyPosition, targetPosition) {
-    // TODO: возможно стоит поменять Graph на не граф, говно же
-    var graph = new Graph(game.map.giveCopyOfGreed());
     try {
-        var start = graph.nodes[targetPosition.x][targetPosition.y];
-        var end = graph.nodes[enemyPosition.x][enemyPosition.y];
-        // var result = AStar.search(graph.nodes, start, end, true);
-        var result = astar.search(graph.nodes, start, end, true).reverse();
+        var end = new GraphNode(enemyPosition.x, enemyPosition.y);
+
+        var result = PathFinder.search(end);
     } catch(e) {
         result = [];
     }

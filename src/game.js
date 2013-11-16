@@ -151,13 +151,19 @@ Game.prototype.registerPlayer = function(player) {
     };
 
     player.addEventListener(Player.CHANGE_TILE_POSITION, function(){
-        AStar.reset();
+        var graph = new Graph(game.map.giveCopyOfGreed());
+        var start = graph.nodes[player.tilePosition.x][player.tilePosition.y];
+        
+        PathFinder.reset();
+        PathFinder.generateMap(graph.nodes, start, true);
         for (var i = 0; i < self.objects2D.length; i++) {
             if (self.objects2D[i].isInstanceOf(Enemy)){
                 self.objects2D[i].targetChangeTilePosition(player.tilePosition);
             }
         }
     });
+
+    this.player.checkChengeTileCoord();
 
     this.camera.setFolow(this.player.view);
 };

@@ -19,8 +19,6 @@ Player.prototype.soundTakeDamage = "player_hit";
 Player.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     Player.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
     this.createIntentory();
-
-    this.tilePosition = this.getPosition('tile', game.map);
 };
 
 
