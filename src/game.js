@@ -89,6 +89,19 @@ Game.prototype.init = function(renderer) {
     this.background = PIXI.Sprite.fromImage("./img/bg.jpg");
     this.stage.addChild(this.background);
 
+    this.background2 = PIXI.Sprite.fromImage("./img/bg.jpg");
+    this.background2.position.x = 1366;
+    this.stage.addChild(this.background2);
+
+    this.background3 = PIXI.Sprite.fromImage("./img/bg.jpg");
+    this.background3.position.y = 768;
+    this.stage.addChild(this.background3);
+
+    this.background4 = PIXI.Sprite.fromImage("./img/bg.jpg");
+    this.background4.position.x = 1366;
+    this.background4.position.y = 768;
+    this.stage.addChild(this.background4);
+
     this.box2DWorld = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, 0),  true);
 
     //TODO: убрать в другое место

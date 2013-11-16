@@ -120,7 +120,7 @@ function createWalls(grid){
         createBorder(0.01, Game.HEIGHT / 100, Game.WIDTH / 100, 0);
     }
 
-//    createBorders();
+   // createBorders();
 //    for (var i = 0; i < 20; i++) {
 //        createWall(
 //            _.random(0, game.withInTile) * Game.TILE_SIZE,
