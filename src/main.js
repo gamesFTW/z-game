@@ -1,29 +1,33 @@
-var assetsToLoader = [
-    "img/zombieSprite.json",
-    "img/zombieLightBlueSprite.json",
-    "img/zombieRedSprite.json",
-    "img/blue-man.png",
-    "img/brick.png",
-    "img/bullet.png"
-];
+$(function(){
+    var assetsToLoader = [
+        "img/zombieSprite.json",
+        "img/zombieLightBlueSprite.json",
+        "img/zombieRedSprite.json",
+        "img/blue-man.png",
+        "img/brick.png",
+        "img/bullet.png"
+    ];
 
-// create a new loader
-var loader = new PIXI.AssetLoader(assetsToLoader);
+    // create a new loader
+    var loader = new PIXI.AssetLoader(assetsToLoader);
 
- // use callback
-loader.onComplete = onAssetsLoaded;
-loader.load();
+     // use callback
+    loader.onComplete = onAssetsLoaded;
+    loader.load();     
 
+    // let pixi choose WebGL or canvas
+    var renderer = PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT);
+    // attach render to page
+    document.body.appendChild(renderer.view);
 
-// let pixi choose WebGL or canvas
-var renderer = PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT);
-// attach render to page
-document.body.appendChild(renderer.view);
+    window.game = new Game();
+    window.game.init(renderer);
 
-var game = new Game();
-game.init(renderer);
+    var gameInterface = new GameInterface(game);
 
-var gameInterface = new GameInterface(game);
+    loadSound();
+});
+
 
 function createAnimation() {
     // create an array to store the textures
@@ -154,5 +158,3 @@ function loadSound() {
 function handleLoad(event) {
 
 }
-
-loadSound();
