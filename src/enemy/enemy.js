@@ -68,9 +68,8 @@ Enemy.prototype.tick = function() {
     if (this.canGoToPlayer) {
         this.goToPosition(game.player.getPosition('pixi'));
     } else {
-        this.goToPosition();
+        this.goToPosition(game.map.getCoordinatesByTileInCenter(this.nearTargetStep));
     }
-
 
     this.tickCounter >= this.maxTickCounter && this.calcPlayerVisibility();
     this.tickCounter = this.tickCounter >= this.maxTickCounter ? 0 : this.tickCounter + 1;
@@ -79,7 +78,19 @@ Enemy.prototype.tick = function() {
 
 
 Enemy.prototype.calcPlayerVisibility = function() {
-    this.view.visible = this.isVisibleTo(game.player);
+    var canSeePlayer = this.isVisibleTo(game.player);
+
+    if (canSeePlayer){
+        this.canGoToPlayer = true;
+        this.canSeePlayer = true;
+    } else if (this.canSeePlayer === true || this.canSeePlayer === undefined){
+        this.canSeePlayer = canSeePlayer;
+
+        // TODO: По логике таргет не менял позицию, а тут targetChangeTilePosition.
+        this.targetChangeTilePosition(game.player.tilePosition);
+    }
+
+    this.view.visible = canSeePlayer;
 };
 
 
@@ -123,7 +134,7 @@ Enemy.prototype.getNearTargetStep = function() {
 
 Enemy.prototype.goToPosition = function(position) {
     var myPosition = this.getPosition('box2D');
-    position = position || game.map.getCoordinatesByTileInCenter(this.nearTargetStep);
+    // position = position || game.map.getCoordinatesByTileInCenter(this.nearTargetStep);
     position.x = position.x / Game.box2DMultiplier;
     position.y = position.y / Game.box2DMultiplier;
 
@@ -135,11 +146,11 @@ Enemy.prototype.goToPosition = function(position) {
         Math.sin(radian) * this.acceleration
     );
 
-    if ((Math.abs(newVelocity.x + velocity.x) > this.maxSpeed) && signum(newVelocity.x) == signum(velocity.x))
-        newVelocity.x = 0;
+    // if ((Math.abs(newVelocity.x + velocity.x) > this.maxSpeed) && signum(newVelocity.x) == signum(velocity.x))
+    //     newVelocity.x = 0;
 
-    if ((Math.abs(newVelocity.y + velocity.y) > this.maxSpeed) && signum(newVelocity.y) == signum(velocity.y))
-        newVelocity.y = 0;
+    // if ((Math.abs(newVelocity.y + velocity.y) > this.maxSpeed) && signum(newVelocity.y) == signum(velocity.y))
+    //     newVelocity.y = 0;
 
     this.body.ApplyImpulse(
         newVelocity,

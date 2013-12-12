@@ -66,23 +66,23 @@ function onAssetsLoaded() {
 
     game.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.world);
 
-    // for (var i = 0; i < 1; i++) {
-    //     enemyManager.spawn({x:0, y:0});
-    // }
+    for (var i = 0; i < 1; i++) {
+        enemyManager.spawn({x:0, y:0});
+    }
 
-    var number = 10;
-    for (var i = 0; i < number; i++) {
-        enemyManager.setSpawnPoint(_.random(0, game.map.width), 0);
-    }
-    for (var i = 0; i < number; i++) {
-        enemyManager.setSpawnPoint(0, _.random(0, game.map.height));
-    }
-    for (var i = 0; i < number; i++) {
-        enemyManager.setSpawnPoint(game.map.width, _.random(0, game.map.height));
-    }
-    for (var i = 0; i < number; i++) {
-        enemyManager.setSpawnPoint(_.random(0, game.map.width), game.map.height);
-    }
+    // var number = 10;
+    // for (var i = 0; i < number; i++) {
+    //     enemyManager.setSpawnPoint(_.random(0, game.map.width), 0);
+    // }
+    // for (var i = 0; i < number; i++) {
+    //     enemyManager.setSpawnPoint(0, _.random(0, game.map.height));
+    // }
+    // for (var i = 0; i < number; i++) {
+    //     enemyManager.setSpawnPoint(game.map.width, _.random(0, game.map.height));
+    // }
+    // for (var i = 0; i < number; i++) {
+    //     enemyManager.setSpawnPoint(_.random(0, game.map.width), game.map.height);
+    // }
 
     // enemyManager.setSpawnPoint(0, 0)
     //     .setSpawnPoint(Game.WIDTH, 0)

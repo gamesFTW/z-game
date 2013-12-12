@@ -11,9 +11,9 @@ Zombie.prototype.isStatic = false;
 
 
 Zombie.prototype.damage = 10;
-Zombie.prototype.acceleration  = 0.015;
-Zombie.prototype.dullness  = 1;
-Zombie.prototype.maxSpeed = 0.4;
+Zombie.prototype.acceleration  = 0.06;
+// Zombie.prototype.dullness  = 1;
+// Zombie.prototype.maxSpeed = 0.4;
 
 
 Zombie.prototype.soundDie = "zombie_die";
@@ -22,7 +22,7 @@ Zombie.prototype.soundDie = "zombie_die";
 Zombie.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     Zombie.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
 
-    this.maxSpeed += Math.random() / 10;
+    this.acceleration += Math.random() / 100;
 };
 
 
@@ -113,9 +113,9 @@ ZombieFast.prototype = Object.create( Zombie.prototype );
 ZombieFast.prototype.constructor = ZombieFast;
 
 ZombieFast.prototype.hp = 50;
-ZombieFast.prototype.acceleration = 0.3;
-ZombieFast.prototype.maxSpeed = 0.6;
-ZombieFast.prototype.dullness = 0.2;
+ZombieFast.prototype.acceleration = 0.08;
+// ZombieFast.prototype.maxSpeed = 0.6;
+// ZombieFast.prototype.dullness = 0.2;
 
 
 ZombieFast.prototype.createTexture = function(){
@@ -132,7 +132,7 @@ function ZombieDamage() {
 ZombieDamage.prototype = Object.create( Zombie.prototype );
 ZombieDamage.prototype.constructor = ZombieDamage;
 
-ZombieDamage.prototype.dullness = 0.2;
+// ZombieDamage.prototype.dullness = 0.2;
 ZombieDamage.prototype.damage = 30;
 
 

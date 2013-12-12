@@ -15,6 +15,7 @@ LiveObject.prototype.hp         = 100;
 
 LiveObject.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     LiveObject.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+    this.body.SetLinearDamping(6);
 };
 
 

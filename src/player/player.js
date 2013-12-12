@@ -102,7 +102,6 @@ Player.prototype.defineMouseEvents = function(stage){
 Player.prototype.createFixture = function(){
     var self = this;
     this.body.CreateFixture(Player.POLY_FIXTURE);
-    this.body.SetLinearDamping(6);
 };
 
 
