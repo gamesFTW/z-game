@@ -17,7 +17,7 @@ Enemy.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
     this.tickCounter = this.maxTickCounter;
     Enemy.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
 
-    this.targetChangeTilePosition(game.player.tilePosition);
+    this.targetChangeTilePosition(game.activeScene.player.tilePosition);
 };
 
 
@@ -51,7 +51,7 @@ Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
 
 
 Enemy.prototype.tick = function() {
-    var enemyPosition = this.getPosition('tile', game.map);
+    var enemyPosition = this.getPosition('tile', game.activeScene.map);
 
     (this.pathToTarget && !this.nearTargetStep) && this.getNearTargetStep();
     // хак для того что бы чувак не имеющий пути не выкидывал эксепшен
@@ -66,9 +66,9 @@ Enemy.prototype.tick = function() {
     }
 
     if (this.canGoToPlayer) {
-        this.goToPosition(game.player.getPosition('pixi'));
+        this.goToPosition(game.activeScene.player.getPosition('pixi'));
     } else {
-        this.goToPosition(game.map.getCoordinatesByTileInCenter(this.nearTargetStep));
+        this.goToPosition(game.activeScene.map.getCoordinatesByTileInCenter(this.nearTargetStep));
     }
 
     this.tickCounter >= this.maxTickCounter && this.calcPlayerVisibility();
@@ -78,7 +78,7 @@ Enemy.prototype.tick = function() {
 
 
 Enemy.prototype.calcPlayerVisibility = function() {
-    var canSeePlayer = this.isVisibleTo(game.player);
+    var canSeePlayer = this.isVisibleTo(game.activeScene.player);
 
     if (canSeePlayer){
         this.canGoToPlayer = true;
@@ -87,7 +87,7 @@ Enemy.prototype.calcPlayerVisibility = function() {
         this.canSeePlayer = canSeePlayer;
 
         // TODO: По логике таргет не менял позицию, а тут targetChangeTilePosition.
-        this.targetChangeTilePosition(game.player.tilePosition);
+        this.targetChangeTilePosition(game.activeScene.player.tilePosition);
     }
 
     this.view.visible = canSeePlayer;
@@ -95,7 +95,7 @@ Enemy.prototype.calcPlayerVisibility = function() {
 
 
 Enemy.prototype.targetChangeTilePosition = function(targetPosition) {
-    var enemyPosition = this.getPosition('tile', game.map);
+    var enemyPosition = this.getPosition('tile', game.activeScene.map);
     if (targetPosition.x !== this.targetPosition.x || targetPosition.y !== this.targetPosition.y) {
         if (targetPosition.x == enemyPosition.x && targetPosition.y == enemyPosition.y) {
             this.canGoToPlayer = true;

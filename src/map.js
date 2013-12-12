@@ -13,17 +13,18 @@ function Map() {
 Map.prototype.constructor = Map;
 
 
-Map.prototype.init = function(grid) {
+Map.prototype.init = function(grid, tileSize) {
+    this.tileSize = tileSize;
     this.grid = grid;
 
-    this.width = grid.length * Game.TILE_SIZE;
-    this.height = grid[0].length * Game.TILE_SIZE;
+    this.width = grid.length * tileSize;
+    this.height = grid[0].length * tileSize;
 };
 
 
 Map.prototype.giveGraphNodes = function() {
     if (this.graphNodes == undefined){
-        this.graphNodes = new Graph(game.map.giveCopyOfGreed());
+        this.graphNodes = new Graph(this.giveCopyOfGreed());
     }
 
     return this.graphNodes;
@@ -37,23 +38,23 @@ Map.prototype.giveCopyOfGreed = function() {
 
 Map.prototype.getTileByCoordinates = function(vector) {
     return {
-        x: Math.floor(vector.x / Game.TILE_SIZE),
-        y: Math.floor(vector.y / Game.TILE_SIZE)
+        x: Math.floor(vector.x / this.tileSize),
+        y: Math.floor(vector.y / this.tileSize)
     };
 };
 
 
 Map.prototype.getCoordinatesByTile = function(vector) {
     return {
-        x: vector.x * Game.TILE_SIZE,
-        y: vector.y * Game.TILE_SIZE
+        x: vector.x * this.tileSize,
+        y: vector.y * this.tileSize
     };
 };
 
 
 Map.prototype.getCoordinatesByTileInCenter = function(vector) {
     var coordinate = this.getCoordinatesByTile(vector);
-    coordinate.x += Game.TILE_SIZE / 2;
-    coordinate.y += Game.TILE_SIZE / 2;
+    coordinate.x += this.tileSize / 2;
+    coordinate.y += this.tileSize / 2;
     return coordinate;
 };

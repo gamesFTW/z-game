@@ -38,7 +38,7 @@ Player.prototype.defineMouseEvents = function(stage){
     var isFiring = false;
 
     function mouseMoveHandler(event){
-        var position = event.getLocalPosition(game.stage);
+        var position = event.getLocalPosition(game.activeScene.stage);
         mouseX = position.x;
         mouseY = position.y;
     }
@@ -76,7 +76,7 @@ Player.prototype.defineMouseEvents = function(stage){
                     }, weapon.weaponStats.timeBetweenShots);
                 }
 
-                var position = event.getLocalPosition(game.stage);
+                var position = event.getLocalPosition(game.activeScene.stage);
                 mouseX = position.x;
                 mouseY = position.y;
 
@@ -161,7 +161,8 @@ Player.prototype.tick = function() {
 
 
 Player.prototype.checkChengeTileCoord = function() {
-    var position = this.getPosition('tile', game.map);
+    var position = this.getPosition('tile', game.activeScene.map);
+
     if (position.x !== this.tilePosition.x || position.y !== this.tilePosition.y) {
         this.tilePosition = position;
         this.dispatchEvent(Player.CHANGE_TILE_POSITION);

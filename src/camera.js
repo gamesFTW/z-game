@@ -7,12 +7,14 @@ function Camera() {
 
 Camera.prototype.constructor = Camera;
 
-Camera.prototype.init = function(stage) {
+Camera.prototype.init = function(stage, width, height) {
     this.displayContainer = new PIXI.DisplayObjectContainer();
 
     this.displayContainer.position.x = 0;
     this.displayContainer.position.y = 0;
-    this.displayContainer.hitArea = new PIXI.Rectangle(0, 0, game.map.width, game.map.height);
+    this.width = width;
+    this.height = height;
+    this.displayContainer.hitArea = new PIXI.Rectangle(0, 0, width, height);
     this.displayContainer.setInteractive(true);
 
     stage.addChild(this.displayContainer);
@@ -26,8 +28,8 @@ Camera.prototype.setFolow = function(object2DView) {
 
 Camera.prototype.refresh = function() {
     if (this.folow) {
-        this.displayContainer.position.x = Math.round(-this.folow.position.x + Game.WIDTH/2);
-        this.displayContainer.position.y = Math.round(-this.folow.position.y + Game.HEIGHT/2);
+        this.displayContainer.position.x = Math.round(-this.folow.position.x + this.width/2);
+        this.displayContainer.position.y = Math.round(-this.folow.position.y + this.height/2);
     }
 }
 

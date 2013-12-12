@@ -129,7 +129,7 @@ Object2D.prototype.isVisibleTo = function(object2D) {
         }
     }
 
-    game.box2DWorld.RayCast(filterCollisions, myVect, targerVect);
+    this.body.GetWorld().RayCast(filterCollisions, myVect, targerVect);
     return isVisible;
 };
 

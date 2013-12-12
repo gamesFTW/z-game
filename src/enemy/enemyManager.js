@@ -21,7 +21,8 @@ EnemyManager.prototype.spawn = function(spawnPoint) {
     else if (rnd == 1) enemyClass = ZombieDamage;
     else enemyClass = Zombie;
 
-    game.createObject2DAt(enemyClass, spawnPoint.x, spawnPoint.y);
+    // TODO переписать на эвенты
+    game.activeScene.createObject2DAt(enemyClass, spawnPoint.x, spawnPoint.y);
 
     spawnPoint.spawned++;
     //if (spawnPoint.spawned > this.maxSpawnsPerPoint) {

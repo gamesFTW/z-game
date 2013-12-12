@@ -1,5 +1,6 @@
 function GameInterface(game){
-    game.onPlayerHpChanged = function(newHp){
+    // TODO переписать на ивенты
+    game.activeScene.onPlayerHpChanged = function(newHp){
         $(".player-hp").text(newHp);
     };
 
