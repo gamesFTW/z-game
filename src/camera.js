@@ -26,8 +26,8 @@ Camera.prototype.setFolow = function(object2DView) {
 
 Camera.prototype.refresh = function() {
     if (this.folow) {
-        this.displayContainer.position.x = -this.folow.position.x + Game.WIDTH/2;
-        this.displayContainer.position.y = -this.folow.position.y + Game.HEIGHT/2;
+        this.displayContainer.position.x = Math.round(-this.folow.position.x + Game.WIDTH/2);
+        this.displayContainer.position.y = Math.round(-this.folow.position.y + Game.HEIGHT/2);
     }
 }
 
