@@ -77,37 +77,9 @@ Enemy.prototype.tick = function() {
 
 };
 
-Enemy.prototype.isVisibleToPlayer = function() {
-    var enemyVect = this.getPosition('vector'),
-        playerVect = game.player.getPosition('vector'),
-        isVisible = false;
-
-
-    //function filterCollisions(fixture, normal, fraction) {
-    //    if( 1 ) {
-    //        // you've got the fraction of the original length of the raycast!
-    //        // you can use this to determine the distance
-    //        // between the character and the ground
-    //        return fraction;
-    //    }
-    //    else {
-    //        // continue looking
-    //        return 1;
-    //    }
-    //}
-    var fixtures = game.box2DWorld.RayCastAll(enemyVect, playerVect);
-
-    for (var i = 0; i < fixtures.length; i++) {
-        var cls = fixtures[i].m_body.GetUserData();
-        if (cls.isInstanceOf(Wall)) {
-            return false;
-        }
-    }
-    return true;
-};
 
 Enemy.prototype.calcPlayerVisibility = function() {
-    this.view.visible = this.isVisibleToPlayer();
+    this.view.visible = this.isVisibleTo(game.player);
 };
 
 

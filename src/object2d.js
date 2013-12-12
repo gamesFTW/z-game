@@ -111,8 +111,30 @@ Object2D.prototype.getPosition = function(body, map) {
 };
 
 
-Object2D.prototype.tick = function() {
+Object2D.prototype.isVisibleTo = function(object2D) {
+    var myVect = this.getPosition('vector'),
+        targerVect = object2D.getPosition('vector'),
+        isVisible = true;
 
+    function filterCollisions(fixture, normal, fraction) {
+        if (fixture.m_body.GetUserData().isInstanceOf(Wall)) {
+            // you've got the fraction of the original length of the raycast!
+            // you can use this to determine the distance
+            // between the character and the ground
+            isVisible = false;
+            return 0;
+        } else {
+            // continue looking
+            return 1;
+        }
+    }
+
+    game.box2DWorld.RayCast(filterCollisions, myVect, targerVect);
+    return isVisible;
+};
+
+
+Object2D.prototype.tick = function() {
 };
 
 
