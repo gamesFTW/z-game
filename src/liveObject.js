@@ -5,6 +5,7 @@ LiveObject.prototype.constructor = LiveObject;
 LiveObject.superclass = Object2D.prototype;
 
 
+LiveObject.HP_CHANGED = "hpChanged";
 LiveObject.prototype.onDie = function(){};
 LiveObject.prototype.onHpChanged = function(){};
 
@@ -22,7 +23,7 @@ LiveObject.prototype.init = function(world, x, y, texture, isStatic, isAnimated)
 LiveObject.prototype.takeDamage = function(damage){
     this.hp -= damage;
 
-    this.onHpChanged(this.hp);
+    this.dispatchEvent(LiveObject.HP_CHANGED);
 
     if (this.hp <= 0)
         this.die();
