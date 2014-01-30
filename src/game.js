@@ -59,7 +59,6 @@ Game.prototype.build = function() {
     this.activeScene = new SceneMap();
     this.activeScene.init();
 
-
     this.mainLoop();
 };
 

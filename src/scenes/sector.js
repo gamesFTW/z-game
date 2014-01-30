@@ -259,7 +259,7 @@ Sector.prototype.registerPlayer = function(player) {
     };
 
     player.addEventListener(Player.CHANGE_TILE_POSITION, function(){
-        var graph = new Graph(self.map.giveCopyOfGreed());
+        var graph = new AStarGraph(self.map.giveCopyOfGreed());
         var start = graph.nodes[player.tilePosition.x][player.tilePosition.y];
 
         PathFinder.reset();
