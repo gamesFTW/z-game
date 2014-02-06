@@ -3,22 +3,29 @@ function MapGenerator() {
 }
 
 
-MapGenerator.generateMap = function(width, height) {
+MapGenerator.generateMap = function(width, height, numberOfNodesToRemove) {
 	var Graph = require('data-structures').Graph;
 	var mapGraph = new Graph();
 
 	MapGenerator._generateGrid(mapGraph, width, height);
 
-	MapGenerator._removeRandomNodes(mapGraph, 1);	
+	MapGenerator._removeRandomNodes(mapGraph, numberOfNodesToRemove);	
 	
 	return mapGraph;
 };
 
 
 MapGenerator._removeRandomNodes = function(mapGraph, numberOfremoves) {
-	this._removeNodeByName(mapGraph, "1");
-	this._removeNodeByName(mapGraph, "5");
-	this._removeNodeByName(mapGraph, "6");
+	var allNodes = _.keys(mapGraph._nodes),
+    	i = 0;
+
+	while(i != numberOfremoves){
+		var nodeNameForRemove = _.sample(allNodes);
+		if (MapGenerator._removeNodeByName(mapGraph, nodeNameForRemove)) {
+			i++;
+		    _.without(allNodes, nodeNameForRemove);
+		}
+	}
 };
 
 
@@ -36,38 +43,8 @@ MapGenerator._removeNodeByName = function(mapGraph, nodeNameToRemove) {
 
 	if(isHasConnection){
 		mapGraph.removeNode(nodeNameToRemove);
+		return true;
 	}
-};
-
-
-MapGenerator._hasConnection = function(mapGraph, startNodeName, endNodeName, nodeNameToIgnore){
-	var visitedNodes = {},
-	    notVisitedNodes = {};
-
-	visitedNodes[nodeNameToIgnore] = true;
-	notVisitedNodes[startNodeName] = true;
-
-
-	mapGraph.getAllBros = function(nodeName) {
-        return _.keys(this.getNode(nodeName)._outEdges);
-	}
-
-	while (_.keys(notVisitedNodes).length) {
-		var currentNodeName = _.keys(notVisitedNodes)[0];
-		var nodes = mapGraph.getAllBros(currentNodeName);
-		for (var node in nodes) {
-			if (node == endNodeName) {
-    			return true;
-			}
-			if (!visitedNodes[node]) {
-				notVisitedNodes[node] = true;
-			}
-		};
-    
-		visitedNodes[currentNodeName] = true;
-		delete notVisitedNodes[currentNodeName];
-	}
-
 	return false;
 };
 
@@ -86,7 +63,6 @@ MapGenerator._hasConnectionToAll = function(mapGraph, startNodeName, nodeNameToI
 
 	while (_.keys(notVisitedNodes).length) {
 		var currentNodeName = _.keys(notVisitedNodes)[0];
-		console.log("currentNodeName", currentNodeName);
 
 		var nodes = mapGraph.getAllBros(currentNodeName);
 		for (var i = 0; i < nodes.length; i++) {

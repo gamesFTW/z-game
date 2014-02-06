@@ -31,7 +31,7 @@ SceneMap.prototype.init = function() {
 };
 
 SceneMap.prototype.createGraph = function() {
-	this.mapGraph = MapGenerator.generateMap(5, 5);
+	this.mapGraph = MapGenerator.generateMap(7, 7, 20);
 };
 
 
