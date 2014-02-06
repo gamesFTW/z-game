@@ -13,11 +13,16 @@ SceneMap.prototype.init = function() {
 
     this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
 
+    this.map = new PIXI.DisplayObjectContainer();
+    this.pixiStage.addChild(this.map);
+    this.map.position.x = 50;
+    this.map.position.y = 50;
+
     this.nodesConteiner = new PIXI.DisplayObjectContainer();
     this.edgesContainer = new PIXI.Graphics();
 
-    this.pixiStage.addChild(this.nodesConteiner);
-    this.pixiStage.addChild(this.edgesContainer);
+    this.map.addChild(this.edgesContainer);
+    this.map.addChild(this.nodesConteiner);
 
     this.createGraph();
     this.drawGraph();
@@ -26,21 +31,7 @@ SceneMap.prototype.init = function() {
 };
 
 SceneMap.prototype.createGraph = function() {
-	var Graph = require('data-structures').Graph;
-	this.mapGraph = new Graph();
-
-	// var nodesNames = ["A", "B", "C", "D", ""];
-
-	for (var i = 0; i < 10; i++) {
-		for (var j = 0; j < 10; j++) {
-			var node = this.mapGraph.addNode(i.toString()+j);
-			node.x = i * 100;
-			node.y = j * 100;
-
-			this.mapGraph.addEdge(i.toString()+j, i + (j - 1).toString());
-			this.mapGraph.addEdge(i.toString()+j, "00");
-		}
-	}
+	this.mapGraph = MapGenerator.generateMap(5, 5);
 };
 
 
@@ -81,7 +72,7 @@ SceneMap.prototype.drawNode = function(node) {
 
 
 SceneMap.prototype.drawEdge = function(node, node2) {
-	this.edgesContainer.lineStyle(5, 0x00ff00, 1);
+	this.edgesContainer.lineStyle(3, 0x00ff00, 0.5);
    	this.edgesContainer.moveTo(node.x, node.y);
    	this.edgesContainer.lineTo(node2.x, node2.y);
 };
