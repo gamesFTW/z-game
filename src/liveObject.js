@@ -6,9 +6,7 @@ LiveObject.superclass = Object2D.prototype;
 
 
 LiveObject.HP_CHANGED = "hpChanged";
-LiveObject.prototype.onDie = function(){};
-LiveObject.prototype.onHpChanged = function(){};
-
+LiveObject.DIE = "die";
 
 LiveObject.prototype.isLive     = true;
 LiveObject.prototype.hp         = 100;
@@ -35,5 +33,5 @@ LiveObject.prototype.takeDamage = function(damage){
 
 LiveObject.prototype.die = function(){
     createjs.Sound.play(this.soundDie, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
-    this.onDie(this);
+    this.dispatchEvent(LiveObject.DIE);
 };

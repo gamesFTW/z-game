@@ -38,6 +38,9 @@ SceneMap.prototype.disactive = function() {
     this.pixiStage.visible = false;
 };
 
+SceneMap.prototype.active = function() {
+    this.pixiStage.visible = true;
+};
 
 SceneMap.prototype.buildMap = function() {
     this.graphManager =  this.createGraph();
@@ -117,10 +120,10 @@ SceneMap.prototype.moveUnitToSector = function(unit, sector) {
 
 SceneMap.prototype.movePlayerToSector = function(unit, sector) {
     this.moveUnitToSector(unit, sector);
-    
+
     if (_.random(0, 1) == 1) {
-        this.dispatchEvent(SceneMap.PLAYER_ENCOUNTERED_ENEMIES)
-    }   
+        this.dispatchEvent(SceneMap.PLAYER_ENCOUNTERED_ENEMIES);
+    }
 };
 
 

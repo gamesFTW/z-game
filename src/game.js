@@ -50,14 +50,12 @@ Game.prototype.build = function() {
     document.body.appendChild(renderer.view);
     this.renderer = renderer;
 
-    this.timer = (new GlobalTimer()).init();
-
     //TODO: убрать в другое место!! FPS
     this.stats = new Stats();
     $(".viewport").append(this.stats.domElement);
     this.stats.domElement.style.position = "absolute";
-    
-    this.createSceneMap();    
+
+    this.createSceneMap();
 
     this.mainLoop();
 };
@@ -120,7 +118,7 @@ Game.prototype.createAnimation = function() {
         }
         ztd.obj.TEXTURE = zombieTextures;
     });
-}
+};
 
 
 Game.prototype.mainLoop = function() {
@@ -130,7 +128,6 @@ Game.prototype.mainLoop = function() {
         // TODO Cчитываем кнопки пользователя
 
         // Считаем таймер для делеев и симуляци
-        self.timer.tick();
         // TODO Пройтись по всем активным стейджам и запустить их лупы
         self.activeScene.loop();
 
@@ -145,6 +142,7 @@ Game.prototype.mainLoop = function() {
 Game.prototype.createSector = function() {
     var sector = new Sector();
     sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
+    sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler.bind(this));
     sector.init();
 
     this.scenesList.push(sector);
@@ -156,7 +154,6 @@ Game.prototype.createSector = function() {
 Game.prototype.changeActiveScene = function(newScene) {
     var oldScene = this.activeScene;
     this.activeScene = newScene;
-
     oldScene.disactive();
 
 };
@@ -166,8 +163,15 @@ Game.prototype.sectorBuildedHandler = function() {
     this.gameInterface = new GameInterface(game);
 };
 
+Game.prototype.sectorClearedHandler = function(event) {
+    var sector = event.currentTarget;
+    this.changeActiveScene(this.scenesList[0]);
+    sector.destroy();
+    this.scenesList.pop();
+};
 
 Game.prototype.playerEncounteredEnemiesHandler = function(event) {
     var sector = this.createSector();
     this.changeActiveScene(sector);
 };
+

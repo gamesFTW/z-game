@@ -63,7 +63,7 @@ Player.prototype.defineMouseEvents = function(stage){
                 function shootCycle(){
                     var weapon = self.inventory.getCurrentMainWeapon();
 
-                    weapon.betweenShotDelay = delay(function(){
+                    weapon.betweenShotDelay = self.scene.timer.delay(function(){
                         var weapon = self.inventory.getCurrentMainWeapon();
                         weapon.isBetweenShot = false;
 

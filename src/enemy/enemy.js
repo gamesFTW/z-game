@@ -41,7 +41,7 @@ Enemy.prototype.attackLiveObjectWithMeleeWeapon = function(attackedObject){
         attackedObject.takeDamage(this.damage);
 
         var self = this;
-        delay(function() {
+        this.scene.timer.delay(function() {
             self.canAttack = true;
         }, this.meleeCooldown);
 
