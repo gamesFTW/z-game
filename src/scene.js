@@ -8,4 +8,3 @@ Scene.prototype.constructor = Scene;
 Scene.prototype.init = function() {
 
 };
-

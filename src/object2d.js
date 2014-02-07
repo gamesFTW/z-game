@@ -7,16 +7,22 @@ function Object2D() {
 Object2D.prototype = Object.create( EventDispatcher.prototype );
 Object2D.prototype.constructor = Object2D;
 
+
+Object2D.prototype.scene;
+
+
 // Initial methods
-Object2D.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+Object2D.prototype.init = function(scene, x, y, texture, isStatic, isAnimated) {
     if (this.isStatic == undefined)
         this.isStatic = isStatic;
 
     if (this.isAnimated == undefined)
         this.isAnimated = isAnimated;
 
+    this.scene = scene;
+
     this.createTexture(isAnimated, texture);
-    this.createBody(isStatic, world);
+    this.createBody(isStatic, scene.box2DWorld);
 
     this.body.SetUserData(this);
 

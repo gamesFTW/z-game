@@ -16,8 +16,8 @@ Player.prototype.soundDie = "player_die";
 Player.prototype.soundTakeDamage = "player_hit";
 
 
-Player.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
-    Player.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+Player.prototype.init = function(scene, x, y, texture, isStatic, isAnimated) {
+    Player.superclass.init.call(this, scene, x, y, texture, isStatic, isAnimated);
     this.createIntentory();
 };
 
@@ -38,7 +38,7 @@ Player.prototype.defineMouseEvents = function(stage){
     var isFiring = false;
 
     function mouseMoveHandler(event){
-        var position = event.getLocalPosition(game.activeScene.stage);
+        var position = event.getLocalPosition(self.scene.stage);
         mouseX = position.x;
         mouseY = position.y;
     }
@@ -76,7 +76,7 @@ Player.prototype.defineMouseEvents = function(stage){
                     }, weapon.weaponStats.timeBetweenShots);
                 }
 
-                var position = event.getLocalPosition(game.activeScene.stage);
+                var position = event.getLocalPosition(self.scene.stage);
                 mouseX = position.x;
                 mouseY = position.y;
 
@@ -161,7 +161,7 @@ Player.prototype.tick = function() {
 
 
 Player.prototype.checkChengeTileCoord = function() {
-    var position = this.getPosition('tile', game.activeScene.map);
+    var position = this.getPosition('tile', this.scene.map);
 
     if (position.x !== this.tilePosition.x || position.y !== this.tilePosition.y) {
         this.tilePosition = position;

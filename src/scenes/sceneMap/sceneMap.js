@@ -13,7 +13,6 @@ SceneMap.prototype.graphManager = null;
 SceneMap.prototype.init = function() {
     SceneMap.superclass.init.call(this, arguments);
 
-
     this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
 
     this.displayContainer = new PIXI.DisplayObjectContainer();
@@ -32,6 +31,11 @@ SceneMap.prototype.init = function() {
     this.createPlayer();
 
     return this;
+};
+
+
+SceneMap.prototype.disactive = function() {
+    this.pixiStage.visible = false;
 };
 
 
@@ -104,10 +108,19 @@ SceneMap.prototype.drawEdge = function(node, node2) {
 };
 
 
-SimpleSector.prototype.moveUnitToSector = function(unit, sector) {
+SceneMap.prototype.moveUnitToSector = function(unit, sector) {
     unit.currentSector.removeUnit(unit);
 
     sector.addUnit(unit);
+};
+
+
+SceneMap.prototype.movePlayerToSector = function(unit, sector) {
+    this.moveUnitToSector(unit, sector);
+    
+    if (_.random(0, 1) == 1) {
+        this.dispatchEvent(SceneMap.PLAYER_ENCOUNTERED_ENEMIES)
+    }   
 };
 
 
@@ -115,6 +128,9 @@ SceneMap.prototype.sectorClickhandler = function(event, sector) {
     var playerSector = this.player.currentSector;
 
     if (this.graphManager.getEdge(playerSector.nodeName, sector.nodeName) !== undefined) {
-        sector.moveUnitToSector(this.player, sector);
+        this.movePlayerToSector(this.player, sector);
     }
 };
+
+
+SceneMap.PLAYER_ENCOUNTERED_ENEMIES = "playerEncounteredEnemies";

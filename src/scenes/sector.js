@@ -106,13 +106,13 @@ Sector.prototype.init = function() {
     };
     this.box2DWorld.SetContactListener(listener);
 
-    game.activeScene.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.activeScene.box2DWorld);
+    this.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, this.box2DWorld);
 
     this.enemyManager = new EnemyManager();
     this.enemyManager.init();
     this.createSpawnPoints();
 
-    this.createWalls(game.activeScene.map.giveCopyOfGreed());
+    this.createWalls(this.map.giveCopyOfGreed());
 
     this.dispatchEvent(Sector.SECTOR_BUILDED);
     return this;
@@ -122,16 +122,16 @@ Sector.prototype.init = function() {
 Sector.prototype.createSpawnPoints = function() {
     var number = 10;
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(_.random(0, game.activeScene.map.width), 0);
+        this.enemyManager.setSpawnPoint(_.random(0, this.map.width), 0);
     }
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(0, _.random(0, game.activeScene.map.height));
+        this.enemyManager.setSpawnPoint(0, _.random(0, this.map.height));
     }
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(game.activeScene.map.width, _.random(0, game.activeScene.map.height));
+        this.enemyManager.setSpawnPoint(this.map.width, _.random(0, this.map.height));
     }
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(_.random(0, game.activeScene.map.width), game.activeScene.map.height);
+        this.enemyManager.setSpawnPoint(_.random(0, this.map.width), this.map.height);
     }
 
     this.enemyManager.setSpawnPoint(0, 0)
@@ -143,10 +143,11 @@ Sector.prototype.createSpawnPoints = function() {
 
 
 Sector.prototype.createWalls = function(grid) {
+    var self = this;
     var brickTexture = PIXI.Texture.fromFrame("img/brick.png");
 
     function createWall(x, y) {
-        game.activeScene.createObject2DAt(Wall, x, y, brickTexture, true, false);
+        self.createObject2DAt(Wall, x, y, brickTexture, true, false);
     }
 
     function createBorders() {
@@ -154,7 +155,7 @@ Sector.prototype.createWalls = function(grid) {
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
 
         function createBorder(width, height, x, y){
-            var body = game.activeScene.box2DWorld.CreateBody(bodyDef);
+            var body = self.box2DWorld.CreateBody(bodyDef);
 
             var fixture = new Box2D.Dynamics.b2FixtureDef();
             fixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();
@@ -221,7 +222,7 @@ Sector.prototype.loop = function() {
 
 Sector.prototype.createObject2DAt = function(objectClass, x, y, texture, isStatic, isAnimated) {
     var object2D = new objectClass();
-    object2D.init(this.box2DWorld, x, y, texture, isStatic, isAnimated);
+    object2D.init(this, x, y, texture, isStatic, isAnimated);
     this.registerObject2D(object2D);
 
     if (object2D.isLive){
