@@ -45,8 +45,7 @@ Game.prototype.build = function() {
     document.body.appendChild(renderer.view);
     this.renderer = renderer;
 
-    this.timer = new GlobalTimer();
-    this.timer.init();
+    this.timer = (new GlobalTimer()).init();
 
     //TODO: убрать в другое место!! FPS
     this.stats = new Stats();
