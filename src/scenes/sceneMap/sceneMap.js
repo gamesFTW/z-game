@@ -7,6 +7,9 @@ SceneMap.prototype.constructor = SceneMap;
 SceneMap.superclass = Scene.prototype;
 
 
+SceneMap.prototype.graphManager = null;
+
+
 SceneMap.prototype.init = function() {
     SceneMap.superclass.init.call(this, arguments);
 
@@ -26,24 +29,29 @@ SceneMap.prototype.init = function() {
 
     this.buildMap();
 
-    return this;
-};
+    this.createPlayer();
 
-SceneMap.prototype.createGraph = function() {
-    return MapGenerator.generateMap(9, 7, 29);
+    return this;
 };
 
 
 SceneMap.prototype.buildMap = function() {
-    var graph =  this.createGraph(),
-       nodes = _.keys(graph._nodes),
-       self = this;
+    this.graphManager =  this.createGraph();
+    var nodes = _.keys(this.graphManager._nodes),
+        self = this;
 
     this.map = {};
 
     _.forEach(nodes, function(node) {
-        self.map[node] = (new SimpleSector()).init(node, graph);
-        self.drawNode(self.map[node]);
+        var simpleSector = (new SimpleSector()).init(node, self.graphManager);
+        self.map[node] = simpleSector;
+
+        simpleSector.view.interactive = true;
+        simpleSector.view.click = function(event){
+            self.sectorClickhandler(event, simpleSector);
+        };
+
+        self.drawNode(simpleSector);
     });
 
     _.forEach(nodes, function(node) {
@@ -54,6 +62,26 @@ SceneMap.prototype.buildMap = function() {
     });
 };
 
+
+SceneMap.prototype.createGraph = function() {
+    return MapGenerator.generateMap(9, 7, 29);
+};
+
+
+SceneMap.prototype.getRandomSector = function() {
+    return this.map[_.sample(_.keys(this.map))];
+};
+
+
+SceneMap.prototype.createPlayer = function() {
+    this.player = new MapUnitPlayer();
+    this.player.init();
+
+    var randomSector = this.getRandomSector();
+    randomSector.addUnit(this.player);
+};
+
+
 SceneMap.prototype.render = function() {
     game.renderer.render(this.pixiStage);
 };
@@ -62,14 +90,6 @@ SceneMap.prototype.render = function() {
 SceneMap.prototype.loop = function() {
     this.render();
 };
-
-
-//SceneMap.prototype.drawGraph = function() {
-    //var self = this;
-    //_.keys(this.map).forEach(function(node){
-        //self.drawNode(node);
-    //});
-//};
 
 
 SceneMap.prototype.drawNode = function(node) {
@@ -84,34 +104,17 @@ SceneMap.prototype.drawEdge = function(node, node2) {
 };
 
 
+SimpleSector.prototype.moveUnitToSector = function(unit, sector) {
+    unit.currentSector.removeUnit(unit);
 
-
-function SimpleSector() {
-
-}
-
-
-SimpleSector.prototype.constructor = SimpleSector();
-
-
-SimpleSector.prototype.texturePath = "img/brick.png";
-
-
-SimpleSector.prototype.init = function(nodeName, mapGraph) {
-    mapGraph.getNode(nodeName).model = this;
-    this.nodeName = nodeName;
-    this.graph = mapGraph.getNode(nodeName);
-    this.createView();
-    return this;
+    sector.addUnit(unit);
 };
 
 
-SimpleSector.prototype.createView = function() {
-    var brickTexture = PIXI.Texture.fromFrame(this.texturePath);
-    this.view = new PIXI.Sprite(brickTexture);
-    this.view.anchor.x = 0.5;
-    this.view.anchor.y = 0.5;
-    this.view.position.x = this.graph.positionX * 100;
-    this.view.position.y = this.graph.positionY * 100;
-};
+SceneMap.prototype.sectorClickhandler = function(event, sector) {
+    var playerSector = this.player.currentSector;
 
+    if (this.graphManager.getEdge(playerSector.nodeName, sector.nodeName) !== undefined) {
+        sector.moveUnitToSector(this.player, sector);
+    }
+};
