@@ -355,6 +355,9 @@ Sector.prototype.liveObjectDieHandler = function(event) {
         if (this.killsCounter >= 100) {
             this.dispatchEvent(Sector.SECTOR_CLEARED);
         }
+    } else if (object2D.isInstanceOf(Player)) {
+        alert("YOU LOSE!");
+        delete window.game;
     }
 
     this.destroyList.push(object2D);

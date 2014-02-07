@@ -14,7 +14,7 @@ Camera.prototype.init = function(stage, width, height) {
     this.displayContainer.position.y = 0;
     this.width = width;
     this.height = height;
-    this.displayContainer.hitArea = new PIXI.Rectangle(0, 0, width, height);
+    this.displayContainer.hitArea = new PIXI.Rectangle(0, 0, 10000, 10000);
     this.displayContainer.setInteractive(true);
 
     stage.addChild(this.displayContainer);
