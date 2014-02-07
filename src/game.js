@@ -53,8 +53,10 @@ Game.prototype.build = function() {
     $(".viewport").append(this.stats.domElement);
     this.stats.domElement.style.position = "absolute";
 
-    this.activeScene = new Sector();
-    this.activeScene.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
+    //this.activeScene = new Sector();
+    //this.activeScene.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
+    //this.activeScene.init();
+    this.activeScene = new SceneMap();
     this.activeScene.init();
 
     this.mainLoop();
