@@ -10,6 +10,7 @@ GlobalTimer.prototype.constructor = GlobalTimer;
 GlobalTimer.prototype.init = function() {
     this._delays = [];
     window.delay = _.bind(this.delay, this);
+    return this;
 };
 
 GlobalTimer.prototype.tick = function() {
