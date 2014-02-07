@@ -9,3 +9,10 @@ Scene.prototype.init = function() {
 
 };
 
+Scene.prototype.active = function() {
+
+};
+
+Scene.prototype.disactive = function() {
+
+};

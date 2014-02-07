@@ -7,16 +7,20 @@ Sector.prototype.constructor = Sector;
 Sector.superclass = Scene.prototype;
 
 // Static property
+Sector.SECTOR_CLEARED = "sectorCleared";
 Sector.SECTOR_BUILDED = "sectorBuilded";
+
 Sector.TILE_SIZE = 40;
 Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / Game.box2DMultiplier;
 
+Sector.prototype.killsCounter = 0;
 
 Sector.prototype.init = function() {
     Sector.superclass.init.call(this, arguments);
 
     this.destroyList = [];
     this.objects2D = [];
+    this.timer = (new Timer()).init();
 
     this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
 
@@ -106,32 +110,36 @@ Sector.prototype.init = function() {
     };
     this.box2DWorld.SetContactListener(listener);
 
-    game.activeScene.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, game.activeScene.box2DWorld);
+    this.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, this.box2DWorld);
 
     this.enemyManager = new EnemyManager();
-    this.enemyManager.init();
+    this.enemyManager.init(this);
     this.createSpawnPoints();
 
-    this.createWalls(game.activeScene.map.giveCopyOfGreed());
+    this.createWalls(this.map.giveCopyOfGreed());
 
     this.dispatchEvent(Sector.SECTOR_BUILDED);
     return this;
+};
+
+Sector.prototype.destroy = function() {
+
 };
 
 
 Sector.prototype.createSpawnPoints = function() {
     var number = 10;
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(_.random(0, game.activeScene.map.width), 0);
+        this.enemyManager.setSpawnPoint(_.random(0, this.map.width), 0);
     }
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(0, _.random(0, game.activeScene.map.height));
+        this.enemyManager.setSpawnPoint(0, _.random(0, this.map.height));
     }
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(game.activeScene.map.width, _.random(0, game.activeScene.map.height));
+        this.enemyManager.setSpawnPoint(this.map.width, _.random(0, this.map.height));
     }
     for (var i = 0; i < number; i++) {
-        this.enemyManager.setSpawnPoint(_.random(0, game.activeScene.map.width), game.activeScene.map.height);
+        this.enemyManager.setSpawnPoint(_.random(0, this.map.width), this.map.height);
     }
 
     this.enemyManager.setSpawnPoint(0, 0)
@@ -143,10 +151,11 @@ Sector.prototype.createSpawnPoints = function() {
 
 
 Sector.prototype.createWalls = function(grid) {
+    var self = this;
     var brickTexture = PIXI.Texture.fromFrame("img/brick.png");
 
     function createWall(x, y) {
-        game.activeScene.createObject2DAt(Wall, x, y, brickTexture, true, false);
+        self.createObject2DAt(Wall, x, y, brickTexture, true, false);
     }
 
     function createBorders() {
@@ -154,7 +163,7 @@ Sector.prototype.createWalls = function(grid) {
         bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
 
         function createBorder(width, height, x, y){
-            var body = game.activeScene.box2DWorld.CreateBody(bodyDef);
+            var body = self.box2DWorld.CreateBody(bodyDef);
 
             var fixture = new Box2D.Dynamics.b2FixtureDef();
             fixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();
@@ -208,6 +217,7 @@ Sector.prototype.render = function() {
 
 
 Sector.prototype.loop = function() {
+    this.timer.tick();
     this.mainLoopDestroyObjectsStep();
     this.tickObjects2D();
     // Симулейтим колижины
@@ -221,14 +231,11 @@ Sector.prototype.loop = function() {
 
 Sector.prototype.createObject2DAt = function(objectClass, x, y, texture, isStatic, isAnimated) {
     var object2D = new objectClass();
-    object2D.init(this.box2DWorld, x, y, texture, isStatic, isAnimated);
+    object2D.init(this, x, y, texture, isStatic, isAnimated);
     this.registerObject2D(object2D);
 
     if (object2D.isLive){
-        var self = this;
-        object2D.onDie = function(object) {
-            self.onLiveObjectDie(object);
-        };
+        object2D.addEventListener(LiveObject.DIE, this.liveObjectDieHandler.bind(this));
     }
 
     return object2D;
@@ -330,7 +337,7 @@ Sector.prototype.createSimpleBullet = function(vectorFrom, vectorTo, weaponStats
 
     // self destroy in 10 secs
     var self = this;
-    delay(function() {
+    this.timer.delay(function() {
         self.destroyList.push(bullet);
     }, 10 * 1000);
 };
@@ -341,8 +348,16 @@ Sector.prototype.createSimpleBullet = function(vectorFrom, vectorTo, weaponStats
 //  Handlers
 //
 //---------------------------------------------------------------------------------------------------
-Sector.prototype.onLiveObjectDie = function(object) {
-    this.destroyList.push(object);
+Sector.prototype.liveObjectDieHandler = function(event) {
+    var object2D = event.currentTarget;
+    if (object2D.isInstanceOf(Enemy)) {
+        this.killsCounter++;
+        if (this.killsCounter >= 100) {
+            this.dispatchEvent(Sector.SECTOR_CLEARED);
+        }
+    }
+
+    this.destroyList.push(object2D);
 };
 
 
@@ -367,10 +382,11 @@ Sector.prototype.globalPostSolveHandler = function(contact, impulse) {
 
         if ((objectA.isInstanceOf(Zombie) && objectB.isInstanceOf(Player)) ||
             (objectA.isInstanceOf(Player) && objectB.isInstanceOf(Zombie))){
+            var player, zombie;
             // определяем кто из них кто
             if (objectA.isInstanceOf(Player)){
-                var player = objectA,
-                    zombie = objectB;
+                player = objectA;
+                zombie = objectB;
             } else {
                 player = objectB;
                 zombie = objectA;

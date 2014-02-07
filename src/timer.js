@@ -1,19 +1,14 @@
-function GlobalTimer() {
-    if (!GlobalTimer.__instance)
-        GlobalTimer.__instance = this;
-    else
-        return GlobalTimer.__instance;
+function Timer() {
 }
 
-GlobalTimer.prototype.constructor = GlobalTimer;
+Timer.prototype.constructor = Timer;
 
-GlobalTimer.prototype.init = function() {
+Timer.prototype.init = function() {
     this._delays = [];
-    window.delay = _.bind(this.delay, this);
     return this;
 };
 
-GlobalTimer.prototype.tick = function() {
+Timer.prototype.tick = function() {
     var now = new Date().getTime();
     var index = this._delays.length;
     while (--index >= 0) {
@@ -38,14 +33,14 @@ GlobalTimer.prototype.tick = function() {
     }
 };
 
-GlobalTimer.prototype.pause = function() {
+Timer.prototype.pause = function() {
     var now = new Date().getTime();
     for(var index in this._delays) {
         this._delays[index].pauseBuffer = now;
     }
 };
 
-GlobalTimer.prototype.unPause = function() {
+Timer.prototype.unPause = function() {
     var now = new Date().getTime();
     for(var index in this._delays) {
         var item = this._delays[index];
@@ -53,7 +48,7 @@ GlobalTimer.prototype.unPause = function() {
     }
 };
 
-GlobalTimer.prototype.delay = function(func, delay, repeat) {
+Timer.prototype.delay = function(func, delay, repeat) {
     this._delays.push({
         start : new Date().getTime(),
         func : func,
@@ -80,7 +75,7 @@ GlobalTimer.prototype.delay = function(func, delay, repeat) {
     return delayController;
 };
 
-GlobalTimer.prototype.removeAllDelaysWithFunction = function(func) {
+Timer.prototype.removeAllDelaysWithFunction = function(func) {
     for (var i = this._delays.length - 1; i >= 0; i--) {
         if (this._delays[i].func == func)
             this._delays.splice(i, 1);

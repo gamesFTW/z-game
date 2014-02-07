@@ -4,9 +4,14 @@ function Game() {
 
 Game.prototype.constructor = Game;
 
+
 Game.WIDTH = 1024;
 Game.HEIGHT = 768;
 Game.box2DMultiplier = 100;
+
+
+Game.prototype.scenesList = [];
+
 
 Game.prototype.init = function() {
     this.loadAssets();
@@ -45,25 +50,29 @@ Game.prototype.build = function() {
     document.body.appendChild(renderer.view);
     this.renderer = renderer;
 
-    this.timer = (new GlobalTimer()).init();
-
     //TODO: убрать в другое место!! FPS
     this.stats = new Stats();
     $(".viewport").append(this.stats.domElement);
     this.stats.domElement.style.position = "absolute";
 
-    //this.activeScene = new Sector();
-    //this.activeScene.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
-    //this.activeScene.init();
-    this.activeScene = new SceneMap();
-    this.activeScene.init();
+    this.createSceneMap();
 
     this.mainLoop();
 };
 
 
-Game.prototype.sectorBuildedHandler = function() {
-    this.gameInterface = new GameInterface(game);
+Game.prototype.createSceneMap = function() {
+    var sceneMap = new SceneMap();
+    sceneMap.addEventListener(
+        SceneMap.PLAYER_ENCOUNTERED_ENEMIES, 
+        this.playerEncounteredEnemiesHandler.bind(this)
+    );
+
+    sceneMap.init();
+
+    this.activeScene = sceneMap;
+
+    this.scenesList.push(sceneMap);
 };
 
 
@@ -109,7 +118,7 @@ Game.prototype.createAnimation = function() {
         }
         ztd.obj.TEXTURE = zombieTextures;
     });
-}
+};
 
 
 Game.prototype.mainLoop = function() {
@@ -119,7 +128,6 @@ Game.prototype.mainLoop = function() {
         // TODO Cчитываем кнопки пользователя
 
         // Считаем таймер для делеев и симуляци
-        self.timer.tick();
         // TODO Пройтись по всем активным стейджам и запустить их лупы
         self.activeScene.loop();
 
@@ -131,4 +139,39 @@ Game.prototype.mainLoop = function() {
 };
 
 
+Game.prototype.createSector = function() {
+    var sector = new Sector();
+    sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
+    sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler.bind(this));
+    sector.init();
+
+    this.scenesList.push(sector);
+
+    return sector;
+};
+
+
+Game.prototype.changeActiveScene = function(newScene) {
+    var oldScene = this.activeScene;
+    this.activeScene = newScene;
+    oldScene.disactive();
+
+};
+
+// HANDLERS
+Game.prototype.sectorBuildedHandler = function() {
+    this.gameInterface = new GameInterface(game);
+};
+
+Game.prototype.sectorClearedHandler = function(event) {
+    var sector = event.currentTarget;
+    this.changeActiveScene(this.scenesList[0]);
+    sector.destroy();
+    this.scenesList.pop();
+};
+
+Game.prototype.playerEncounteredEnemiesHandler = function(event) {
+    var sector = this.createSector();
+    this.changeActiveScene(sector);
+};
 
