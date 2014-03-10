@@ -11,13 +11,9 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "ym": ">=0.0.15",
     "grunt": ">=0.4.0",
-    "bower": ">=1.2.7",
-    "ngraph.physics.simulator": "0.0.5",
-    "ngraph.forcelayout": "0.0.7",
-    "ngraph.generators": "0.0.2",
-    "browserify": "~3.19.1",
-    "ngraph.graph": "0.0.2"
+    "bower": ">=1.2.7"
   },
   "scripts": {
     "postinstall": "node node_modules/bower/bin/bower install"

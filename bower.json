@@ -9,6 +9,6 @@
     "keyboard": "https://github.com/RobertWHurst/KeyboardJS.git",
     "soundjs": "http://code.createjs.com/soundjs-0.5.0.min.js",
     "astar": "https://raw.github.com/bgrins/javascript-astar/master/astar.js",
-    "data_structures": "https://raw.github.com/chenglou/data-structures/master/distribution/browser/data-structures-1.4.1.min.js"
+    "data-structures": "data-structures#v1.4.1"
   }
 }
