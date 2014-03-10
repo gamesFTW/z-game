@@ -1,7 +1,7 @@
 modules.define(
     'Sector',
-    ['Map', 'Timer', 'Camera', 'EnemyManager', 'Player', 'Zombie', 'Wall', 'Bullet', 'Collisions'],
-    function(provide, Map, Timer, Camera, EnemyManager, Player, Zombie, Wall, Bullet, Collisions) {
+    ['Scene', 'Map', 'Timer', 'Camera', 'EnemyManager', 'Player', 'Zombie', 'Wall', 'Bullet', 'Collisions'],
+    function(provide, Scene, Map, Timer, Camera, EnemyManager, Player, Zombie, Wall, Bullet, Collisions) {
 
     function Sector() {
 
@@ -16,7 +16,7 @@ modules.define(
     Sector.SECTOR_BUILDED = "sectorBuilded";
 
     Sector.TILE_SIZE = 40;
-    Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / Game.box2DMultiplier;
+    Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / window.game.box2DMultiplier;
 
     Sector.prototype.killsCounter = 0;
 

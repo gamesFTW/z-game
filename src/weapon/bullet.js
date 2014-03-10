@@ -1,5 +1,5 @@
 modules.define(
-    'Bullet', ['Object2D'], function(provide, Object2D) {
+    'Bullet', ['Object2D', 'Collisions'], function(provide, Object2D, Collisions) {
 
     function Bullet() {
     }

@@ -1,5 +1,5 @@
 modules.define(
-    'Zombie', ['Enemy'], function (provide, Enemy) {
+    'Zombie', ['Enemy', 'Collisions'], function (provide, Enemy, Collisions) {
 
     function Zombie() {
 

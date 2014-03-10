@@ -1,5 +1,7 @@
 modules.define(
-    'Game', ['SceneMap'], function(provide, SceneMap) {
+    'Game',
+    ['SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage'],
+    function(provide, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage) {
 
 
     function Game() {

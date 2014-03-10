@@ -1,5 +1,5 @@
 modules.define(
-    'Player', ['LiveObject', 'Inventory'], function(provide, LiveObject, Inventory) {
+    'Player', ['LiveObject', 'Inventory', 'Collisions'], function(provide, LiveObject, Inventory, Collisions) {
 
     function Player() {
     }

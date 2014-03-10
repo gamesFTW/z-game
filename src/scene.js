@@ -1,7 +1,7 @@
 modules.define(
-    "Scene", ['EventDispatcher'], function() {
+    "Scene", ['EventDispatcher'], function(provide, EventDispatcher) {
 
-    function Scene(provide, EventDispatcher) {
+    function Scene() {
 
     }
 

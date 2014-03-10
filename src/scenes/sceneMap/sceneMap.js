@@ -1,5 +1,8 @@
 modules.define(
-    'SceneMap', ['Scene', 'SimpleSector', 'MapGenerator'], function(provide, Scene, SimpleSector, MapGenerator) {
+    'SceneMap',
+    ['Scene', 'SimpleSector', 'MapGenerator', 'MapUnitPlayer'],
+    function(provide, Scene, SimpleSector, MapGenerator, MapUnitPlayer) {
+
     function SceneMap() {
 
     }
