@@ -1,161 +1,167 @@
-function MapGenerator() {
+modules.define(
+    'MapGenerator', [], function(provide) {
 
-}
+    function MapGenerator() {
 
-
-MapGenerator.generateMap = function(width, height, numberOfNodesToRemove) {
-    var Graph = require('data-structures').Graph;
-    var mapGraph = new Graph();
-
-    MapGenerator._generateGrid(mapGraph, width, height);
-    MapGenerator._removeRandomNodes(mapGraph, numberOfNodesToRemove);
-
-    return mapGraph;
-};
+    }
 
 
-MapGenerator._removeRandomNodes = function(mapGraph, numberOfremoves) {
-    var allNodes = _.keys(mapGraph._nodes),
-        i = 0;
+    MapGenerator.generateMap = function(width, height, numberOfNodesToRemove) {
+        var Graph = require('data-structures').Graph;
+        var mapGraph = new Graph();
 
-    while(i != numberOfremoves){
-        var nodeNameForRemove = _.sample(allNodes);
-        if (MapGenerator._removeNodeByName(mapGraph, nodeNameForRemove)) {
-            i++;
-            _.without(allNodes, nodeNameForRemove);
+        MapGenerator._generateGrid(mapGraph, width, height);
+        MapGenerator._removeRandomNodes(mapGraph, numberOfNodesToRemove);
+
+        return mapGraph;
+    };
+
+
+    MapGenerator._removeRandomNodes = function(mapGraph, numberOfremoves) {
+        var allNodes = _.keys(mapGraph._nodes),
+            i = 0;
+
+        while(i != numberOfremoves){
+            var nodeNameForRemove = _.sample(allNodes);
+            if (MapGenerator._removeNodeByName(mapGraph, nodeNameForRemove)) {
+                i++;
+                _.without(allNodes, nodeNameForRemove);
+            }
         }
-    }
-};
+    };
 
 
-MapGenerator._removeNodeByName = function(mapGraph, nodeNameToRemove) {
-    var verificationNodeName = null;
+    MapGenerator._removeNodeByName = function(mapGraph, nodeNameToRemove) {
+        var verificationNodeName = null;
 
-    for (var nodeName in mapGraph._nodes) {
-        if (nodeName != nodeNameToRemove){
-            verificationNodeName = nodeName;
-            break;
-        }
-    }
-
-    var isHasConnection = this._hasConnectionToAll(mapGraph, verificationNodeName, nodeNameToRemove);
-
-    if(isHasConnection){
-        mapGraph.removeNode(nodeNameToRemove);
-        return true;
-    }
-    return false;
-};
-
-
-MapGenerator._hasConnectionToAll = function(mapGraph, startNodeName, nodeNameToIgnore){
-    var visitedNodes = {},
-        notVisitedNodes = {};
-
-    visitedNodes[nodeNameToIgnore] = true;
-    notVisitedNodes[startNodeName] = true;
-
-
-    mapGraph.getAllBros = function(nodeName) {
-        return _.keys(this.getNode(nodeName)._outEdges);
-    }
-
-    while (_.keys(notVisitedNodes).length) {
-        var currentNodeName = _.keys(notVisitedNodes)[0];
-
-        var nodes = mapGraph.getAllBros(currentNodeName);
-        for (var i = 0; i < nodes.length; i++) {
-            if (!visitedNodes[nodes[i]]) {
-                notVisitedNodes[nodes[i]] = true;
+        for (var nodeName in mapGraph._nodes) {
+            if (nodeName != nodeNameToRemove){
+                verificationNodeName = nodeName;
+                break;
             }
         }
 
-        visitedNodes[currentNodeName] = true;
-        delete notVisitedNodes[currentNodeName];
-    }
+        var isHasConnection = this._hasConnectionToAll(mapGraph, verificationNodeName, nodeNameToRemove);
 
-    return _.keys(visitedNodes).length == _.keys(mapGraph._nodes).length;
-};
-
-
-MapGenerator._generateGrid = function(mapGraph, width, height) {
-    var mapArray = [];
-    id = 0;
-
-    for (var x = 0; x < width; x++) {
-        mapArray[x] = [];
-
-        for (var y = 0; y < height; y++) {
-            var nodeName = id.toString();
-            mapArray[x][y] = nodeName;
-
-            var node = mapGraph.addNode(nodeName);
-            node.positionX = x;
-            node.positionY = y;
-
-            id ++;
+        if(isHasConnection){
+            mapGraph.removeNode(nodeNameToRemove);
+            return true;
         }
-    }
+        return false;
+    };
 
-    for (x = 0; x < mapArray.length; x++) {
-        for (y = 0; y < mapArray[x].length; y++) {
-            var nodeName = mapArray[x][y];
 
-            if (mapArray[x - 1] !== undefined){
-                if (mapArray[x - 1][y - 1] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x - 1][y - 1]);
+    MapGenerator._hasConnectionToAll = function(mapGraph, startNodeName, nodeNameToIgnore){
+        var visitedNodes = {},
+            notVisitedNodes = {};
+
+        visitedNodes[nodeNameToIgnore] = true;
+        notVisitedNodes[startNodeName] = true;
+
+
+        mapGraph.getAllBros = function(nodeName) {
+            return _.keys(this.getNode(nodeName)._outEdges);
+        };
+
+        while (_.keys(notVisitedNodes).length) {
+            var currentNodeName = _.keys(notVisitedNodes)[0];
+
+            var nodes = mapGraph.getAllBros(currentNodeName);
+            for (var i = 0; i < nodes.length; i++) {
+                if (!visitedNodes[nodes[i]]) {
+                    notVisitedNodes[nodes[i]] = true;
                 }
             }
 
-            if (mapArray[x] !== undefined){
-                if (mapArray[x][y - 1] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x][y - 1]);
-                }
-            }
+            visitedNodes[currentNodeName] = true;
+            delete notVisitedNodes[currentNodeName];
+        }
 
-            if (mapArray[x + 1] !== undefined){
-                if (mapArray[x + 1][y - 1] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x + 1][y - 1]);
-                }
-            }
+        return _.keys(visitedNodes).length == _.keys(mapGraph._nodes).length;
+    };
 
 
-            if (mapArray[x - 1] !== undefined){
-                if (mapArray[x - 1][y] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x - 1][y]);
-                }
-            }
+    MapGenerator._generateGrid = function(mapGraph, width, height) {
+        var mapArray = [];
+        id = 0;
 
-            if (mapArray[x] !== undefined){
-                if (mapArray[x][y] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x][y]);
-                }
-            }
+        for (var x = 0; x < width; x++) {
+            mapArray[x] = [];
 
-            if (mapArray[x + 1] !== undefined){
-                if (mapArray[x + 1][y] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x + 1][y]);
-                }
-            }
+            for (var y = 0; y < height; y++) {
+                var nodeName = id.toString();
+                mapArray[x][y] = nodeName;
 
+                var node = mapGraph.addNode(nodeName);
+                node.positionX = x;
+                node.positionY = y;
 
-            if (mapArray[x - 1] !== undefined){
-                if (mapArray[x - 1][y + 1] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x - 1][y + 1]);
-                }
-            }
-
-            if (mapArray[x] !== undefined){
-                if (mapArray[x][y + 1] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x][y + 1]);
-                }
-            }
-
-            if (mapArray[x + 1] !== undefined){
-                if (mapArray[x + 1][y + 1] !== undefined){
-                    mapGraph.addEdge(nodeName, mapArray[x + 1][y + 1]);
-                }
+                id ++;
             }
         }
-    }
-};
+
+        for (x = 0; x < mapArray.length; x++) {
+            for (y = 0; y < mapArray[x].length; y++) {
+                var nodeName = mapArray[x][y];
+
+                if (mapArray[x - 1] !== undefined){
+                    if (mapArray[x - 1][y - 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x - 1][y - 1]);
+                    }
+                }
+
+                if (mapArray[x] !== undefined){
+                    if (mapArray[x][y - 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x][y - 1]);
+                    }
+                }
+
+                if (mapArray[x + 1] !== undefined){
+                    if (mapArray[x + 1][y - 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x + 1][y - 1]);
+                    }
+                }
+
+
+                if (mapArray[x - 1] !== undefined){
+                    if (mapArray[x - 1][y] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x - 1][y]);
+                    }
+                }
+
+                if (mapArray[x] !== undefined){
+                    if (mapArray[x][y] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x][y]);
+                    }
+                }
+
+                if (mapArray[x + 1] !== undefined){
+                    if (mapArray[x + 1][y] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x + 1][y]);
+                    }
+                }
+
+
+                if (mapArray[x - 1] !== undefined){
+                    if (mapArray[x - 1][y + 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x - 1][y + 1]);
+                    }
+                }
+
+                if (mapArray[x] !== undefined){
+                    if (mapArray[x][y + 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x][y + 1]);
+                    }
+                }
+
+                if (mapArray[x + 1] !== undefined){
+                    if (mapArray[x + 1][y + 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x + 1][y + 1]);
+                    }
+                }
+            }
+        }
+    };
+
+    provide(MapGenerator);
+});

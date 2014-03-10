@@ -1,3 +1,5 @@
+modules.define(
+    'EventDispatcher', [], function(provide) {
 /*
 * Copyright (c) 2010 gskinner.com, inc.
 *
@@ -309,3 +311,6 @@ var p = EventDispatcher.prototype;
             }
         }
     };
+
+    provide(EventDispatcher);
+});
