@@ -1,5 +1,5 @@
 modules.define(
-    'Enemy', ['LiveObject'], function(provide, LiveObject) {
+    'Enemy', ['GameOptions', 'LiveObject', 'Wall'], function(provide, GameOptions, LiveObject, Wall) {
 
     function Enemy() {
     }
@@ -82,7 +82,7 @@ modules.define(
 
 
     Enemy.prototype.calcPlayerVisibility = function() {
-        var canSeePlayer = this.isVisibleTo(game.activeScene.player);
+        var canSeePlayer = this.isVisibleTo(game.activeScene.player, Wall);
 
         if (canSeePlayer){
             this.canGoToPlayer = true;
@@ -139,8 +139,8 @@ modules.define(
     Enemy.prototype.goToPosition = function(position) {
         var myPosition = this.getPosition('box2D');
         // position = position || game.map.getCoordinatesByTileInCenter(this.nearTargetStep);
-        position.x = position.x / Game.box2DMultiplier;
-        position.y = position.y / Game.box2DMultiplier;
+        position.x = position.x / GameOptions.box2DMultiplier;
+        position.y = position.y / GameOptions.box2DMultiplier;
 
         var radian = Math.atan2(position.y - myPosition.y, position.x - myPosition.x);
         var velocity = this.body.GetLinearVelocity();

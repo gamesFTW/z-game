@@ -133,7 +133,7 @@ modules.define(
         this.view.animationSpeed = 0.45;
     };
 
-    provide(Zombie);
+    provide(ZombieFast);
 });
 
 
@@ -157,7 +157,7 @@ modules.define(
         this.view.animationSpeed = 0.3;
     };
 
-    provide(Zombie);
+    provide(ZombieDamage);
 });
 
 

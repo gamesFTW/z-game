@@ -1,5 +1,5 @@
 modules.define(
-    'Object2D', ['EventDispatcher'], function(provide, EventDispatcher) {
+    'Object2D', ['GameOptions', 'EventDispatcher'], function(provide, GameOptions, EventDispatcher) {
 
     function Object2D() {
         this.view = null;
@@ -74,7 +74,7 @@ modules.define(
 
 
     Object2D.prototype.setPosition = function(x, y){
-        this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / Game.box2DMultiplier, y / Game.box2DMultiplier));
+        this.body.SetPosition(new Box2D.Common.Math.b2Vec2(x / GameOptions.box2DMultiplier, y / GameOptions.box2DMultiplier));
         this.view.position.x = x;
         this.view.position.y = y;
     };
@@ -82,13 +82,13 @@ modules.define(
 
     Object2D.prototype.getX = function() {
         var position = this.body.GetPosition();
-        return position.x * Game.box2DMultiplier;
+        return position.x * GameOptions.box2DMultiplier;
     };
 
 
     Object2D.prototype.getY = function() {
         var position = this.body.GetPosition();
-        return position.y * Game.box2DMultiplier;
+        return position.y * GameOptions.box2DMultiplier;
     };
 
 
@@ -104,8 +104,8 @@ modules.define(
             return { x: position.x, y: position.y };
         } else if (body == undefined || body == "pixi"){
             return {
-                x: position.x * Game.box2DMultiplier,
-                y: position.y * Game.box2DMultiplier
+                x: position.x * GameOptions.box2DMultiplier,
+                y: position.y * GameOptions.box2DMultiplier
             };
         } else if (body == "vector"){
             return new Box2D.Common.Math.b2Vec2(
@@ -113,20 +113,20 @@ modules.define(
             );
         } else if (body == "map" || body == "tile") {
             return map.getTileByCoordinates({
-                x: position.x * Game.box2DMultiplier,
-                y: position.y * Game.box2DMultiplier
+                x: position.x * GameOptions.box2DMultiplier,
+                y: position.y * GameOptions.box2DMultiplier
             });
         }
     };
 
 
-    Object2D.prototype.isVisibleTo = function(object2D) {
+    Object2D.prototype.isVisibleTo = function(object2D, wall) {
         var myVect = this.getPosition('vector'),
             targerVect = object2D.getPosition('vector'),
             isVisible = true;
 
         function filterCollisions(fixture, normal, fraction) {
-            if (fixture.m_body.GetUserData().isInstanceOf(Wall)) {
+            if (fixture.m_body.GetUserData().isInstanceOf(wall)) {
                 // you've got the fraction of the original length of the raycast!
                 // you can use this to determine the distance
                 // between the character and the ground
@@ -150,8 +150,8 @@ modules.define(
     Object2D.prototype.updateView = function() {
         if (!this.isStatic && this.view.visible) {
            var position = this.body.GetPosition();
-           this.view.position.x = position.x * Game.box2DMultiplier;
-           this.view.position.y = position.y * Game.box2DMultiplier;
+           this.view.position.x = position.x * GameOptions.box2DMultiplier;
+           this.view.position.y = position.y * GameOptions.box2DMultiplier;
            this.view.rotation = this.body.GetAngle();
         }
     };

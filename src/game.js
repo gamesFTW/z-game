@@ -1,7 +1,17 @@
 modules.define(
+    'GameOptions', [], function(provide) {
+    var Game = {};
+    Game.WIDTH = 1024;
+    Game.HEIGHT = 768;
+    Game.box2DMultiplier = 100;
+
+    provide(Game);
+});
+
+modules.define(
     'Game',
-    ['SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage'],
-    function(provide, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage) {
+    ['GameOptions', 'SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage'],
+    function(provide, GameOptions, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage) {
 
 
     function Game() {
@@ -10,14 +20,7 @@ modules.define(
 
     Game.prototype.constructor = Game;
 
-
-    Game.WIDTH = 1024;
-    Game.HEIGHT = 768;
-    Game.box2DMultiplier = 100;
-
-
     Game.prototype.scenesList = [];
-
 
     Game.prototype.init = function() {
         this.loadAssets();
@@ -51,7 +54,7 @@ modules.define(
         this.loadSound();
         this.createAnimation();
         // let pixi choose WebGL or canvas
-        var renderer = PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT);
+        var renderer = PIXI.autoDetectRenderer(GameOptions.WIDTH, GameOptions.HEIGHT);
         // attach render to page
         document.body.appendChild(renderer.view);
         this.renderer = renderer;

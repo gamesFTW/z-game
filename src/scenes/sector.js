@@ -1,7 +1,7 @@
 modules.define(
     'Sector',
-    ['Scene', 'Map', 'Timer', 'Camera', 'EnemyManager', 'Player', 'Zombie', 'Wall', 'Bullet', 'Collisions'],
-    function(provide, Scene, Map, Timer, Camera, EnemyManager, Player, Zombie, Wall, Bullet, Collisions) {
+    ['GameOptions', 'Scene', 'Map', 'Timer', 'Camera', 'EnemyManager', 'LiveObject', 'Player', 'Enemy', 'Zombie', 'Wall', 'Bullet', 'Collisions'],
+    function(provide, GameOptions, Scene, Map, Timer, Camera, EnemyManager, LiveObject, Player, Enemy, Zombie, Wall, Bullet, Collisions) {
 
     function Sector() {
 
@@ -16,7 +16,7 @@ modules.define(
     Sector.SECTOR_BUILDED = "sectorBuilded";
 
     Sector.TILE_SIZE = 40;
-    Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / window.game.box2DMultiplier;
+    Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / GameOptions.box2DMultiplier;
 
     Sector.prototype.killsCounter = 0;
 
@@ -84,7 +84,7 @@ modules.define(
 
         //TODO убрать this
         this.camera = new Camera();
-        this.camera.init(this.pixiStage, Game.WIDTH, Game.HEIGHT);
+        this.camera.init(this.pixiStage, GameOptions.WIDTH, GameOptions.HEIGHT);
         this.stage = this.camera.displayContainer;
 
         //TODO: перенести бг, но куда?
@@ -115,7 +115,7 @@ modules.define(
         };
         this.box2DWorld.SetContactListener(listener);
 
-        this.createPlayerAt(Game.WIDTH / 2, Game.HEIGHT / 2, this.box2DWorld);
+        this.createPlayerAt(GameOptions.WIDTH / 2, GameOptions.HEIGHT / 2, this.box2DWorld);
 
         this.enemyManager = new EnemyManager();
         this.enemyManager.init(this);
@@ -148,9 +148,9 @@ modules.define(
         }
 
         this.enemyManager.setSpawnPoint(0, 0)
-            .setSpawnPoint(Game.WIDTH, 0)
-            .setSpawnPoint(0, Game.HEIGHT)
-            .setSpawnPoint(Game.WIDTH, Game.HEIGHT);
+            .setSpawnPoint(GameOptions.WIDTH, 0)
+            .setSpawnPoint(0, GameOptions.HEIGHT)
+            .setSpawnPoint(GameOptions.WIDTH, GameOptions.HEIGHT);
 
     };
 
@@ -179,10 +179,10 @@ modules.define(
                 body.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
             }
 
-            createBorder(Game.WIDTH / 100, 0.01, 0, 0);
-            createBorder(0.01, Game.HEIGHT / 100, 0, 0);
-            createBorder(Game.WIDTH / 100, 0.01, 0, Game.HEIGHT / 100);
-            createBorder(0.01, Game.HEIGHT / 100, Game.WIDTH / 100, 0);
+            createBorder(GameOptions.WIDTH / 100, 0.01, 0, 0);
+            createBorder(0.01, GameOptions.HEIGHT / 100, 0, 0);
+            createBorder(GameOptions.WIDTH / 100, 0.01, 0, GameOptions.HEIGHT / 100);
+            createBorder(0.01, GameOptions.HEIGHT / 100, GameOptions.WIDTH / 100, 0);
         }
 
        // createBorders();
