@@ -33,6 +33,7 @@ modules.define(
             "img/zombieLightBlueSprite.json",
             "img/zombieRedSprite.json",
             "img/blue-man.png",
+            "img/small-brick.png",
             "img/brick.png",
             "img/bullet.png"
         ];
@@ -138,7 +139,7 @@ modules.define(
 
             // Считаем таймер для делеев и симуляци
             // TODO Пройтись по всем активным стейджам и запустить их лупы
-            self.activeScene.loop();
+            self.activeScene && self.activeScene.loop();
 
             self.stats.update();
             requestAnimFrame(loop);
