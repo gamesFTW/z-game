@@ -206,7 +206,7 @@ modules.define(
         for (var x = 0; x < grid.length; x++) {
             for (var y = 0; y < grid.length; y++) {
                 if (grid[x][y] === 1)
-                    createWall(x * SectorOptions.TILE_SIZE + 20, y * SectorOptions.TILE_SIZE + 20);
+                    createWall(x * SectorOptions.TILE_SIZE + Wall.SIZE, y * SectorOptions.TILE_SIZE + Wall.SIZE);
             }
         }
     };
