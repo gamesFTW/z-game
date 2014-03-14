@@ -85,7 +85,8 @@ modules.define(
         var canSeePlayer = this.isVisibleTo(game.activeScene.player, Wall);
 
         if (canSeePlayer){
-            this.canGoToPlayer = true;
+            // Если нужно чтоб enemy шел на таргета как только его увидит (оптимизация), раскоментить.
+            // this.canGoToPlayer = true;
             this.canSeePlayer = true;
         } else if (this.canSeePlayer === true || this.canSeePlayer === undefined){
             this.canSeePlayer = canSeePlayer;
@@ -102,8 +103,10 @@ modules.define(
         var enemyPosition = this.getPosition('tile', game.activeScene.map);
         if (targetPosition.x !== this.targetPosition.x || targetPosition.y !== this.targetPosition.y) {
             if (targetPosition.x == enemyPosition.x && targetPosition.y == enemyPosition.y) {
+                // Если enemy стоит на клетке с таргетом, то можно идти прямо на него.
                 this.canGoToPlayer = true;
             } else {
+                // Если не стоит, то ищем путь.
                 this.targetPosition = targetPosition;
 
                 this.findPath(enemyPosition, targetPosition);

@@ -1,7 +1,19 @@
+
+modules.define(
+    'SectorOptions',
+    ['GameOptions'],
+    function(provide, GameOptions) {
+        Sector = {};
+        Sector.TILE_SIZE = 20;
+        Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / GameOptions.box2DMultiplier;
+
+        provide(Sector);
+});
+
 modules.define(
     'Sector',
-    ['GameOptions', 'Scene', 'Map', 'Timer', 'Camera', 'EnemyManager', 'LiveObject', 'Player', 'Enemy', 'Zombie', 'Wall', 'Bullet', 'Collisions'],
-    function(provide, GameOptions, Scene, Map, Timer, Camera, EnemyManager, LiveObject, Player, Enemy, Zombie, Wall, Bullet, Collisions) {
+    ['GameOptions', 'SectorOptions', 'Scene', 'Map', 'Timer', 'Camera', 'EnemyManager', 'LiveObject', 'Player', 'Enemy', 'Zombie', 'Wall', 'Bullet', 'Collisions'],
+    function(provide, GameOptions, SectorOptions, Scene, Map, Timer, Camera, EnemyManager, LiveObject, Player, Enemy, Zombie, Wall, Bullet, Collisions) {
 
     function Sector() {
 
@@ -15,8 +27,6 @@ modules.define(
     Sector.SECTOR_CLEARED = "sectorCleared";
     Sector.SECTOR_BUILDED = "sectorBuilded";
 
-    Sector.TILE_SIZE = 40;
-    Sector.TILE_SIZE_BOX2D = Sector.TILE_SIZE / GameOptions.box2DMultiplier;
 
     Sector.prototype.killsCounter = 0;
 
@@ -80,7 +90,7 @@ modules.define(
             [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,1,0,0,0,0],
         ],
-        Sector.TILE_SIZE);
+        SectorOptions.TILE_SIZE);
 
         //TODO убрать this
         this.camera = new Camera();
@@ -157,7 +167,7 @@ modules.define(
 
     Sector.prototype.createWalls = function(grid) {
         var self = this;
-        var brickTexture = PIXI.Texture.fromFrame("img/brick.png");
+        var brickTexture = PIXI.Texture.fromFrame("img/small-brick.png");
 
         function createWall(x, y) {
             self.createObject2DAt(Wall, x, y, brickTexture, true, false);
@@ -196,7 +206,7 @@ modules.define(
         for (var x = 0; x < grid.length; x++) {
             for (var y = 0; y < grid.length; y++) {
                 if (grid[x][y] === 1)
-                    createWall(x * Sector.TILE_SIZE + 20, y * Sector.TILE_SIZE + 20);
+                    createWall(x * SectorOptions.TILE_SIZE + Wall.SIZE, y * SectorOptions.TILE_SIZE + Wall.SIZE);
             }
         }
     };
