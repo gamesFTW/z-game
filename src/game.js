@@ -187,8 +187,8 @@ modules.define(
     Game.prototype.changeActiveScene = function(newScene) {
         var oldScene = this.activeScene;
         this.activeScene = newScene;
+        this.activeScene.active();
         oldScene.disactive();
-
     };
 
     // HANDLERS
