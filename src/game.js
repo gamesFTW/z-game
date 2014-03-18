@@ -42,8 +42,7 @@ modules.define(
             "img/blue-man.png",
             "img/small-brick.png",
             "img/brick.png",
-            "img/bullet.png",
-            "img/stone.png"
+            "img/bullet.png"
         ];
 
         // create a new loader
