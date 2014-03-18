@@ -4,6 +4,10 @@ modules.define(
     Game.WIDTH = 1024;
     Game.HEIGHT = 768;
     Game.box2DMultiplier = 100;
+    Game.MAP_PRESETS_FILENAMES = [
+        "simple_desert.json",
+        "simple_ruins.json"
+    ];
 
     provide(Game);
 });
@@ -21,6 +25,7 @@ modules.define(
     Game.prototype.constructor = Game;
 
     Game.prototype.scenesList = [];
+    Game.prototype.mapPresets = {};
 
     Game.prototype.init = function() {
         this.loadAssets();
@@ -28,6 +33,8 @@ modules.define(
 
 
     Game.prototype.loadAssets = function() {
+        this.loadJSON();
+
         var assetsToLoader = [
             "img/zombieSprite.json",
             "img/zombieLightBlueSprite.json",
@@ -35,7 +42,8 @@ modules.define(
             "img/blue-man.png",
             "img/small-brick.png",
             "img/brick.png",
-            "img/bullet.png"
+            "img/bullet.png",
+            "img/stone.png"
         ];
 
         // create a new loader
@@ -43,6 +51,16 @@ modules.define(
         var self = this;
         loader.onComplete = function(){self.onAssetsLoaded();};
         loader.load();
+    };
+
+
+    Game.prototype.loadJSON = function(){
+        // TODO: Нужно подождать пока все загружиться
+        for (var i = 0; i < GameOptions.MAP_PRESETS_FILENAMES.length; i++) {
+            $.getJSON("assets/map_presets/" + GameOptions.MAP_PRESETS_FILENAMES[i], function(data) {
+                this.mapPresets[data.name] = data;
+            }.bind(this));
+        }
     };
 
 
@@ -150,14 +168,20 @@ modules.define(
 
 
     Game.prototype.createSector = function() {
+        var mapPreset = this.getRandomMapPreset();
         var sector = new Sector();
         sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
         sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler.bind(this));
-        sector.init();
+        sector.init(mapPreset);
 
         this.scenesList.push(sector);
 
         return sector;
+    };
+
+
+    Game.prototype.getRandomMapPreset = function() {
+        return this.mapPresets[_.sample(_.keys(this.mapPresets))];
     };
 
 

@@ -126,7 +126,9 @@ modules.define(
             isVisible = true;
 
         function filterCollisions(fixture, normal, fraction) {
-            if (fixture.m_body.GetUserData().isInstanceOf(wall)) {
+            var userData = fixture.m_body.GetUserData();
+
+            if (userData && userData.isInstanceOf(wall)) {
                 // you've got the fraction of the original length of the raycast!
                 // you can use this to determine the distance
                 // between the character and the ground

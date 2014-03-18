@@ -30,8 +30,10 @@ modules.define(
 
     Sector.prototype.killsCounter = 0;
 
-    Sector.prototype.init = function() {
+    Sector.prototype.init = function(mapPreset) {
         Sector.superclass.init.call(this, arguments);
+
+        this._mapPreset = mapPreset;
 
         this.destroyList = [];
         this.objects2D = [];
@@ -40,79 +42,13 @@ modules.define(
         this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
 
         this.map = new Map();
-        this.map.init([
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,0,1,1,0],
-            [0,1,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-            [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0],
-            [0,1,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0],
-            [0,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0],
-            [0,0,0,0,0,0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1,1,0,1,1,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,0,1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],
-            [0,1,1,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1],
-            [0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,1],
-            [0,1,1,1,0,1,0,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
-            [0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,0,0,0,0,0,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,1,0,0,0,0],
-            [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,1,1,0,0,0],
-            [0,1,1,0,1,1,1,1,1,1,0,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0],
-            [0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-            [0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
-            [0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0],
-            [0,0,0,0,0,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],
-            [1,1,1,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1],
-            [1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
-            [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0],
-            [0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,1,0,0,0,0],
-        ],
-        SectorOptions.TILE_SIZE);
+        this.map.init(this._mapPreset.map, SectorOptions.TILE_SIZE);
 
-        //TODO убрать this
         this.camera = new Camera();
-        this.camera.init(this.pixiStage, GameOptions.WIDTH, GameOptions.HEIGHT);
+        this.camera.init(this.pixiStage, true, GameOptions.WIDTH, GameOptions.HEIGHT, this.map.width, this.map.height);
         this.stage = this.camera.displayContainer;
 
-        //TODO: перенести бг, но куда?
-        this.background = PIXI.Sprite.fromImage("./img/bg.jpg");
-        this.stage.addChild(this.background);
-
-        this.background2 = PIXI.Sprite.fromImage("./img/bg.jpg");
-        this.background2.position.x = 1366;
-        this.stage.addChild(this.background2);
-
-        this.background3 = PIXI.Sprite.fromImage("./img/bg.jpg");
-        this.background3.position.y = 768;
-        this.stage.addChild(this.background3);
-
-        this.background4 = PIXI.Sprite.fromImage("./img/bg.jpg");
-        this.background4.position.x = 1366;
-        this.background4.position.y = 768;
-        this.stage.addChild(this.background4);
+        this.createBackground();
 
         this.box2DWorld = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, 0),  true);
 
@@ -137,8 +73,17 @@ modules.define(
         return this;
     };
 
+
     Sector.prototype.destroy = function() {
 
+    };
+
+
+    Sector.prototype.createBackground = function() {
+        var texture = PIXI.Texture.fromImage("./img/" + this._mapPreset.background);
+        var tilingSprite = new PIXI.TilingSprite(texture, this.map.width, this.map.height);
+
+        this.stage.addChild(tilingSprite);
     };
 
 
@@ -182,29 +127,23 @@ modules.define(
 
                 var fixture = new Box2D.Dynamics.b2FixtureDef();
                 fixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();
-                fixture.shape.SetAsBox(width, height);
+                fixture.shape.SetAsBox(width / GameOptions.box2DMultiplier, height / GameOptions.box2DMultiplier);
                 fixture.filter.categoryBits = Collisions.CATEGORY_GAME_BORDER;
 
                 body.CreateFixture(fixture);
-                body.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
+                body.SetPosition(new Box2D.Common.Math.b2Vec2(x / GameOptions.box2DMultiplier, y / GameOptions.box2DMultiplier));
             }
 
-            createBorder(GameOptions.WIDTH / 100, 0.01, 0, 0);
-            createBorder(0.01, GameOptions.HEIGHT / 100, 0, 0);
-            createBorder(GameOptions.WIDTH / 100, 0.01, 0, GameOptions.HEIGHT / 100);
-            createBorder(0.01, GameOptions.HEIGHT / 100, GameOptions.WIDTH / 100, 0);
+            createBorder(self.map.width, 0.01, 0, 0);
+            createBorder(0.01, self.map.height, 0, 0);
+            createBorder(self.map.width, 0.01, 0, self.map.height);
+            createBorder(0.01, self.map.height, self.map.width, 0);
         }
 
-       // createBorders();
-    //    for (var i = 0; i < 20; i++) {
-    //        createWall(
-    //            _.random(0, game.withInTile) * Game.TILE_SIZE,
-    //            _.random(0, game.heightInTile) * Game.TILE_SIZE
-    //        );
-    //    }
+        createBorders();
 
         for (var x = 0; x < grid.length; x++) {
-            for (var y = 0; y < grid.length; y++) {
+            for (var y = 0; y < grid[x].length; y++) {
                 if (grid[x][y] === 1)
                     createWall(x * SectorOptions.TILE_SIZE + Wall.SIZE, y * SectorOptions.TILE_SIZE + Wall.SIZE);
             }
