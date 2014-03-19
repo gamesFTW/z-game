@@ -17,10 +17,14 @@ modules.define(
         var sniperRifle = new WeaponController();
         sniperRifle.init(WeaponsStats.sniperRifle);
 
+        var doubleBarrel = new WeaponController();
+        doubleBarrel.init(WeaponsStats.doubleBarrel);
+
         this.mainWeaponsSlots = [
             assaultRifle,
             shotgun,
-            sniperRifle
+            sniperRifle,
+            doubleBarrel
         ];
 
         this.setKeyboardEvents();
@@ -55,6 +59,10 @@ modules.define(
 
         KeyboardJS.on("3", function(){
             self.changeMainWeapon(2);
+        });
+
+        KeyboardJS.on("4", function(){
+            self.changeMainWeapon(3);
         });
     };
 

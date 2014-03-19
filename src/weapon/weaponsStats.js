@@ -25,6 +25,14 @@ modules.define(
             bulletSpeed:        0.8,
             bulletsPerShot:     1,
             shotSound:          "shoot"
+        },
+        doubleBarrel:{
+            damage:             10,
+            timeBetweenShots:   700,
+            scatter:            0.20,
+            bulletSpeed:        0.5,
+            bulletsPerShot:     12,
+            shotSound:          "shoot"
         }
     };
     provide(WeaponsStats);
