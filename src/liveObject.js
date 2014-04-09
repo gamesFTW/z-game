@@ -13,6 +13,7 @@ modules.define(
 
     LiveObject.prototype.isLive     = true;
     LiveObject.prototype.hp         = 100;
+    LiveObject.prototype.is_died    = false;
 
 
     LiveObject.prototype.init = function(scene, x, y, texture, isStatic, isAnimated) {
@@ -22,19 +23,22 @@ modules.define(
 
 
     LiveObject.prototype.takeDamage = function(damage){
-        this.hp -= damage;
+        if (!this.is_died) {
+            this.hp -= damage;
 
-        this.dispatchEvent(LiveObject.HP_CHANGED);
+            this.dispatchEvent(LiveObject.HP_CHANGED);
 
-        if (this.hp <= 0)
-            this.die();
+            if (this.hp <= 0)
+                this.die();
 
-        if (this.soundTakeDamage)
-            createjs.Sound.play(this.soundTakeDamage, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+            if (this.soundTakeDamage)
+                createjs.Sound.play(this.soundTakeDamage, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+        }
     };
 
 
     LiveObject.prototype.die = function(){
+        this.is_died = true;
         createjs.Sound.play(this.soundDie, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
         this.dispatchEvent(LiveObject.DIE);
     };
