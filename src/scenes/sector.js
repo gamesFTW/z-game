@@ -299,7 +299,7 @@ modules.define(
         var object2D = event.currentTarget;
         if (object2D.isInstanceOf(Enemy)) {
             this.killsCounter++;
-            if (this.killsCounter >= 5) {
+            if (this.killsCounter >= 50) {
                 this.dispatchEvent(Sector.SECTOR_CLEARED);
             }
         } else if (object2D.isInstanceOf(Player)) {

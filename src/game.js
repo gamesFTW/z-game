@@ -19,7 +19,25 @@ modules.define(
 
 
     function Game() {
+        // HANDLERS
+        this.sectorBuildedHandler = function() {
+            this.gameInterface = new GameInterface(game);
+        }.bind(this);
 
+        this.sectorClearedHandler = function(event) {
+            var sector = event.currentTarget;
+
+            sector.removeEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler);
+
+            this.changeActiveScene(this.scenesList[0]);
+            sector.destroy();
+            this.scenesList.pop();
+        }.bind(this);
+
+        this.playerEncounteredEnemiesHandler = function(event) {
+            var sector = this.createSector();
+            this.changeActiveScene(sector);
+        };
     }
 
     Game.prototype.constructor = Game;
@@ -177,8 +195,8 @@ modules.define(
     Game.prototype.createSector = function() {
         var mapPreset = this.getRandomMapPreset();
         var sector = new Sector();
-        sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
-        sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler.bind(this));
+        sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler);
+        sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler);
         sector.init(mapPreset);
 
         this.pixiStage.addChild(sector.sceneStage);
@@ -199,23 +217,6 @@ modules.define(
         this.activeScene = newScene;
         this.activeScene.active();
         oldScene.disactive();
-    };
-
-    // HANDLERS
-    Game.prototype.sectorBuildedHandler = function() {
-        this.gameInterface = new GameInterface(game);
-    };
-
-    Game.prototype.sectorClearedHandler = function(event) {
-        var sector = event.currentTarget;
-        this.changeActiveScene(this.scenesList[0]);
-        sector.destroy();
-        this.scenesList.pop();
-    };
-
-    Game.prototype.playerEncounteredEnemiesHandler = function(event) {
-        var sector = this.createSector();
-        this.changeActiveScene(sector);
     };
 
 
