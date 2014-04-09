@@ -39,13 +39,13 @@ modules.define(
         this.objects2D = [];
         this.timer = (new Timer()).init();
 
-        this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
+        this.sceneStage = new PIXI.DisplayObjectContainer();
 
         this.map = new Map();
         this.map.init(this._mapPreset.map, SectorOptions.TILE_SIZE);
 
         this.camera = new Camera();
-        this.camera.init(this.pixiStage, true, GameOptions.WIDTH, GameOptions.HEIGHT, this.map.width, this.map.height);
+        this.camera.init(this.sceneStage, true, GameOptions.WIDTH, GameOptions.HEIGHT, this.map.width, this.map.height);
         this.stage = this.camera.displayContainer;
 
         this.createBackground();
@@ -71,11 +71,6 @@ modules.define(
 
         this.dispatchEvent(Sector.SECTOR_BUILDED);
         return this;
-    };
-
-
-    Sector.prototype.destroy = function() {
-
     };
 
 
@@ -159,14 +154,12 @@ modules.define(
     };
 
 
-    Sector.prototype.render = function() {
+    Sector.prototype.updateViews = function() {
         // Обновляем позиции в PIXI
         for (var i = 0; i < this.objects2D.length; i++) {
             this.objects2D[i].updateView();
         }
         this.camera.refresh();
-        // Рендерим
-        game.renderer.render(this.pixiStage);
     };
 
 
@@ -179,7 +172,7 @@ modules.define(
         this.box2DWorld.Step(1 / 60,  3,  3);
         this.box2DWorld.ClearForces();
 
-        this.render();
+        this.updateViews();
     };
 
 

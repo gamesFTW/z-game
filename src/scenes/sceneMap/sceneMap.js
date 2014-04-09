@@ -18,18 +18,15 @@ modules.define(
     SceneMap.prototype.init = function() {
         SceneMap.superclass.init.call(this, arguments);
 
-        this.pixiStage = new PIXI.Stage(0xEEFFFF, true);
-
-        this.displayContainer = new PIXI.DisplayObjectContainer();
-        this.pixiStage.addChild(this.displayContainer);
-        this.displayContainer.position.x = 50;
-        this.displayContainer.position.y = 50;
+        this.sceneStage = new PIXI.DisplayObjectContainer();
+        this.sceneStage.position.x = 50;
+        this.sceneStage.position.y = 50;
 
         this.nodesContainer = new PIXI.DisplayObjectContainer();
         this.edgesContainer = new PIXI.Graphics();
 
-        this.displayContainer.addChild(this.edgesContainer);
-        this.displayContainer.addChild(this.nodesContainer);
+        this.sceneStage.addChild(this.edgesContainer);
+        this.sceneStage.addChild(this.nodesContainer);
 
         this.buildMap();
 
@@ -40,11 +37,11 @@ modules.define(
 
 
     SceneMap.prototype.disactive = function() {
-        this.pixiStage.visible = false;
+        this.sceneStage.visible = false;
     };
 
     SceneMap.prototype.active = function() {
-        this.pixiStage.visible = true;
+        this.sceneStage.visible = true;
     };
 
     SceneMap.prototype.buildMap = function() {
@@ -94,13 +91,7 @@ modules.define(
     };
 
 
-    SceneMap.prototype.render = function() {
-        game.renderer.render(this.pixiStage);
-    };
-
-
     SceneMap.prototype.loop = function() {
-        this.render();
     };
 
 

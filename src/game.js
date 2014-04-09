@@ -73,6 +73,9 @@ modules.define(
         this.createAnimation();
         // let pixi choose WebGL or canvas
         var renderer = PIXI.autoDetectRenderer(GameOptions.WIDTH, GameOptions.HEIGHT);
+
+        this.pixiStage = new PIXI.Stage(0x000000, true);
+
         // attach render to page
         document.body.appendChild(renderer.view);
         this.renderer = renderer;
@@ -95,7 +98,9 @@ modules.define(
             this.playerEncounteredEnemiesHandler.bind(this)
         );
 
-        sceneMap.init();
+        sceneMap.init(this.pixiStage);
+
+        this.pixiStage.addChild(sceneMap.sceneStage);
 
         this.activeScene = sceneMap;
 
@@ -158,6 +163,9 @@ modules.define(
             // TODO Пройтись по всем активным стейджам и запустить их лупы
             self.activeScene && self.activeScene.loop();
 
+            // Рендерим
+            self.renderer.render(self.pixiStage);
+
             self.stats.update();
             requestAnimFrame(loop);
         }
@@ -172,6 +180,8 @@ modules.define(
         sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler.bind(this));
         sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler.bind(this));
         sector.init(mapPreset);
+
+        this.pixiStage.addChild(sector.sceneStage);
 
         this.scenesList.push(sector);
 
