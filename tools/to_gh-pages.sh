@@ -5,7 +5,7 @@ git branch -D $GH_PAGES
 git checkout -b $GH_PAGES
 
 npm install
-./node_modulse/bower/bin/bower install
+./node_modulse/.bin/bower install
 
 git add node_modules/ym lib/* -f
 git commit -m '+ libs and modules'

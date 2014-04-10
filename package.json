@@ -16,7 +16,7 @@
     "bower": ">=1.2.7"
   },
   "scripts": {
-    "postinstall": "node node_modules/bower/bin/bower install"
+    "postinstall": "node node_modules/.bin/bower install"
   },
   "engines": [
     "node >= 0.8.0"
