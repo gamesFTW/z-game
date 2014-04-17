@@ -12,10 +12,6 @@ modules.define(
 
     };
 
-    Scene.prototype.destroy = function() {
-        this.sceneStage.parent.removeChild(this.sceneStage);
-    };
-
     Scene.prototype.active = function() {
 
     };

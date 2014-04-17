@@ -31,9 +31,17 @@ modules.define(
     };
 
 
+    Inventory.prototype.destroy = function(){
+        KeyboardJS.clear('1');
+        KeyboardJS.clear('2');
+        KeyboardJS.clear('3');
+        KeyboardJS.clear('4');
+    };
+
+
     Inventory.prototype.changeMainWeapon = function(weaponID){
         var weapon = this.getCurrentMainWeapon();
-        if (weapon.betweenShotDelay){
+        if (weapon.betweenShotDelay) {
             weapon.betweenShotDelay.remove();
             weapon.betweenShotDelay = null;
         }

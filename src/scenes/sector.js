@@ -74,6 +74,12 @@ modules.define(
     };
 
 
+    Sector.prototype.destroy = function() {
+        this.sceneStage.parent.removeChild(this.sceneStage);
+        this.player.inventory.destroy();
+    };
+
+
     Sector.prototype.createBackground = function() {
         var texture = PIXI.Texture.fromImage("./img/" + this._mapPreset.background);
         var tilingSprite = new PIXI.TilingSprite(texture, this.map.width, this.map.height);
@@ -299,7 +305,7 @@ modules.define(
         var object2D = event.currentTarget;
         if (object2D.isInstanceOf(Enemy)) {
             this.killsCounter++;
-            if (this.killsCounter >= 50) {
+            if (this.killsCounter >= 10) {
                 this.dispatchEvent(Sector.SECTOR_CLEARED);
             }
         } else if (object2D.isInstanceOf(Player)) {
