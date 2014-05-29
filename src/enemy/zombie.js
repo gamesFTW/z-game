@@ -114,4 +114,29 @@ modules.define(
 });
 
 
+modules.define(
+    'ZombieJump', ['Zombie'], function (provide, Zombie) {
+
+    function ZombieJump() {
+
+    }
+    ZombieJump.prototype = Object.create( Zombie.prototype );
+    ZombieJump.prototype.constructor = ZombieJump;
+
+    ZombieJump.difficulty = 2.5;
+    ZombieJump.prototype.damage = 30;
+    ZombieJump.prototype.hp = 100;
+
+
+    ZombieJump.prototype.createTexture = function(){
+        this.view = new PIXI.MovieClip(ZombieJump.TEXTURE);
+
+        this.view.gotoAndPlay(_.random(0,24));
+        this.view.animationSpeed = 0.3;
+    };
+
+    provide(ZombieJump);
+});
+
+
 

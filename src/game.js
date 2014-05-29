@@ -14,8 +14,8 @@ modules.define(
 
 modules.define(
     'Game',
-    ['GameOptions', 'SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage'],
-    function(provide, GameOptions, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage) {
+    ['GameOptions', 'SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage', 'ZombieJump'],
+    function(provide, GameOptions, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage, ZombieJump) {
 
 
     function Game() {
@@ -60,6 +60,7 @@ modules.define(
             "img/zombieSprite.json",
             "img/zombieLightBlueSprite.json",
             "img/zombieRedSprite.json",
+            "img/zombieLightGreenSprite.json",
             "img/blue-man.png",
             "img/small-brick.png",
             "img/brick.png",
@@ -160,6 +161,10 @@ modules.define(
                 prefix: "zombieRed",
                 obj: ZombieDamage
             },
+            {
+                prefix: "zombieLightGreen",
+                obj: ZombieJump
+            }
         ];
 
         zombiesTexturesData.forEach(function(ztd) {
