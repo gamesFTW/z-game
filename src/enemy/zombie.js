@@ -13,6 +13,7 @@ modules.define(
     Zombie.prototype.isStatic = false;
 
 
+    Zombie.difficulty = 1;
     Zombie.prototype.damage = 10;
     Zombie.prototype.acceleration  = 0.06;
     // Zombie.prototype.dullness  = 1;
@@ -69,6 +70,7 @@ modules.define(
     ZombieFast.prototype = Object.create( Zombie.prototype );
     ZombieFast.prototype.constructor = ZombieFast;
 
+    ZombieFast.difficulty = 1.5;
     ZombieFast.prototype.hp = 50;
     ZombieFast.prototype.acceleration = 0.08;
     // ZombieFast.prototype.maxSpeed = 0.6;
@@ -96,7 +98,9 @@ modules.define(
     ZombieDamage.prototype.constructor = ZombieDamage;
 
     // ZombieDamage.prototype.dullness = 0.2;
+    ZombieDamage.difficulty = 2;
     ZombieDamage.prototype.damage = 30;
+    ZombieDamage.prototype.hp = 200;
 
 
     ZombieDamage.prototype.createTexture = function(){
