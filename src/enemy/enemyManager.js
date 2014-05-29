@@ -17,12 +17,12 @@ modules.define(
 
     EnemyManager.WAVE_DURATION                  = 60;
 
-    EnemyManager.prototype.init = function(scene) {
+    EnemyManager.prototype.init = function(scene, difficultyLevel) {
         this.scene = scene;
         this.spawnPoints = [];
 
         this.waveManager = new WaveManager();
-        this.waveManager.generateWaves(1);
+        this.waveManager.generateWaves(difficultyLevel);
     };
 
     EnemyManager.prototype.nextWaveRightNow = function() {
@@ -36,7 +36,7 @@ modules.define(
 
     EnemyManager.prototype.nextWave = function() {
         var self = this;
-        
+
         this.currentWaveID++;
         this.spanwWave();
 
@@ -44,7 +44,7 @@ modules.define(
             this.nextWaveTimer = this.scene.timer.delay(
                 self.nextWave.bind(this),
                 EnemyManager.WAVE_DURATION * 1000
-            );    
+            );
         } else {
             this.is_waves_finished = true;
         }

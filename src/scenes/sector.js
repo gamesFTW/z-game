@@ -30,7 +30,7 @@ modules.define(
 
     Sector.prototype.killsCounter = 0;
 
-    Sector.prototype.init = function(mapPreset) {
+    Sector.prototype.init = function(mapPreset, difficultyLevel) {
         Sector.superclass.init.call(this, arguments);
 
         this._mapPreset = mapPreset;
@@ -64,7 +64,7 @@ modules.define(
         this.createPlayerAt(GameOptions.WIDTH / 2, GameOptions.HEIGHT / 2, this.box2DWorld);
 
         this.enemyManager = new EnemyManager();
-        this.enemyManager.init(this);
+        this.enemyManager.init(this, difficultyLevel);
         this.createSpawnPoints();
 
         this.createWalls(this.map.giveCopyOfGreed());

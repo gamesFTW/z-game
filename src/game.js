@@ -28,6 +28,7 @@ modules.define(
             var sector = event.currentTarget;
 
             sector.removeEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler);
+            this.currentDifficultyLevel += 0.3;
 
             this.changeActiveScene(this.scenesList[0]);
             sector.destroy();
@@ -45,6 +46,7 @@ modules.define(
 
     Game.prototype.scenesList = [];
     Game.prototype.mapPresets = {};
+    Game.prototype.currentDifficultyLevel = 1;
 
     Game.prototype.init = function() {
         this.loadAssets();
@@ -198,7 +200,7 @@ modules.define(
         var sector = new Sector();
         sector.addEventListener(Sector.SECTOR_BUILDED, this.sectorBuildedHandler);
         sector.addEventListener(Sector.SECTOR_CLEARED, this.sectorClearedHandler);
-        sector.init(mapPreset);
+        sector.init(mapPreset, this.currentDifficultyLevel);
 
         this.pixiStage.addChild(sector.sceneStage);
 
