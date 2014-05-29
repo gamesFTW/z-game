@@ -66,9 +66,6 @@ modules.define(
 
 
     Object2D.prototype.createBody = function(isStatic, world){
-        console.log("Баг тут:");
-        console.log(world.);
-        
         if (isStatic)
             this.body = world.CreateBody(Object2D.STATIC_BODY_DEF);
         else

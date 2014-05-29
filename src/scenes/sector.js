@@ -305,10 +305,8 @@ modules.define(
             this.killsCounter++;
             if (this.killsCounter >= this.enemyManager.enemiesRespawned) {
                 if (this.enemyManager.is_waves_finished) {
-                    console.log("Sector.SECTOR_CLEARED");
                     this.dispatchEvent(Sector.SECTOR_CLEARED);
                 } else {
-                    console.log("nextWaveRightNow");
                     this.enemyManager.nextWaveRightNow();
                 }
             }
@@ -322,39 +320,44 @@ modules.define(
 
 
     Sector.prototype.globalPostSolveHandler = function(contact, impulse) {
-        var objectA = contact.GetFixtureA().GetBody().GetUserData();
-        var objectB = contact.GetFixtureB().GetBody().GetUserData();
+        this.timer.delay(function() {
+            // Если убрать делей, то при смерти последнего зомби в вейве сработает 
+            // nextWaveRightNow, и создаст зомби. Но так как данное событие срабатывает
+            // в фазе box2d locked, body не создастся и все рухнет.
+            var objectA = contact.GetFixtureA().GetBody().GetUserData();
+            var objectB = contact.GetFixtureB().GetBody().GetUserData();
 
-        if(objectA && objectB){
-            if (objectA.isInstanceOf(Bullet)){
-                var velocity = objectA.body.GetLinearVelocity();
-                var speed = Number(Math.abs(velocity.x).toFixed(4)) + Number(Math.abs(velocity.y).toFixed(4));
+            if(objectA && objectB){
+                if (objectA.isInstanceOf(Bullet)){
+                    var velocity = objectA.body.GetLinearVelocity();
+                    var speed = Number(Math.abs(velocity.x).toFixed(4)) + Number(Math.abs(velocity.y).toFixed(4));
 
-                if (speed < 5){
+                    if (speed < 5){
+                        this.destroyList.push(objectA);
+                    }
+                }
+
+                if (objectA.isInstanceOf(Bullet) && objectB.isInstanceOf(LiveObject)){
                     this.destroyList.push(objectA);
-                }
-            }
-
-            if (objectA.isInstanceOf(Bullet) && objectB.isInstanceOf(LiveObject)){
-                this.destroyList.push(objectA);
-                objectB.takeDamage(objectA.damage);
-            }
-
-            if ((objectA.isInstanceOf(Zombie) && objectB.isInstanceOf(Player)) ||
-                (objectA.isInstanceOf(Player) && objectB.isInstanceOf(Zombie))){
-                var player, zombie;
-                // определяем кто из них кто
-                if (objectA.isInstanceOf(Player)){
-                    player = objectA;
-                    zombie = objectB;
-                } else {
-                    player = objectB;
-                    zombie = objectA;
+                    objectB.takeDamage(objectA.damage);
                 }
 
-                zombie.attackLiveObjectWithMeleeWeapon(player);
+                if ((objectA.isInstanceOf(Zombie) && objectB.isInstanceOf(Player)) ||
+                    (objectA.isInstanceOf(Player) && objectB.isInstanceOf(Zombie))){
+                    var player, zombie;
+                    // определяем кто из них кто
+                    if (objectA.isInstanceOf(Player)){
+                        player = objectA;
+                        zombie = objectB;
+                    } else {
+                        player = objectB;
+                        zombie = objectA;
+                    }
+
+                    zombie.attackLiveObjectWithMeleeWeapon(player);
+                }
             }
-        }
+        }.bind(this), 0);
     };
 
     provide(Sector);

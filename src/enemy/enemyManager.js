@@ -63,7 +63,6 @@ modules.define(
         var spawnPoint = _.sample(this.spawnPoints);
 
         this.enemiesRespawned ++;
-        console.log(enemyClass);
         this.scene.createObject2DAt(enemyClass, spawnPoint.x, spawnPoint.y);
     };
 
