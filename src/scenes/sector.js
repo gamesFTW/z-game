@@ -74,6 +74,10 @@ modules.define(
     };
 
 
+    Sector.prototype.start = function() {
+        this.enemyManager.nextWave();
+    };
+
     Sector.prototype.destroy = function() {
         this.sceneStage.parent.removeChild(this.sceneStage);
         this.player.inventory.destroy();
@@ -102,12 +106,6 @@ modules.define(
         for (var i = 0; i < number; i++) {
             this.enemyManager.setSpawnPoint(_.random(0, this.map.width), this.map.height);
         }
-
-        this.enemyManager.setSpawnPoint(0, 0)
-            .setSpawnPoint(GameOptions.WIDTH, 0)
-            .setSpawnPoint(0, GameOptions.HEIGHT)
-            .setSpawnPoint(GameOptions.WIDTH, GameOptions.HEIGHT);
-
     };
 
 
@@ -305,8 +303,14 @@ modules.define(
         var object2D = event.currentTarget;
         if (object2D.isInstanceOf(Enemy)) {
             this.killsCounter++;
-            if (this.killsCounter >= 10) {
-                this.dispatchEvent(Sector.SECTOR_CLEARED);
+            if (this.killsCounter >= this.enemyManager.enemiesRespawned) {
+                if (this.enemyManager.is_waves_finished) {
+                    console.log("Sector.SECTOR_CLEARED");
+                    this.dispatchEvent(Sector.SECTOR_CLEARED);
+                } else {
+                    console.log("nextWaveRightNow");
+                    this.enemyManager.nextWaveRightNow();
+                }
             }
         } else if (object2D.isInstanceOf(Player)) {
             alert("YOU LOSE!");

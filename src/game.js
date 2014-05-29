@@ -5,8 +5,8 @@ modules.define(
     Game.HEIGHT = 768;
     Game.box2DMultiplier = 100;
     Game.MAP_PRESETS_FILENAMES = [
-        "simple_desert.json",
-        "simple_ruins.json"
+        "simple_desert.json"//,
+        // "simple_ruins.json"
     ];
 
     provide(Game);
@@ -37,6 +37,7 @@ modules.define(
         this.playerEncounteredEnemiesHandler = function(event) {
             var sector = this.createSector();
             this.changeActiveScene(sector);
+            sector.start();
         };
     }
 

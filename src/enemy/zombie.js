@@ -70,7 +70,7 @@ modules.define(
     ZombieFast.prototype = Object.create( Zombie.prototype );
     ZombieFast.prototype.constructor = ZombieFast;
 
-    ZombieFast.difficulty = 1.5;
+    ZombieFast.difficulty = 2;
     ZombieFast.prototype.hp = 50;
     ZombieFast.prototype.acceleration = 0.08;
     // ZombieFast.prototype.maxSpeed = 0.6;
@@ -98,7 +98,7 @@ modules.define(
     ZombieDamage.prototype.constructor = ZombieDamage;
 
     // ZombieDamage.prototype.dullness = 0.2;
-    ZombieDamage.difficulty = 2;
+    ZombieDamage.difficulty = 1.5;
     ZombieDamage.prototype.damage = 30;
     ZombieDamage.prototype.hp = 200;
 
