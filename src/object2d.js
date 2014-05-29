@@ -96,6 +96,18 @@ modules.define(
        return Math.atan2(this.getY() - object2d.getY(), this.getX() - object2d.getX());
     };
 
+    // Высчитывает дистанцию между этим объектом и тем что передается в функцию
+    Object2D.prototype.calcDistance = function(anotherObject2D) {
+        var myPos = this.getPosition(),
+            anotherPos = anotherObject2D.getPosition(),
+            xs = 0,
+            ys = 0;
+        xs = anotherPos.x - myPos.x;
+        xs = xs * xs;
+        ys = anotherPos.y - myPos.y;
+        ys = ys * ys;
+        return Math.sqrt( xs + ys );
+    };
 
     Object2D.prototype.getPosition = function(body, map) {
         var position = this.body.GetPosition();

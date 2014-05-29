@@ -16,8 +16,6 @@ modules.define(
     Zombie.difficulty = 1;
     Zombie.prototype.damage = 10;
     Zombie.prototype.acceleration  = 0.06;
-    // Zombie.prototype.dullness  = 1;
-    // Zombie.prototype.maxSpeed = 0.4;
 
 
     Zombie.prototype.soundDie = "zombie_die";
@@ -107,7 +105,7 @@ modules.define(
         this.view = new PIXI.MovieClip(ZombieDamage.TEXTURE);
 
         this.view.gotoAndPlay(_.random(0,24));
-        this.view.animationSpeed = 0.3;
+        this.view.animationSpeed = 0.18;
     };
 
     provide(ZombieDamage);
@@ -122,21 +120,68 @@ modules.define(
     }
     ZombieJump.prototype = Object.create( Zombie.prototype );
     ZombieJump.prototype.constructor = ZombieJump;
+    ZombieJump.prototype.superclass = Zombie.prototype;
 
     ZombieJump.difficulty = 2.5;
     ZombieJump.prototype.damage = 30;
     ZombieJump.prototype.hp = 100;
 
+    ZombieJump.prototype.jumpDistance = 350;
+    ZombieJump.prototype.jumpForce = 2;
 
-    ZombieJump.prototype.createTexture = function(){
+
+    ZombieJump.prototype.createTexture = function() {
         this.view = new PIXI.MovieClip(ZombieJump.TEXTURE);
 
         this.view.gotoAndPlay(_.random(0,24));
-        this.view.animationSpeed = 0.3;
+        this.view.animationSpeed = 0.45;
     };
 
+    ZombieJump.prototype.init = function() {
+        this.superclass.init.apply(this, arguments);
+        game.activeScene.timer.delay(function() {
+            // can i Jump?
+            if (this.canSeePlayer) {
+                if (! this.isJumping) {
+                    if (this.calcDistance(game.activeScene.player) < this.jumpDistance) {
+                        console.log('jump');
+                        this.jump(game.activeScene.player);
+                    }
+                }
+            }
+        }.bind(this), 3 * 1000 + _.random(1, 30), -1);
+    };
+
+    ZombieJump.prototype.jump = function(object2D) {
+        this.body.SetLinearDamping(1.3);
+        this.isJumping = true;
+        var myPosition = this.getPosition('box2D');
+        var position = object2D.getPosition('box2D');
+
+        var radian = Math.atan2(position.y - myPosition.y, position.x - myPosition.x);
+
+        var newVelocity = new Box2D.Common.Math.b2Vec2(
+            Math.cos(radian) * this.jumpForce,
+            Math.sin(radian) * this.jumpForce
+        );
+
+        this.body.ApplyImpulse(
+            newVelocity,
+            this.body.GetWorldCenter()
+        );
+
+        game.activeScene.timer.delay(function() {
+            this.body.SetLinearDamping(6);
+            this.isJumping = false;
+        }.bind(this), 1 * 1000);
+    };
+
+    //ZombieJump.prototype.tick = function() {
+        //this.superclass.tick.call(this);
+
+        //if () {
+        //}
+
+    //};
     provide(ZombieJump);
 });
-
-
-

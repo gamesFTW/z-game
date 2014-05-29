@@ -7,11 +7,13 @@ modules.define(
     function WaveManager() {
     }
 
-    WaveManager.prototype.constructor 	= WaveManager;
-    WaveManager.prototype.waves 		= null;
+    WaveManager.prototype.constructor   = WaveManager;
+    WaveManager.prototype.waves         = null;
 
     WaveManager.prototype.enemiesTypes = [Zombie, ZombieDamage, ZombieFast,
         ZombieJump, ZombieJump, ZombieJump];
+    //WaveManager.prototype.enemiesTypes = [
+        //ZombieJump, ZombieJump, ZombieJump];
 
     WaveManager.NUMBER_OF_TYPES_IN_SECTOR = [
         [5, 2],
@@ -49,7 +51,7 @@ modules.define(
                 return {
                     type: type,
                     number: (WaveManager.DEFAULT_ENEMIES_NUMBER / typesInWave.length) 
-                    	* (difficulty / type.difficulty)
+                        * (difficulty / type.difficulty)
                 };
             });
 

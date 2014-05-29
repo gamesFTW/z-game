@@ -17,9 +17,9 @@ modules.define(
     Enemy.prototype.maxTickCounter = 10;
 
 
-    Enemy.prototype.init = function(world, x, y, texture, isStatic, isAnimated) {
+    Enemy.prototype.init = function() {
         this.tickCounter = this.maxTickCounter;
-        Enemy.superclass.init.call(this, world, x, y, texture, isStatic, isAnimated);
+        Enemy.superclass.init.apply(this, arguments);
 
         this.targetChangeTilePosition(game.activeScene.player.tilePosition);
     };
@@ -55,24 +55,26 @@ modules.define(
 
 
     Enemy.prototype.tick = function() {
-        var enemyPosition = this.getPosition('tile', game.activeScene.map);
+        if (! this.isJumping) {
+            var enemyPosition = this.getPosition('tile', game.activeScene.map);
 
-        (this.pathToTarget && !this.nearTargetStep) && this.getNearTargetStep();
-        // хак для того что бы чувак не имеющий пути не выкидывал эксепшен
-        if (!this.pathToTarget && !this.canGoToPlayer) {
-            this.canGoToPlayer = true;
-        }
-
-        if (!this.canGoToPlayer) {
-            if (enemyPosition.x == this.nearTargetStep.x && enemyPosition.y == this.nearTargetStep.y) {
-                this.getNearTargetStep();
+            (this.pathToTarget && !this.nearTargetStep) && this.getNearTargetStep();
+            // хак для того что бы чувак не имеющий пути не выкидывал эксепшен
+            if (!this.pathToTarget && !this.canGoToPlayer) {
+                this.canGoToPlayer = true;
             }
-        }
 
-        if (this.canGoToPlayer) {
-            this.goToPosition(game.activeScene.player.getPosition('pixi'));
-        } else {
-            this.goToPosition(game.activeScene.map.getCoordinatesByTileInCenter(this.nearTargetStep));
+            if (!this.canGoToPlayer) {
+                if (enemyPosition.x == this.nearTargetStep.x && enemyPosition.y == this.nearTargetStep.y) {
+                    this.getNearTargetStep();
+                }
+            }
+
+            if (this.canGoToPlayer) {
+                this.goToPosition(game.activeScene.player.getPosition('pixi'));
+            } else {
+                this.goToPosition(game.activeScene.map.getCoordinatesByTileInCenter(this.nearTargetStep));
+            }
         }
 
         this.tickCounter >= this.maxTickCounter && this.calcPlayerVisibility();
@@ -146,7 +148,6 @@ modules.define(
         position.y = position.y / GameOptions.box2DMultiplier;
 
         var radian = Math.atan2(position.y - myPosition.y, position.x - myPosition.x);
-        var velocity = this.body.GetLinearVelocity();
 
         var newVelocity = new Box2D.Common.Math.b2Vec2(
             Math.cos(radian) * this.acceleration,
@@ -165,6 +166,7 @@ modules.define(
         );
 
         // Rotate in right angle
+        var velocity = this.body.GetLinearVelocity();
         radian = Math.atan2(velocity.y, velocity.x);
         var newRotation = radian - (90 * (Math.PI / 180));
         this.body.SetAngle(newRotation);
