@@ -7,7 +7,8 @@ modules.define(
     Game.MAP_PRESETS_FILENAMES = [
         "simple_desert.json",
         "simple_ruins.json",
-        "simple_tunnels.json"
+        "simple_tunnels.json",
+        "simple_labyrinth.json"
     ];
 
     provide(Game);
