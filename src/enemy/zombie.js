@@ -119,7 +119,7 @@ modules.define(
     ZombieDamage.prototype = Object.create( Zombie.prototype );
     ZombieDamage.prototype.constructor = ZombieDamage;
 
-    ZombieDamage.difficulty = 1.5;
+    ZombieDamage.difficulty = 2.5;
     ZombieDamage.prototype.damage = 30;
     ZombieDamage.prototype.hp = 300;
 

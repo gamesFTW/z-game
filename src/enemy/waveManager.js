@@ -30,7 +30,7 @@ modules.define(
         [5, 6]
     ];
 
-    WaveManager.DEFAULT_ENEMIES_NUMBER = 150;
+    WaveManager.DEFAULT_ENEMIES_NUMBER = 100;
 
     WaveManager.prototype.generateWaves = function(difficulty) {
         var types = _.sample(
