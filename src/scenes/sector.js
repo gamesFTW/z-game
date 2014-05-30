@@ -337,9 +337,22 @@ modules.define(
                     }
                 }
 
-                if (objectA.isInstanceOf(Bullet) && objectB.isInstanceOf(LiveObject)){
-                    this.destroyList.push(objectA);
-                    objectB.takeDamage(objectA.damage);
+                if (
+                    objectA.isInstanceOf(Bullet) && objectB.isInstanceOf(LiveObject) ||
+                    objectB.isInstanceOf(Bullet) && objectA.isInstanceOf(LiveObject)
+                    ){
+                    var bullet, enemy;
+                    // определяем кто из них кто
+                    if (objectA.isInstanceOf(Bullet)){
+                        bullet = objectA;
+                        enemy = objectB;
+                    } else {
+                        bullet = objectB;
+                        enemy = objectA;
+                    }
+
+                    this.destroyList.push(bullet);
+                    enemy.takeDamage(bullet.damage);
                 }
 
                 if ((objectA.isInstanceOf(Zombie) && objectB.isInstanceOf(Player)) ||
