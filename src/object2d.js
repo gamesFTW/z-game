@@ -9,6 +9,8 @@ modules.define(
 
     Object2D.prototype = Object.create( EventDispatcher.prototype );
     Object2D.prototype.constructor = Object2D;
+    Object2D.prototype.abilityList = null;
+    Object2D.prototype.abilities   = null;
 
 
     Object2D.prototype.scene;
@@ -16,6 +18,9 @@ modules.define(
 
     // Initial methods
     Object2D.prototype.init = function(scene, x, y, texture, isStatic, isAnimated) {
+        this.abilities = {};
+        this.abilityList = this.abilityList || [];
+
         if (this.isStatic === undefined)
             this.isStatic = isStatic;
 
@@ -31,6 +36,10 @@ modules.define(
 
         this.defineProperties();
         this.createFixture();
+
+        for (var i = 0; i < this.abilityList.length; i++) {
+            this.addAbility(this.abilityList[i]);
+        }
 
         this.setPosition(x, y);
     };
@@ -160,7 +169,6 @@ modules.define(
     Object2D.prototype.tick = function() {
     };
 
-
     Object2D.prototype.updateView = function() {
         if (!this.isStatic && this.view.visible) {
            var position = this.body.GetPosition();
@@ -168,6 +176,17 @@ modules.define(
            this.view.position.y = position.y * GameOptions.box2DMultiplier;
            this.view.rotation = this.body.GetAngle();
         }
+    };
+
+    Object2D.prototype.addAbility = function(ability) {
+        console.log("addAbility");
+        // console.log(ability.id.getMilliseconds());
+
+        ability.user = this;
+
+        console.log(ability.use.bind(ability));
+
+        this.abilities[ability.name] = ability.use.bind(ability);
     };
 
     // Static
