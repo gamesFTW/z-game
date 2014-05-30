@@ -85,25 +85,33 @@ var PathFinder = {
         }
 
         if (diagonals) {
-
             // Southwest
             if(grid[x-1] && grid[x-1][y-1]) {
-                ret.push(grid[x-1][y-1]);
+                // Нужно чтобы враги не пытались пройти по диагонали сквозь стенку
+                if (grid[x][y-1].type == 0 && grid[x-1][y].type == 0) {
+                    ret.push(grid[x-1][y-1]);
+                }
             }
 
             // Southeast
             if(grid[x+1] && grid[x+1][y-1]) {
-                ret.push(grid[x+1][y-1]);
+                if (grid[x][y-1].type == 0 && grid[x+1][y].type == 0) {
+                    ret.push(grid[x+1][y-1]);
+                }
             }
 
             // Northwest
             if(grid[x-1] && grid[x-1][y+1]) {
-                ret.push(grid[x-1][y+1]);
+                if (grid[x][y+1].type == 0 && grid[x-1][y].type == 0) {
+                    ret.push(grid[x-1][y+1]);
+                }
             }
 
             // Northeast
             if(grid[x+1] && grid[x+1][y+1]) {
-                ret.push(grid[x+1][y+1]);
+                if (grid[x][y+1].type == 0 && grid[x+1][y].type == 0) {
+                    ret.push(grid[x+1][y+1]);
+                }
             }
 
         }
