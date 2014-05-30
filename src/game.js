@@ -6,7 +6,8 @@ modules.define(
     Game.box2DMultiplier = 100;
     Game.MAP_PRESETS_FILENAMES = [
         "simple_desert.json",
-        "simple_ruins.json"
+        "simple_ruins.json",
+        "simple_tunnels.json"
     ];
 
     provide(Game);
