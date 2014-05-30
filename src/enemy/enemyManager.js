@@ -52,11 +52,16 @@ modules.define(
 
     EnemyManager.prototype.spanwWave = function() {
         var types = this.waveManager.waves[this.currentWaveID].types;
+
         for (var i = 0; i < types.length; i++) {
-            for (var j = 0; j < types[i].number; j++) {
-                this.spawnAtRandomPoint(types[i].type);
-            }
+            this.spawnWaveType(types[i].type, types[i].number);
         }
+    };
+
+    EnemyManager.prototype.spawnWaveType = function(type, number) {
+        this.scene.timer.delay(function() {
+            this.spawnAtRandomPoint(type);
+        }.bind(this), 0.4 * 1000, number);
     };
 
     EnemyManager.prototype.spawnAtRandomPoint = function(enemyClass) {
