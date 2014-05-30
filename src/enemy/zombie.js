@@ -125,10 +125,8 @@ modules.define(
     ZombieJump.difficulty = 2.5;
     ZombieJump.prototype.damage                 = 30;
     ZombieJump.prototype.hp                     = 100;
-    ZombieJump.prototype.distanceDesideToJump   = 350;
+    ZombieJump.prototype.distanceDesideToJump   = 150;
     ZombieJump.prototype.abilityList            = null;
-
-
 
     ZombieJump.prototype.createTexture = function() {
         this.view = new PIXI.MovieClip(ZombieJump.TEXTURE);
@@ -139,30 +137,23 @@ modules.define(
 
     ZombieJump.prototype.init = function() {
         this.abilityList = [
-            (new AbilityJump()).init()
+            (new AbilityJump()).init(3 * 1000, 2)
         ];
 
         this.superclass.init.apply(this, arguments);
-        game.activeScene.timer.delay(function() {
-            // can i Jump?
-            if (this.canSeePlayer) {
-                if (! this.isJumping) {
-                    if (this.calcDistance(game.activeScene.player) < this.distanceDesideToJump) {
-                        var position = game.activeScene.player.getPosition('box2D');
-
-                        this.abilities.jump(position);
-                    }
-                }
-            }
-        }.bind(this), 3 * 1000 + _.random(1, 30), -1);
     };
 
-    //ZombieJump.prototype.tick = function() {
-        //this.superclass.tick.call(this);
+    ZombieJump.prototype.abilityTick = function() {
+        // can i Jump?
+        if (this.canSeePlayer) {
+            if (! this.isJumping) {
+                if (this.calcDistance(game.activeScene.player) < this.distanceDesideToJump) {
+                    var position = game.activeScene.player.getPosition('box2D');
+                    this.abilities.jump(position);
+                }
+            }
+        }
+    };
 
-        //if () {
-        //}
-
-    //};
     provide(ZombieJump);
 });

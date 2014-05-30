@@ -55,7 +55,7 @@ modules.define(
 
 
     Enemy.prototype.tick = function() {
-        if (! this.isJumping) {
+        if (this.canMove) {
             var enemyPosition = this.getPosition('tile', game.activeScene.map);
 
             (this.pathToTarget && !this.nearTargetStep) && this.getNearTargetStep();
@@ -80,8 +80,11 @@ modules.define(
         this.tickCounter >= this.maxTickCounter && this.calcPlayerVisibility();
         this.tickCounter = this.tickCounter >= this.maxTickCounter ? 0 : this.tickCounter + 1;
 
+        this.abilityTick();
     };
 
+    Enemy.prototype.abilityTick = function() {
+    };
 
     Enemy.prototype.calcPlayerVisibility = function() {
         var canSeePlayer = this.isVisibleTo(game.activeScene.player, Wall);

@@ -14,7 +14,7 @@ modules.define(
     LiveObject.prototype.isLive     = true;
     LiveObject.prototype.hp         = 100;
     LiveObject.prototype.is_died    = false;
-    LiveObject.prototype.isJumping  = false;
+    LiveObject.prototype.canMove    = true;
 
 
     LiveObject.prototype.init = function(scene, x, y, texture, isStatic, isAnimated) {

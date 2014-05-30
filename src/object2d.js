@@ -179,12 +179,9 @@ modules.define(
     };
 
     Object2D.prototype.addAbility = function(ability) {
-        console.log("addAbility");
-        // console.log(ability.id.getMilliseconds());
 
         ability.user = this;
 
-        console.log(ability.use.bind(ability));
 
         this.abilities[ability.name] = ability.use.bind(ability);
     };

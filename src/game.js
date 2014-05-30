@@ -5,8 +5,8 @@ modules.define(
     Game.HEIGHT = 768;
     Game.box2DMultiplier = 100;
     Game.MAP_PRESETS_FILENAMES = [
-        "simple_desert.json"//,
-        //"simple_ruins.json"
+        "simple_desert.json",
+        "simple_ruins.json"
     ];
 
     provide(Game);
