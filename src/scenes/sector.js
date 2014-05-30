@@ -86,9 +86,9 @@ modules.define(
 
     Sector.prototype.createBackground = function() {
         var texture = PIXI.Texture.fromImage("./img/" + this._mapPreset.background);
-        var tilingSprite = new PIXI.TilingSprite(texture, this.map.width, this.map.height);
+        this.tilingSprite = new PIXI.TilingSprite(texture, this.map.width, this.map.height);
 
-        this.stage.addChild(tilingSprite);
+        this.stage.addChild(this.tilingSprite);
     };
 
 
@@ -187,6 +187,7 @@ modules.define(
 
         if (object2D.isLive){
             object2D.addEventListener(LiveObject.DIE, this.liveObjectDieHandler.bind(this));
+            object2D.addEventListener(LiveObject.TAKE_DAMAGE, this.liveObjectTakeDamageHandler.bind(this));
         }
 
         return object2D;
@@ -315,7 +316,29 @@ modules.define(
             delete window.game;
         }
 
+        var texture = PIXI.Texture.fromImage("./img/blood-big.png");
+        var boodSprite = new PIXI.Sprite(texture);
+        boodSprite.x = object2D.getX();
+        boodSprite.y = object2D.getY();
+        boodSprite.anchor.x = 0.5;
+        boodSprite.anchor.y = 0.5;
+        boodSprite.rotation = Math.random() * Math.PI * 2;
+        this.tilingSprite.addChild(boodSprite);
+
         this.destroyList.push(object2D);
+    };
+
+    Sector.prototype.liveObjectTakeDamageHandler = function(event) {
+        var object2D = event.currentTarget;
+
+        var texture = PIXI.Texture.fromImage("./img/blood.png");
+        var boodSprite = new PIXI.Sprite(texture);
+        boodSprite.x = object2D.getX();
+        boodSprite.y = object2D.getY();
+        boodSprite.anchor.x = 0.5;
+        boodSprite.anchor.y = 0.5;
+        boodSprite.rotation = Math.random() * Math.PI * 2;
+        this.tilingSprite.addChild(boodSprite);
     };
 
 

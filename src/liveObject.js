@@ -9,6 +9,7 @@ modules.define(
 
 
     LiveObject.HP_CHANGED = "hpChanged";
+    LiveObject.TAKE_DAMAGE = "takeDamage";
     LiveObject.DIE = "die";
 
     LiveObject.prototype.isLive     = true;
@@ -34,6 +35,8 @@ modules.define(
 
             if (this.soundTakeDamage)
                 createjs.Sound.play(this.soundTakeDamage, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+
+            this.dispatchEvent(LiveObject.TAKE_DAMAGE);
         }
     };
 
