@@ -1,7 +1,7 @@
 modules.define(
     'WaveManager',
-    ['Zombie', 'ZombieDamage', 'ZombieFast', 'ZombieJump'],
-    function(provide, Zombie, ZombieDamage, ZombieFast, ZombieJump) {
+    ['Zombie', 'ZombieDamage', 'ZombieFast', 'ZombieJump', 'ZombieLongJump'],
+    function(provide, Zombie, ZombieDamage, ZombieFast, ZombieJump, ZombieLongJump) {
 
 
     function WaveManager() {
@@ -11,7 +11,7 @@ modules.define(
     WaveManager.prototype.waves         = null;
 
     WaveManager.prototype.enemiesTypes = [Zombie, ZombieDamage, ZombieFast,
-        ZombieJump, ZombieJump, ZombieJump];
+        ZombieJump, ZombieLongJump, ZombieLongJump];
     //WaveManager.prototype.enemiesTypes = [
         //ZombieJump, ZombieJump, ZombieJump];
 

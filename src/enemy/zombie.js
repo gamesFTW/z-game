@@ -127,6 +127,9 @@ modules.define(
     ZombieJump.prototype.hp                     = 100;
     ZombieJump.prototype.distanceDesideToJump   = 150;
     ZombieJump.prototype.abilityList            = null;
+    ZombieJump.prototype.jumpCooldown           = 3 * 1000;
+    ZombieJump.prototype.jumpForce              = 2;
+    ZombieJump.prototype.jumpLinearDamping      = 1.3;
 
     ZombieJump.prototype.createTexture = function() {
         this.view = new PIXI.MovieClip(ZombieJump.TEXTURE);
@@ -137,7 +140,7 @@ modules.define(
 
     ZombieJump.prototype.init = function() {
         this.abilityList = [
-            (new AbilityJump()).init(3 * 1000, 2)
+            (new AbilityJump()).init(this.jumpCooldown, this.jumpForce, this.jumpLinearDamping)
         ];
 
         this.superclass.init.apply(this, arguments);
@@ -156,4 +159,32 @@ modules.define(
     };
 
     provide(ZombieJump);
+});
+
+
+modules.define(
+    'ZombieLongJump', ['ZombieJump'], function (provide, ZombieJump) {
+
+    function ZombieLongJump() {
+
+    }
+    ZombieLongJump.prototype = Object.create( ZombieJump.prototype );
+    ZombieLongJump.prototype.constructor = ZombieLongJump;
+
+    ZombieLongJump.difficulty = 2.5;
+
+    ZombieLongJump.prototype.jumpCooldown           = 6 * 1000;
+    ZombieLongJump.prototype.distanceDesideToJump   = 350;
+    ZombieLongJump.prototype.jumpLinearDamping      = 0.5;
+    ZombieLongJump.prototype.acceleration           = 0.04;
+
+
+    ZombieLongJump.prototype.createTexture = function() {
+        this.view = new PIXI.MovieClip(ZombieLongJump.TEXTURE);
+
+        this.view.gotoAndPlay(_.random(0,24));
+        this.view.animationSpeed = 0.35;
+    };
+
+    provide(ZombieLongJump);
 });

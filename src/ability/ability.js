@@ -43,10 +43,12 @@ modules.define(
     AbilityJump.prototype.cooldown      = 10 * 1000;
     AbilityJump.prototype.jumpTime      = 1 * 1000;
     AbilityJump.prototype.jumpForce     = 2;
+    AbilityJump.prototype.linearDamping = 1.3;
 
-    AbilityJump.prototype.init = function(cooldown, jumpForce) {
+    AbilityJump.prototype.init = function(cooldown, jumpForce, linearDamping) {
         this.cooldown = cooldown || this.cooldown;
         this.jumpForce = jumpForce || this.jumpForce;
+        this.linearDamping = linearDamping || this.linearDamping;
 
         return this;
     };
@@ -54,7 +56,7 @@ modules.define(
     AbilityJump.prototype.use = function(position) {
 
         if (!this.isOnCooldown) {
-            this.user.body.SetLinearDamping(1.3);
+            this.user.body.SetLinearDamping(this.linearDamping);
             this.user.canMove = false;
 
             var myPosition = this.user.getPosition('box2D');
