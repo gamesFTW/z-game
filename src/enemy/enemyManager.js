@@ -15,7 +15,7 @@ modules.define(
     EnemyManager.prototype.is_waves_finished    = false;
     EnemyManager.prototype.nextWaveTimer        = null;
 
-    EnemyManager.WAVE_DURATION                  = 60;
+    EnemyManager.WAVE_DURATION                  = 60 * 1000;
 
     EnemyManager.prototype.init = function(scene, difficultyLevel) {
         this.scene = scene;
@@ -43,7 +43,7 @@ modules.define(
         if (this.currentWaveID < this.waveManager.waves.length - 1) {
             this.nextWaveTimer = this.scene.timer.delay(
                 self.nextWave.bind(this),
-                EnemyManager.WAVE_DURATION * 1000
+                EnemyManager.WAVE_DURATION
             );
         } else {
             this.is_waves_finished = true;
@@ -61,7 +61,7 @@ modules.define(
     EnemyManager.prototype.spawnWaveType = function(type, number) {
         this.scene.timer.delay(function() {
             this.spawnAtRandomPoint(type);
-        }.bind(this), 0.4 * 1000, number);
+        }.bind(this), EnemyManager.WAVE_DURATION / number, number);
     };
 
     EnemyManager.prototype.spawnAtRandomPoint = function(enemyClass) {

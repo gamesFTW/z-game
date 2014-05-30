@@ -85,6 +85,30 @@ modules.define(
     provide(ZombieFast);
 });
 
+modules.define(
+    'ZombieVeryFast', ['Zombie'], function (provide, Zombie) {
+
+    function ZombieVeryFast() {
+
+    }
+    ZombieVeryFast.prototype = Object.create( Zombie.prototype );
+    ZombieVeryFast.prototype.constructor = ZombieVeryFast;
+
+    ZombieVeryFast.difficulty = 3;
+    ZombieVeryFast.prototype.hp = 50;
+    ZombieVeryFast.prototype.acceleration = 0.12;
+
+
+    ZombieVeryFast.prototype.createTexture = function(){
+        this.view = new PIXI.MovieClip(ZombieVeryFast.TEXTURE);
+
+        this.view.gotoAndPlay(_.random(0,24));
+        this.view.animationSpeed = 0.60;
+    };
+
+    provide(ZombieVeryFast);
+});
+
 
 modules.define(
     'ZombieDamage', ['Zombie'], function (provide, Zombie) {
@@ -95,10 +119,9 @@ modules.define(
     ZombieDamage.prototype = Object.create( Zombie.prototype );
     ZombieDamage.prototype.constructor = ZombieDamage;
 
-    // ZombieDamage.prototype.dullness = 0.2;
     ZombieDamage.difficulty = 1.5;
     ZombieDamage.prototype.damage = 30;
-    ZombieDamage.prototype.hp = 200;
+    ZombieDamage.prototype.hp = 300;
 
 
     ZombieDamage.prototype.createTexture = function(){

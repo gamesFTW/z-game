@@ -1,7 +1,7 @@
 modules.define(
     'WaveManager',
-    ['Zombie', 'ZombieDamage', 'ZombieFast', 'ZombieJump', 'ZombieLongJump'],
-    function(provide, Zombie, ZombieDamage, ZombieFast, ZombieJump, ZombieLongJump) {
+    ['Zombie', 'ZombieDamage', 'ZombieFast', 'ZombieJump', 'ZombieLongJump', 'ZombieVeryFast'],
+    function(provide, Zombie, ZombieDamage, ZombieFast, ZombieJump, ZombieLongJump, ZombieVeryFast) {
 
 
     function WaveManager() {
@@ -11,9 +11,7 @@ modules.define(
     WaveManager.prototype.waves         = null;
 
     WaveManager.prototype.enemiesTypes = [Zombie, ZombieDamage, ZombieFast,
-        ZombieJump, ZombieLongJump, ZombieLongJump];
-    //WaveManager.prototype.enemiesTypes = [
-        //ZombieJump, ZombieJump, ZombieJump];
+        ZombieJump, ZombieLongJump, ZombieVeryFast];
 
     WaveManager.NUMBER_OF_TYPES_IN_SECTOR = [
         [5, 2],
@@ -32,7 +30,7 @@ modules.define(
         [5, 6]
     ];
 
-    WaveManager.DEFAULT_ENEMIES_NUMBER = 100;
+    WaveManager.DEFAULT_ENEMIES_NUMBER = 150;
 
     WaveManager.prototype.generateWaves = function(difficulty) {
         var types = _.sample(

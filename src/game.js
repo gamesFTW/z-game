@@ -5,8 +5,8 @@ modules.define(
     Game.HEIGHT = 768;
     Game.box2DMultiplier = 100;
     Game.MAP_PRESETS_FILENAMES = [
-        "simple_desert.json"//,
-        //"simple_ruins.json"
+        "simple_desert.json",
+        "simple_ruins.json"
     ];
 
     provide(Game);
@@ -14,8 +14,8 @@ modules.define(
 
 modules.define(
     'Game',
-    ['GameOptions', 'SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage', 'ZombieJump', 'ZombieLongJump'],
-    function(provide, GameOptions, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage, ZombieJump, ZombieLongJump) {
+    ['GameOptions', 'SceneMap', 'Sector', 'Zombie', 'ZombieFast', 'ZombieDamage', 'ZombieJump', 'ZombieLongJump', 'ZombieVeryFast'],
+    function(provide, GameOptions, SceneMap, Sector, Zombie, ZombieFast, ZombieDamage, ZombieJump, ZombieLongJump, ZombieVeryFast) {
 
 
     function Game() {
@@ -62,6 +62,7 @@ modules.define(
             "img/zombieRedSprite.json",
             "img/zombieLightGreenSprite.json",
             "img/zombieYellowSprite.json",
+            "img/zombiePurpleSprite.json",
             "img/blue-man.png",
             "img/small-brick.png",
             "img/brick.png",
@@ -169,6 +170,10 @@ modules.define(
             {
                 prefix: "zombieYellow",
                 obj: ZombieLongJump
+            },
+            {
+                prefix: "zombiePurple",
+                obj: ZombieVeryFast
             }
         ];
 
