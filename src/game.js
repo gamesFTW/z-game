@@ -140,6 +140,8 @@ modules.define(
         var audioPath = "assets/";
         var manifest = [
             {id:"shoot", src:audioPath+"shoot.mp3"},
+            {id:"shoot_assaut_rifle", src:audioPath+"shoot_assaut_rifle.mp3"},
+            {id:"shoot_sniper_rifle", src:audioPath+"shoot_sniper_rifle.mp3"},
             {id:"player_hit", src:audioPath+"player_hit.mp3"},
             {id:"player_die", src:audioPath+"player_die.mp3"},
             {id:"zombie_die", src:audioPath+"zombie_die.mp3"}

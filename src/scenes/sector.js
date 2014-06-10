@@ -351,7 +351,11 @@ modules.define(
             var objectB = contact.GetFixtureB().GetBody().GetUserData();
 
             if(objectA && objectB){
-                if (objectA.isInstanceOf(Bullet)){
+                // Столкновение пули с неживыми предметами
+                if (
+                    objectA.isInstanceOf(Bullet) && !objectB.isInstanceOf(LiveObject) ||
+                    objectB.isInstanceOf(Bullet) && !objectA.isInstanceOf(LiveObject)
+                    ){
                     var velocity = objectA.body.GetLinearVelocity();
                     var speed = Number(Math.abs(velocity.x).toFixed(4)) + Number(Math.abs(velocity.y).toFixed(4));
 

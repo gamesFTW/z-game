@@ -8,7 +8,7 @@ modules.define(
             scatter:            0.1,
             bulletSpeed:        0.4,
             bulletsPerShot:     1,
-            shotSound:          "shoot"
+            shotSound:          "shoot_assaut_rifle"
         },
         shotgun:{
             damage:             20,
@@ -24,7 +24,7 @@ modules.define(
             scatter:            0.05,
             bulletSpeed:        0.8,
             bulletsPerShot:     1,
-            shotSound:          "shoot"
+            shotSound:          "shoot_sniper_rifle"
         },
         doubleBarrel:{
             damage:             10,
