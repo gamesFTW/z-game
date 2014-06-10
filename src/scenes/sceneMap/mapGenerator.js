@@ -137,62 +137,78 @@ modules.define(
         }
 
         for (x = 0; x < mapArray.length; x++) {
+            var isConnectNorthEastConnection = false;
+
             for (y = 0; y < mapArray[x].length; y++) {
                 var nodeName = mapArray[x][y];
-
-                if (mapArray[x - 1] !== undefined){
-                    if (mapArray[x - 1][y - 1] !== undefined){
-                        mapGraph.addEdge(nodeName, mapArray[x - 1][y - 1]);
-                    }
-                }
-
-                if (mapArray[x] !== undefined){
-                    if (mapArray[x][y - 1] !== undefined){
-                        mapGraph.addEdge(nodeName, mapArray[x][y - 1]);
-                    }
-                }
-
-                if (mapArray[x + 1] !== undefined){
-                    if (mapArray[x + 1][y - 1] !== undefined){
-                        mapGraph.addEdge(nodeName, mapArray[x + 1][y - 1]);
-                    }
-                }
-
-
+                
+                // West
                 if (mapArray[x - 1] !== undefined){
                     if (mapArray[x - 1][y] !== undefined){
                         mapGraph.addEdge(nodeName, mapArray[x - 1][y]);
                     }
                 }
 
-                if (mapArray[x] !== undefined){
-                    if (mapArray[x][y] !== undefined){
-                        mapGraph.addEdge(nodeName, mapArray[x][y]);
-                    }
-                }
-
+                // East
                 if (mapArray[x + 1] !== undefined){
                     if (mapArray[x + 1][y] !== undefined){
                         mapGraph.addEdge(nodeName, mapArray[x + 1][y]);
                     }
                 }
 
-
-                if (mapArray[x - 1] !== undefined){
-                    if (mapArray[x - 1][y + 1] !== undefined){
-                        mapGraph.addEdge(nodeName, mapArray[x - 1][y + 1]);
+                // North
+                if (mapArray[x] !== undefined){
+                    if (mapArray[x][y - 1] !== undefined){
+                        mapGraph.addEdge(nodeName, mapArray[x][y - 1]);
                     }
                 }
 
+                // South
                 if (mapArray[x] !== undefined){
                     if (mapArray[x][y + 1] !== undefined){
                         mapGraph.addEdge(nodeName, mapArray[x][y + 1]);
                     }
                 }
 
+                // Northwest
+                if (mapArray[x - 1] !== undefined){
+                    if (mapArray[x - 1][y - 1] !== undefined){
+
+                        if (mapGraph.getEdge(mapArray[x - 1][y - 1], nodeName)) {
+                            mapGraph.addEdge(nodeName, mapArray[x - 1][y - 1]);
+                        }
+                    }
+                }
+
+                // Northeast
                 if (mapArray[x + 1] !== undefined){
+                    if (mapArray[x + 1][y - 1] !== undefined){
+                        if (isConnectNorthEastConnection) {
+                            mapGraph.addEdge(nodeName, mapArray[x + 1][y - 1]);
+                            isConnectNorthEastConnection = false;
+                        }
+                    }
+                }
+
+                // Southwest
+                if (mapArray[x - 1] !== undefined){
+                    if (mapArray[x - 1][y + 1] !== undefined){
+                        if (mapGraph.getEdge(mapArray[x - 1][y + 1], nodeName)) {
+                            mapGraph.addEdge(nodeName, mapArray[x - 1][y + 1]);
+                        }
+                    }
+                }
+
+                // Southeast
+                if (mapArray[x + 1] !== undefined) {
                     if (mapArray[x + 1][y + 1] !== undefined){
-                        mapGraph.addEdge(nodeName, mapArray[x + 1][y + 1]);
+                        var isConnect = _.sample([true, false]);
+
+                        if (isConnect) {
+                            mapGraph.addEdge(nodeName, mapArray[x + 1][y + 1]);
+                        } else {
+                            isConnectNorthEastConnection = true;
+                        }
                     }
                 }
             }
