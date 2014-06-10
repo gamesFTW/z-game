@@ -3,14 +3,16 @@ modules.define(
 
     WeaponsStats = {
         assaultRifle:{
+            // dps:             283
             damage:             34,
             timeBetweenShots:   120,
-            scatter:            0.1,
+            scatter:            0.13,
             bulletSpeed:        0.4,
             bulletsPerShot:     1,
             shotSound:          "shoot_assaut_rifle"
         },
         shotgun:{
+            // dps:             200
             damage:             20,
             timeBetweenShots:   400,
             scatter:            0.15,
@@ -19,14 +21,16 @@ modules.define(
             shotSound:          "shoot"
         },
         sniperRifle:{
-            damage:             100,
-            timeBetweenShots:   400,
-            scatter:            0.05,
+            // dps:             250
+            damage:             150,
+            timeBetweenShots:   600,
+            scatter:            0.03,
             bulletSpeed:        0.8,
             bulletsPerShot:     1,
             shotSound:          "shoot_sniper_rifle"
         },
         doubleBarrel:{
+            // dps:             171
             damage:             10,
             timeBetweenShots:   700,
             scatter:            0.20,
