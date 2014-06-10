@@ -6,12 +6,23 @@ modules.define(
     }
 
 
-    MapGenerator.generateMap = function(width, height, numberOfNodesToRemove) {
+    MapGenerator.generateMap = function(
+        width, 
+        height, 
+        numberOfNodesToRemove, 
+        numberOfConnectionsToRemove
+        ) {
         var Graph = require('data-structures').Graph;
         var mapGraph = new Graph();
 
+        // TODO: Выпилить уже этот грязный хак
+        mapGraph.getAllBros = function(nodeName) {
+            return _.keys(this.getNode(nodeName)._outEdges);
+        };
+
         MapGenerator._generateGrid(mapGraph, width, height);
         MapGenerator._removeRandomNodes(mapGraph, numberOfNodesToRemove);
+        MapGenerator._removeRandomConnections(mapGraph, numberOfConnectionsToRemove);
 
         return mapGraph;
     };
@@ -23,7 +34,8 @@ modules.define(
 
         while(i != numberOfremoves){
             var nodeNameForRemove = _.sample(allNodes);
-            if (MapGenerator._removeNodeByName(mapGraph, nodeNameForRemove)) {
+            if (MapGenerator._checkConnectionsAllToAllWithoutOneNode(mapGraph, nodeNameForRemove)) {
+                mapGraph.removeNode(nodeNameForRemove);
                 i++;
                 _.without(allNodes, nodeNameForRemove);
             }
@@ -31,47 +43,71 @@ modules.define(
     };
 
 
-    MapGenerator._removeNodeByName = function(mapGraph, nodeNameToRemove) {
+    MapGenerator._removeRandomConnections = function(mapGraph, numberOfremoves) {
+        var allNodes = _.keys(mapGraph._nodes),
+            i = 0;
+
+        while(i != numberOfremoves){
+            var nodeNameA = _.sample(allNodes);
+            var nodeNameB = _.sample(mapGraph.getAllBros(nodeNameA));
+
+            if (MapGenerator._hasConnectionToAll(
+                mapGraph, nodeNameA, null, [nodeNameA, nodeNameB])) {
+                mapGraph.removeEdge(nodeNameA, nodeNameB);
+                mapGraph.removeEdge(nodeNameB, nodeNameA);
+                i++;
+            }
+        }
+    };
+
+
+    MapGenerator._checkConnectionsAllToAllWithoutOneNode = function(mapGraph, checkedNodeName) {
         var verificationNodeName = null;
 
         for (var nodeName in mapGraph._nodes) {
-            if (nodeName != nodeNameToRemove){
+            if (nodeName != checkedNodeName){
                 verificationNodeName = nodeName;
                 break;
             }
         }
 
-        var isHasConnection = this._hasConnectionToAll(mapGraph, verificationNodeName, nodeNameToRemove);
-
-        if(isHasConnection){
-            mapGraph.removeNode(nodeNameToRemove);
-            return true;
-        }
-        return false;
+        return this._hasConnectionToAll(mapGraph, verificationNodeName, checkedNodeName);
     };
 
 
-    MapGenerator._hasConnectionToAll = function(mapGraph, startNodeName, nodeNameToIgnore){
-        var visitedNodes = {},
+    // @nodesWhoseConnectionsAreIgnored - массив из двух стрингов обозначающих связанные ноды
+    MapGenerator._hasConnectionToAll = function(
+        mapGraph,
+        startNodeName,
+        nodeNameToIgnore,
+        nodesWhoseConnectionsAreIgnored
+        ){
+        var visitedNodes    = {},
             notVisitedNodes = {};
 
-        visitedNodes[nodeNameToIgnore] = true;
+        if(nodeNameToIgnore) {
+            visitedNodes[nodeNameToIgnore] = true;
+        }
+
         notVisitedNodes[startNodeName] = true;
-
-
-        mapGraph.getAllBros = function(nodeName) {
-            return _.keys(this.getNode(nodeName)._outEdges);
-        };
 
         while (_.keys(notVisitedNodes).length) {
             var currentNodeName = _.keys(notVisitedNodes)[0];
 
             var nodes = mapGraph.getAllBros(currentNodeName);
-            for (var i = 0; i < nodes.length; i++) {
-                if (!visitedNodes[nodes[i]]) {
-                    notVisitedNodes[nodes[i]] = true;
+
+            _.each(nodes, function(node){
+                if (nodesWhoseConnectionsAreIgnored) {
+                    if (currentNodeName == nodesWhoseConnectionsAreIgnored[0] && node == nodesWhoseConnectionsAreIgnored[1]
+                        || currentNodeName == nodesWhoseConnectionsAreIgnored[1] && node == nodesWhoseConnectionsAreIgnored[0]) {
+                        return;
+                    }
                 }
-            }
+
+                if (!visitedNodes[node]) {
+                    notVisitedNodes[node] = true;
+                }
+            })
 
             visitedNodes[currentNodeName] = true;
             delete notVisitedNodes[currentNodeName];
