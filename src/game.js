@@ -67,6 +67,8 @@ modules.define(
             "img/zombiePurpleSprite.json",
             "img/blue-man.png",
             "img/small-brick.png",
+            "img/map_bg.jpg",
+            "img/sector.png",
             "img/brick.png",
             "img/bullet.png"
         ];

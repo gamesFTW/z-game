@@ -21,11 +21,15 @@ modules.define(
         this.sceneStage = new PIXI.DisplayObjectContainer();
         this.mapContainer = new PIXI.DisplayObjectContainer();
 
+        var backgroundTexture = PIXI.Texture.fromFrame("img/map_bg.jpg");
+        this.background = new PIXI.Sprite(backgroundTexture);
+
         this.nodesContainer = new PIXI.DisplayObjectContainer();
         this.edgesContainer = new PIXI.Graphics();
 
         this.mapContainer.addChild(this.edgesContainer);
         this.mapContainer.addChild(this.nodesContainer);
+        this.sceneStage.addChild(this.background);        
         this.sceneStage.addChild(this.mapContainer);        
 
         this.buildMap();
@@ -107,8 +111,8 @@ modules.define(
 
 
     SceneMap.prototype.drawEdge = function(node, node2) {
-        this.edgesContainer.lineStyle(3, 0x00ff00, 0.5);
-        this.edgesContainer.moveTo(node.view.position.x, node.view.position.y);
+        this.edgesContainer.lineStyle(2, 0x000000, 0.5);
+        this.edgesContainer.moveTo(node.view.position.x, node.view.position.y);        
         this.edgesContainer.lineTo(node2.view.position.x, node2.view.position.y);
     };
 

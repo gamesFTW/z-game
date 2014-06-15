@@ -7,7 +7,7 @@ modules.define(
 
 
     SimpleSector.prototype.constructor = SimpleSector();
-    SimpleSector.prototype.texturePath = "img/small-brick.png";
+    SimpleSector.prototype.texturePath = "img/sector.png";
 
 
     SimpleSector.prototype.units = null;

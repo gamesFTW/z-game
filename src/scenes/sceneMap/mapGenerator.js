@@ -187,8 +187,6 @@ modules.define(
                 mapArray[x][y] = nodeName;
 
                 var node = mapGraph.addNode(nodeName);
-                // node.positionX = x * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES;
-                // node.positionY = y * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES;
 
                 node.positionX = x * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES + _.random(-infelicity, infelicity);
                 node.positionY = y * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES + _.random(-infelicity, infelicity);
