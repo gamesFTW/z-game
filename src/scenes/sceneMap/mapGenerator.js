@@ -5,6 +5,8 @@ modules.define(
 
     }
 
+    MapGenerator.DISTANCE_BETWEEN_MAIN_NODES = 200;
+
 
     MapGenerator.generateMap = function(
         width, 
@@ -20,9 +22,10 @@ modules.define(
             return _.keys(this.getNode(nodeName)._outEdges);
         };
 
-        MapGenerator._generateGrid(mapGraph, width, height);
+        var lastID = MapGenerator._generateGrid(mapGraph, width, height);
         MapGenerator._removeRandomNodes(mapGraph, numberOfNodesToRemove);
         MapGenerator._removeRandomConnections(mapGraph, numberOfConnectionsToRemove);
+        MapGenerator._createIntermediateNodes(mapGraph, lastID);
 
         return mapGraph;
     };
@@ -58,6 +61,60 @@ modules.define(
                 i++;
             }
         }
+    };
+
+
+    MapGenerator._createIntermediateNodes = function(mapGraph, id) {
+        var infelicity = 10;
+
+        var allNodes = _.keys(mapGraph._nodes);
+        var connections = [];
+
+        _.each(allNodes, function(node) {
+            var broNodes = mapGraph.getAllBros(node);
+
+            _.each(broNodes, function(broNode) {
+                connections.push([node, broNode]);
+                mapGraph.removeEdge(node, broNode);
+                mapGraph.removeEdge(broNode, node);
+            });
+        });
+
+        _.each(connections, function(connection){
+            var nodeNameA = connection[0];
+            var nodeNameB = connection[1];
+
+            var nodeA = mapGraph.getNode(nodeNameA);
+            var nodeB = mapGraph.getNode(nodeNameB);
+
+            // Создаем 2-3 промежуточных нода
+            var randomNodeNumber =_.random(2, 3);
+            var randomNodeNumberList = _.range(1, randomNodeNumber + 1);
+
+            var radian = Math.atan2(nodeB.positionY - nodeA.positionY, nodeB.positionX - nodeA.positionX);
+            var distance = Math.sqrt(Math.pow(nodeB.positionX - nodeA.positionX, 2) 
+                + Math.pow(nodeB.positionY - nodeA.positionY, 2)) / (randomNodeNumber + 1);
+
+            var prevNodeName = nodeNameA;
+            _.each(randomNodeNumberList, function(element) {
+                var nodeName = id.toString();
+                var node = mapGraph.addNode(nodeName);
+
+                node.positionX = (nodeA.positionX + Math.cos(radian) * (distance * element)) + _.random(-infelicity, infelicity);
+                node.positionY = (nodeA.positionY + Math.sin(radian) * (distance * element)) + _.random(-infelicity, infelicity);
+
+                mapGraph.addEdge(prevNodeName, nodeName);
+                mapGraph.addEdge(nodeName, prevNodeName);
+
+                if (element == randomNodeNumber) {
+                    mapGraph.addEdge(nodeNameB, nodeName);
+                    mapGraph.addEdge(nodeName, nodeNameB);
+                }
+
+                prevNodeName = nodeName;
+                id ++;
+            })
+        });
     };
 
 
@@ -119,7 +176,8 @@ modules.define(
 
     MapGenerator._generateGrid = function(mapGraph, width, height) {
         var mapArray = [];
-        id = 0;
+        var id = 0;
+        var infelicity = 40;
 
         for (var x = 0; x < width; x++) {
             mapArray[x] = [];
@@ -129,9 +187,11 @@ modules.define(
                 mapArray[x][y] = nodeName;
 
                 var node = mapGraph.addNode(nodeName);
-                node.positionX = x;
-                node.positionY = y;
+                // node.positionX = x * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES;
+                // node.positionY = y * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES;
 
+                node.positionX = x * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES + _.random(-infelicity, infelicity);
+                node.positionY = y * MapGenerator.DISTANCE_BETWEEN_MAIN_NODES + _.random(-infelicity, infelicity);
                 id ++;
             }
         }
@@ -213,6 +273,8 @@ modules.define(
                 }
             }
         }
+
+        return id;
     };
 
     provide(MapGenerator);

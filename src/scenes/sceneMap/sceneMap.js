@@ -1,7 +1,7 @@
 modules.define(
     'SceneMap',
-    ['Scene', 'SimpleSector', 'MapGenerator', 'MapUnitPlayer'],
-    function(provide, Scene, SimpleSector, MapGenerator, MapUnitPlayer) {
+    ['Scene', 'SimpleSector', 'MapGenerator', 'MapUnitPlayer', 'GameOptions'],
+    function(provide, Scene, SimpleSector, MapGenerator, MapUnitPlayer, GameOptions) {
 
     function SceneMap() {
 
@@ -19,16 +19,22 @@ modules.define(
         SceneMap.superclass.init.call(this, arguments);
 
         this.sceneStage = new PIXI.DisplayObjectContainer();
-        this.sceneStage.position.x = 50;
-        this.sceneStage.position.y = 50;
+        this.mapContainer = new PIXI.DisplayObjectContainer();
 
         this.nodesContainer = new PIXI.DisplayObjectContainer();
         this.edgesContainer = new PIXI.Graphics();
 
-        this.sceneStage.addChild(this.edgesContainer);
-        this.sceneStage.addChild(this.nodesContainer);
+        this.mapContainer.addChild(this.edgesContainer);
+        this.mapContainer.addChild(this.nodesContainer);
+        this.sceneStage.addChild(this.mapContainer);        
 
         this.buildMap();
+
+        var mapContainerBounds = this.mapContainer.getBounds();
+        this.mapContainer.position.x = (GameOptions.WIDTH / 2) - (mapContainerBounds.width / 2) 
+            - mapContainerBounds.x;
+        this.mapContainer.position.y = (GameOptions.HEIGHT / 2) - (mapContainerBounds.height / 2) 
+            - mapContainerBounds.y;
 
         this.createPlayer();
 
@@ -73,7 +79,7 @@ modules.define(
 
 
     SceneMap.prototype.createGraph = function() {
-        return MapGenerator.generateMap(10, 7, 15, 40);
+        return MapGenerator.generateMap(5, 4, 1, 5);
     };
 
 

@@ -7,7 +7,7 @@ modules.define(
 
 
     SimpleSector.prototype.constructor = SimpleSector();
-    SimpleSector.prototype.texturePath = "img/brick.png";
+    SimpleSector.prototype.texturePath = "img/small-brick.png";
 
 
     SimpleSector.prototype.units = null;
@@ -29,8 +29,8 @@ modules.define(
         this.view = new PIXI.Sprite(brickTexture);
         this.view.anchor.x = 0.5;
         this.view.anchor.y = 0.5;
-        this.view.position.x = this.graph.positionX * 100;
-        this.view.position.y = this.graph.positionY * 100;
+        this.view.position.x = this.graph.positionX;
+        this.view.position.y = this.graph.positionY;
     };
 
 
