@@ -151,7 +151,7 @@ modules.define(
 
         createjs.Sound.addEventListener("loadComplete", function(){});
         createjs.Sound.registerManifest(manifest);
-        
+
         createjs.Sound.setVolume(localStorage.getItem("gameMasterVolume"));
     };
 

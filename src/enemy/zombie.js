@@ -15,7 +15,8 @@ modules.define(
 
     Zombie.difficulty = 1;
     Zombie.prototype.damage = 10;
-    Zombie.prototype.acceleration  = 0.06;
+    Zombie.prototype.acceleration   = 0.06;
+    Zombie.prototype.hp             = 50;
 
 
     Zombie.prototype.soundDie = "zombie_die";
@@ -69,7 +70,7 @@ modules.define(
     ZombieFast.prototype.constructor = ZombieFast;
 
     ZombieFast.difficulty = 2;
-    ZombieFast.prototype.hp = 50;
+    ZombieFast.prototype.hp = 25;
     ZombieFast.prototype.acceleration = 0.08;
     // ZombieFast.prototype.maxSpeed = 0.6;
     // ZombieFast.prototype.dullness = 0.2;
@@ -95,7 +96,7 @@ modules.define(
     ZombieVeryFast.prototype.constructor = ZombieVeryFast;
 
     ZombieVeryFast.difficulty = 3;
-    ZombieVeryFast.prototype.hp = 50;
+    ZombieVeryFast.prototype.hp = 25;
     ZombieVeryFast.prototype.acceleration = 0.12;
 
 
@@ -121,7 +122,7 @@ modules.define(
 
     ZombieDamage.difficulty = 2.5;
     ZombieDamage.prototype.damage = 30;
-    ZombieDamage.prototype.hp = 300;
+    ZombieDamage.prototype.hp = 150;
 
 
     ZombieDamage.prototype.createTexture = function(){
@@ -147,7 +148,7 @@ modules.define(
 
     ZombieJump.difficulty = 2.5;
     ZombieJump.prototype.damage                 = 30;
-    ZombieJump.prototype.hp                     = 100;
+    ZombieJump.prototype.hp                     = 50;
     ZombieJump.prototype.distanceDesideToJump   = 150;
     ZombieJump.prototype.abilityList            = null;
     ZombieJump.prototype.jumpCooldown           = 3 * 1000;
@@ -199,6 +200,7 @@ modules.define(
     ZombieLongJump.prototype.jumpCooldown           = 6 * 1000;
     ZombieLongJump.prototype.distanceDesideToJump   = 350;
     ZombieLongJump.prototype.jumpLinearDamping      = 0.5;
+    ZombieLongJump.prototype.jumpForce              = 2.5;
     ZombieLongJump.prototype.acceleration           = 0.04;
 
 

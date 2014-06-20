@@ -30,8 +30,8 @@ modules.define(
             shotSound:          "shoot_sniper_rifle"
         },
         doubleBarrel:{
-            // dps:             171
-            damage:             10,
+            // dps:             137
+            damage:             8,
             timeBetweenShots:   700,
             scatter:            0.20,
             bulletSpeed:        0.5,
