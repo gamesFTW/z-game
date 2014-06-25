@@ -1,0 +1,12 @@
+{
+  "name": "underscore",
+  "_cacheHeaders": {
+    "Last-Modified": "Thu, 24 Apr 2014 16:10:19 GMT",
+    "Content-Length": "14682",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "http://underscorejs.org/underscore-min.js",
+  "_target": "*",
+  "_originalSource": "http://underscorejs.org/underscore-min.js"
+}

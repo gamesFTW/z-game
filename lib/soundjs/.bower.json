@@ -1,0 +1,13 @@
+{
+  "name": "soundjs",
+  "_cacheHeaders": {
+    "ETag": "\"a5a524-82f6-4e73c4b1ba6c0\"",
+    "Last-Modified": "Wed, 25 Sep 2013 21:54:11 GMT",
+    "Content-Type": "application/x-javascript"
+  },
+  "_release": "e-tag:a5a524-82",
+  "main": "index.js",
+  "_source": "http://code.createjs.com/soundjs-0.5.0.min.js",
+  "_target": "*",
+  "_originalSource": "http://code.createjs.com/soundjs-0.5.0.min.js"
+}

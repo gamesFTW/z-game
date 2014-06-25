@@ -1,0 +1,13 @@
+{
+  "name": "astar",
+  "_cacheHeaders": {
+    "ETag": "\"b1cd1c7cac1b77cb1ed2c2f9721e282e4cb5e3da\"",
+    "Content-Length": "11966",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:b1cd1c7ca",
+  "main": "index.js",
+  "_source": "https://raw.github.com/bgrins/javascript-astar/master/astar.js",
+  "_target": "*",
+  "_originalSource": "https://raw.github.com/bgrins/javascript-astar/master/astar.js"
+}

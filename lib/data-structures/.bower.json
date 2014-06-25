@@ -1,0 +1,54 @@
+{
+  "name": "data-structures",
+  "version": "1.4.1",
+  "author": "chenglou <chenglou92@gmail.com>",
+  "description": "JavaScript data structures written in CoffeeScript.",
+  "main": "./distribution/browser/data-structures-1.4.1.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "tests",
+    "source",
+    "Gruntfile.coffee",
+    "distribution/*.js",
+    "distribution/browser/*.min.js"
+  ],
+  "keywords": [
+    "data structure",
+    "linked list",
+    "list",
+    "bst",
+    "binary search tree",
+    "red black tree",
+    "tree",
+    "graph",
+    "edge",
+    "queue",
+    "map",
+    "hash",
+    "heap",
+    "trie"
+  ],
+  "devDependencies": {
+    "coffee-script": ">=1.6.0",
+    "jasmine-node": ">=1.4.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-browserify2": "~0.1.7",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-coffeelint": "0.0.6"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/chenglou/data-structures",
+  "_release": "1.4.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.4.1",
+    "commit": "a4f8cbd5d0f6cb5d28baf64c7fa0968bbc5f7172"
+  },
+  "_source": "git://github.com/chenglou/data-structures.git",
+  "_target": "v1.4.1",
+  "_originalSource": "data-structures"
+}
