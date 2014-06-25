@@ -65,7 +65,7 @@ modules.define(
 
 
     MapGenerator._createIntermediateNodes = function(mapGraph, id) {
-        var infelicity = 10;
+        var infelicity = 0;
 
         var allNodes = _.keys(mapGraph._nodes);
         var connections = [];
@@ -177,7 +177,7 @@ modules.define(
     MapGenerator._generateGrid = function(mapGraph, width, height) {
         var mapArray = [];
         var id = 0;
-        var infelicity = 40;
+        var infelicity = 0;
 
         for (var x = 0; x < width; x++) {
             mapArray[x] = [];
@@ -228,47 +228,47 @@ modules.define(
                     }
                 }
 
-                // Northwest
-                if (mapArray[x - 1] !== undefined){
-                    if (mapArray[x - 1][y - 1] !== undefined){
+                // // Northwest
+                // if (mapArray[x - 1] !== undefined){
+                //     if (mapArray[x - 1][y - 1] !== undefined){
 
-                        if (mapGraph.getEdge(mapArray[x - 1][y - 1], nodeName)) {
-                            mapGraph.addEdge(nodeName, mapArray[x - 1][y - 1]);
-                        }
-                    }
-                }
+                //         if (mapGraph.getEdge(mapArray[x - 1][y - 1], nodeName)) {
+                //             mapGraph.addEdge(nodeName, mapArray[x - 1][y - 1]);
+                //         }
+                //     }
+                // }
 
-                // Northeast
-                if (mapArray[x + 1] !== undefined){
-                    if (mapArray[x + 1][y - 1] !== undefined){
-                        if (isConnectNorthEastConnection) {
-                            mapGraph.addEdge(nodeName, mapArray[x + 1][y - 1]);
-                            isConnectNorthEastConnection = false;
-                        }
-                    }
-                }
+                // // Northeast
+                // if (mapArray[x + 1] !== undefined){
+                //     if (mapArray[x + 1][y - 1] !== undefined){
+                //         if (isConnectNorthEastConnection) {
+                //             mapGraph.addEdge(nodeName, mapArray[x + 1][y - 1]);
+                //             isConnectNorthEastConnection = false;
+                //         }
+                //     }
+                // }
 
-                // Southwest
-                if (mapArray[x - 1] !== undefined){
-                    if (mapArray[x - 1][y + 1] !== undefined){
-                        if (mapGraph.getEdge(mapArray[x - 1][y + 1], nodeName)) {
-                            mapGraph.addEdge(nodeName, mapArray[x - 1][y + 1]);
-                        }
-                    }
-                }
+                // // Southwest
+                // if (mapArray[x - 1] !== undefined){
+                //     if (mapArray[x - 1][y + 1] !== undefined){
+                //         if (mapGraph.getEdge(mapArray[x - 1][y + 1], nodeName)) {
+                //             mapGraph.addEdge(nodeName, mapArray[x - 1][y + 1]);
+                //         }
+                //     }
+                // }
 
-                // Southeast
-                if (mapArray[x + 1] !== undefined) {
-                    if (mapArray[x + 1][y + 1] !== undefined){
-                        var isConnect = _.sample([true, false]);
+                // // Southeast
+                // if (mapArray[x + 1] !== undefined) {
+                //     if (mapArray[x + 1][y + 1] !== undefined){
+                //         var isConnect = _.sample([true, false]);
 
-                        if (isConnect) {
-                            mapGraph.addEdge(nodeName, mapArray[x + 1][y + 1]);
-                        } else {
-                            isConnectNorthEastConnection = true;
-                        }
-                    }
-                }
+                //         if (isConnect) {
+                //             mapGraph.addEdge(nodeName, mapArray[x + 1][y + 1]);
+                //         } else {
+                //             isConnectNorthEastConnection = true;
+                //         }
+                //     }
+                // }
             }
         }
 
