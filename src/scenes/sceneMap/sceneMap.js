@@ -83,7 +83,7 @@ modules.define(
 
 
     SceneMap.prototype.createGraph = function() {
-        return MapGenerator.generateMap(5, 4, 0, 0);
+        return MapGenerator.generateMap(10, 8, 5, 10);
     };
 
 

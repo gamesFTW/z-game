@@ -5,7 +5,7 @@ modules.define(
 
     }
 
-    MapGenerator.DISTANCE_BETWEEN_MAIN_NODES = 200;
+    MapGenerator.DISTANCE_BETWEEN_MAIN_NODES = 100;
 
 
     MapGenerator.generateMap = function(
@@ -88,7 +88,7 @@ modules.define(
             var nodeB = mapGraph.getNode(nodeNameB);
 
             // Создаем 2-3 промежуточных нода
-            var randomNodeNumber =_.random(2, 3);
+            var randomNodeNumber =_.random(1, 3);
             var randomNodeNumberList = _.range(1, randomNodeNumber + 1);
 
             var radian = Math.atan2(nodeB.positionY - nodeA.positionY, nodeB.positionX - nodeA.positionX);
