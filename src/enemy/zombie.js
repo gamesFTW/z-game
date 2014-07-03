@@ -151,7 +151,7 @@ modules.define(
     ZombieJump.prototype.hp                     = 50;
     ZombieJump.prototype.distanceDesideToJump   = 150;
     ZombieJump.prototype.abilityList            = null;
-    ZombieJump.prototype.jumpCooldown           = 3 * 1000;
+    ZombieJump.prototype.jumpCooldown           = 1.5 * 1000;
     ZombieJump.prototype.jumpForce              = 2;
     ZombieJump.prototype.jumpLinearDamping      = 1.3;
 
@@ -197,7 +197,7 @@ modules.define(
 
     ZombieLongJump.difficulty = 2.5;
 
-    ZombieLongJump.prototype.jumpCooldown           = 6 * 1000;
+    ZombieLongJump.prototype.jumpCooldown           = 3 * 1000;
     ZombieLongJump.prototype.distanceDesideToJump   = 350;
     ZombieLongJump.prototype.jumpLinearDamping      = 0.5;
     ZombieLongJump.prototype.jumpForce              = 2.5;
