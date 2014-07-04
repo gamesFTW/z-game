@@ -61,7 +61,7 @@ modules.define(
 });
 
 modules.define(
-    'ZombieFast', ['Zombie'], function (provide, Zombie) {
+    'ZombieFast', ['Zombie', 'Collisions'], function (provide, Zombie, Collisions) {
 
     function ZombieFast() {
 
@@ -70,9 +70,9 @@ modules.define(
     ZombieFast.prototype.constructor = ZombieFast;
 
     ZombieFast.difficulty = 2;
-    ZombieFast.prototype.hp = 25;
-    ZombieFast.prototype.acceleration = 0.08;
-    // ZombieFast.prototype.maxSpeed = 0.6;
+    ZombieFast.prototype.hp = 200;
+    ZombieFast.prototype.acceleration = 0.1;
+    ZombieFast.prototype.linearDamping  = 0.02;
     // ZombieFast.prototype.dullness = 0.2;
 
 
@@ -82,6 +82,19 @@ modules.define(
         this.view.gotoAndPlay(_.random(0,24));
         this.view.animationSpeed = 0.45;
     };
+
+
+    ZombieFast.prototype.createFixture = function(){
+        this.body.CreateFixture(ZombieFast.POLY_FIXTURE);
+    };
+
+    // TODO Перепелить
+    ZombieFast.POLY_FIXTURE = new Box2D.Dynamics.b2FixtureDef();
+    ZombieFast.POLY_FIXTURE.shape = new Box2D.Collision.Shapes.b2PolygonShape();
+    ZombieFast.POLY_FIXTURE.density = 1000;
+    ZombieFast.POLY_FIXTURE.shape.SetAsBox(5 / 100, 5 / 100);
+    ZombieFast.POLY_FIXTURE.filter.categoryBits = Collisions.CATEGORY_MONSTER;
+    ZombieFast.POLY_FIXTURE.filter.maskBits = Collisions.MASK_MONSTER;
 
     provide(ZombieFast);
 });

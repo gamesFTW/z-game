@@ -12,15 +12,16 @@ modules.define(
     LiveObject.TAKE_DAMAGE = "takeDamage";
     LiveObject.DIE = "die";
 
-    LiveObject.prototype.isLive     = true;
-    LiveObject.prototype.hp         = 100;
-    LiveObject.prototype.is_died    = false;
-    LiveObject.prototype.canMove    = true;
+    LiveObject.prototype.isLive         = true;
+    LiveObject.prototype.hp             = 100;
+    LiveObject.prototype.is_died        = false;
+    LiveObject.prototype.canMove        = true;
+    LiveObject.prototype.linearDamping  = 6;
 
 
     LiveObject.prototype.init = function(scene, x, y, texture, isStatic, isAnimated) {
         LiveObject.superclass.init.call(this, scene, x, y, texture, isStatic, isAnimated);
-        this.body.SetLinearDamping(6);
+        this.body.SetLinearDamping(this.linearDamping);
     };
 
 
