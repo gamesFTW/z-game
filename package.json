@@ -10,13 +10,15 @@
   "directories": {
     "lib": "./lib"
   },
-  "dependencies": {
-    "ym": ">=0.0.15",
-    "grunt": ">=0.4.0",
-    "bower": ">=1.2.7"
+  "devDependencies": {
+    "ym": "^0.0.15",
+    "gulp": "^3.8.10",
+    "gulp-replace": "^0.4.0",
+    "glob": "*",
+    "bower": "^1.2.7"
   },
   "scripts": {
-    "postinstall": "node node_modules/.bin/bower install"
+    "postinstall": "node_modules/.bin/bower install && node_modules/.bin/gulp index"
   },
   "engines": [
     "node >= 0.8.0"
