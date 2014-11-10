@@ -1,17 +1,17 @@
 modules.define(
     'GameOptions', [], function(provide) {
-    var Game = {};
-    Game.WIDTH = 1024;
-    Game.HEIGHT = 768;
-    Game.box2DMultiplier = 100;
-    Game.MAP_PRESETS_FILENAMES = [
+    var options = {};
+    options.WIDTH = 1024;
+    options.HEIGHT = 768;
+    options.box2DMultiplier = 100;
+    options.MAP_PRESETS_FILENAMES = [
         "simple_desert.json",
         "simple_ruins.json",
         "simple_tunnels.json",
         "simple_labyrinth.json"
     ];
 
-    provide(Game);
+    provide(options);
 });
 
 modules.define(
@@ -201,7 +201,7 @@ modules.define(
         var self = this;
 
         function loop(){
-            // TODO Cчитываем кнопки пользователя
+            // TODO Cчитываем кнопки пользователя, возможно сделать силами pixi
 
             // Считаем таймер для делеев и симуляци
             // TODO Пройтись по всем активным стейджам и запустить их лупы
